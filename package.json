@@ -1,8 +1,9 @@
 {
   "name": "svelte-virtual-infinite-list",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "lib/index.js",
   "module": "lib/index.mjs",
+  "svelte": "src/index.js",
   "types": "types/index.d.ts",
   "scripts": {
     "build": "rollup -c",
@@ -52,9 +53,9 @@
     "tslib": "^2.0.0"
   },
   "files": [
-    "./src/",
-    "./lib",
-    "./types"
+    "src",
+    "lib",
+    "types"
   ],
   "keywords": [
     "svelte",
