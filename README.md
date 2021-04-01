@@ -4,7 +4,7 @@
 
 # svelte-virtual-infinite-list
 
-[![test](https://github.com/nor-ko-hi-jp/svelte-virtual-infinite-list/actions/workflows/ci.yaml/badge.svg)](https://github.com/nor-ko-hi-jp/svelte-virtual-infinite-list/actions/workflows/ci.yaml)  
+[![test](https://github.com/koheing/svelte-virtual-infinite-list/actions/workflows/ci.yaml/badge.svg)](https://github.com/koheing/svelte-virtual-infinite-list/actions/workflows/ci.yaml)
 
 A virtual list component for Svelte apps. Instead of rendering all your data, `<VirtuaInfinitelList>` just renders the bits that are visible, keeping your page nice and light.  
 
