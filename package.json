@@ -65,5 +65,13 @@
     "loading",
     "virtual-scroll",
     "virtual-list"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/koheing/svelte-virtual-infinite-list"
+  },
+  "homepage": "https://github.com/koheing/svelte-virtual-infinite-list#readme",
+  "bugs": {
+    "url": "https://github.com/koheing/svelte-virtual-infinite-list/issues"
+  }
 }
