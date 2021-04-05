@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/koheing/svelte-virtual-infinite-list/main/assets/svelte-virtual-infinite-list.png" title="svelte-virtual-scroll-list">
+  <img src="https://user-images.githubusercontent.com/55611095/113577028-91f6e800-965b-11eb-8081-4fb0f65fa07b.png" title="svelte-virtual-infinite-list">
 </div>
 
 # svelte-virtual-infinite-list
