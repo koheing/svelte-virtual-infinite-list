@@ -1,0 +1,110 @@
+{
+  "total": 1,
+  "components": [
+    {
+      "moduleName": "VirtualInfiniteList",
+      "filePath": "src/VirtualInfiniteList.svelte",
+      "props": [
+        {
+          "name": "items",
+          "kind": "let",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "height",
+          "kind": "let",
+          "type": "string",
+          "value": "'100%'",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "itemHeight",
+          "kind": "let",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "maxItemCountPerLoad",
+          "kind": "let",
+          "description": "Maximum number of items loaded per load.\nThe offset after loaded may be significantly shift\nif the number of items that exceeds this value is loaded.",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "loading",
+          "kind": "let",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "direction",
+          "kind": "let",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "scrollTo",
+          "kind": "function",
+          "type": "() => any",
+          "value": "() => {     mounted && viewport && (viewport.scrollTop = offset)   }",
+          "isFunction": true,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "start",
+          "kind": "let",
+          "description": "read-only, but visible to consumers via bind:start",
+          "type": "number",
+          "value": "0",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "end",
+          "kind": "let",
+          "description": "read-only, but visible to consumers via bind:end",
+          "type": "number",
+          "value": "0",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        }
+      ],
+      "slots": [
+        {
+          "name": "empty",
+          "default": false,
+          "fallback": "Empty!!!",
+          "slot_props": "{}"
+        },
+        {
+          "name": "item",
+          "default": false,
+          "fallback": "Template Not Found!!!",
+          "slot_props": "{ item: {row.data} }"
+        },
+        {
+          "name": "loader",
+          "default": false,
+          "fallback": "Loading...",
+          "slot_props": "{}"
+        }
+      ],
+      "events": [
+        { "type": "dispatched", "name": "initialize" },
+        { "type": "dispatched", "name": "infinite" }
+      ],
+      "typedefs": []
+    }
+  ]
+}
