@@ -1,6 +1,5 @@
 import svelte from 'rollup-plugin-svelte'
 import resolve from '@rollup/plugin-node-resolve'
-import sveld from 'sveld'
 import pkg from './package.json'
 
 export default [
@@ -13,10 +12,6 @@ export default [
     plugins: [
       svelte({ emitCss: false }),
       resolve(),
-      sveld({
-        markdown: true,
-        json: true,
-      }),
     ],
   },
   // tests
