@@ -2,15 +2,15 @@ name: test
 
 on:
   push:
-    branches: 
-    - main
+    branches:
+      - main
     paths:
-    - src/**
+      - src/**
   pull_request:
-    branches: 
-    - main
+    branches:
+      - main
     paths:
-    - src/**
+      - src/**
 
   workflow_dispatch:
 
@@ -24,7 +24,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-      
+
       - name: Update npm
         run: npm install -g npm
 
@@ -34,14 +34,14 @@ jobs:
         with:
           path: node_modules
           key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-      
+
       - name: Install Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
-        
+
       - name: Run Lint
         run: npm run lint
-      
+
       - name: Run Unit Tests
         run: npm run test:unit
 
