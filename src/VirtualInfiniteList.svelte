@@ -7,11 +7,12 @@
   export let height = '100%'
   export let itemHeight = undefined
   /**
+   * [**For direction-top infinite scroll user**]
    * Maximum number of items loaded per load.
    * The offset after loaded may be significantly shift
    * if the number of items that exceeds this value is loaded.
    */
-  export let maxItemCountPerLoad
+  export let maxItemCountPerLoad = 0
   export let loading
   export let direction
 
@@ -85,7 +86,7 @@
         ? rows[diff - 1].firstChild
         : undefined
 
-      if (!previousTopDom) {
+      if (!previousTopDom || maxItemCountPerLoad === 0) {
         console.warn(`[Virtual Infinite List]
   The number of items exceeds 'maxItemCountPerLoad',
   so the offset after loaded may be significantly shift.`)
