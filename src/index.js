@@ -1,1 +1,1 @@
-export { default as VirtualInfiniteList } from './VirtualInfiniteList.svelte'
+export { default as default } from './VirtualInfiniteList.svelte'
