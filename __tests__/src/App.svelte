@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte'
-  import VirtualInfiniteList from '../../src/VirtualInfiniteList.svelte'
+  import VirtualInfiniteList from '../../src'
   import { find } from './data'
 
   export let items = []
