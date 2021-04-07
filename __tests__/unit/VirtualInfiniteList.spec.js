@@ -1,4 +1,4 @@
-import { VirtualInfiniteList } from '../../src'
+import VirtualInfiniteList from '../../src'
 import '@testing-library/jest-dom/extend-expect'
 import { render } from '@testing-library/svelte'
 
