@@ -1,7 +1,10 @@
 /// <reference types="svelte" />
 import { SvelteComponentTyped } from 'svelte'
 
-export interface InfiniteEvent extends CustomEvent<{ on: 'top' | 'bottom' }> {}
+export interface InfiniteEventDetail {
+  on: 'top' | 'bottom'
+}
+export interface InfiniteEvent extends CustomEvent<InfiniteEventDetail> {}
 export interface InitializeEvent extends CustomEvent<any>{}
 
 export interface VirtualInfiniteListProps {
@@ -40,7 +43,12 @@ export interface VirtualInfiniteListProps {
   readonly end?: number
 }
 
-export interface VirtualInfiniteListSlot {
+export interface VirtualInfiniteListEvents {
+  infinite: InfiniteEvent;
+  initialize: InitializeEvent
+}
+
+export interface VirtualInfiniteListSlots {
   item: any
   loader: {}
   empty: {}
@@ -48,6 +56,6 @@ export interface VirtualInfiniteListSlot {
 
 export default class VirtualInfiniteList extends SvelteComponentTyped<
   VirtualInfiniteListProps,
-  { infinite: InfiniteEvent; initialize: InitializeEvent },
-  VirtualInfiniteListSlot
+  VirtualInfiniteListEvents,
+  VirtualInfiniteListSlots
 > {}

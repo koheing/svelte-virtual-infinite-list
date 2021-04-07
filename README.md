@@ -94,12 +94,6 @@ npm i svelte-virtual-infinite-list
 | 2 |  `direction` | `'top'` or `'bottom'` | Loading direction. |
 | 3 |  `maxItemCountPerLoad` | number | [**For direction-top infinite scroll user**] Maximum number of items loaded per load. The offset after loaded may be significantly shift if the number of items that exceeds this value is loaded. `Default value is 0.` |   
 
-## Additional Methods
-
-| No | Property Name | Type | Note |  
-| :--: | :-- | :-- | :-- |
-| 1 |  `scrollTo` | (offset: number) => void | Move to the position you set by using offset. |  
-
 ## Additional Events
 
 | No | Property Name | Type | Note |  
