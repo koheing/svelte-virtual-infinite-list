@@ -4,6 +4,8 @@
   const dispatch = createEventDispatcher()
 
   export let items
+  export let loading
+  export let direction
   export let height = '100%'
   export let itemHeight = undefined
   /**
@@ -13,8 +15,6 @@
    * if the number of items that exceeds this value is loaded.
    */
   export let maxItemCountPerLoad = 0
-  export let loading
-  export let direction
 
   export function scrollTo(offset) {
     mounted && viewport && (viewport.scrollTop = offset)
@@ -64,17 +64,18 @@
     reachedTop && direction === 'top' ? loadNewItemsOnReachedTop() : loadNewItemsOnReachedBottom()
   }
 
+  function getTopRowOffset() {
+    const element = viewport.querySelector('virtual-infinite-list-row')
+    return element?.getBoundingClientRect().y ?? 0
+  }
+
   $: preItemsExisted = mounted && preItems.length > 0
   async function loadNewItemsOnReachedTop() {
-    const offsetWithLoader = viewport.querySelector('virtual-infinite-list-row')
-      ? viewport.querySelector('virtual-infinite-list-row').getBoundingClientRect().y
-      : 0
+    const offsetWithLoader = getTopRowOffset()
 
     await refresh(items, viewportHeight, itemHeight)
 
-    const offsetOnlyItems = viewport
-      .querySelector('virtual-infinite-list-row')
-      .getBoundingClientRect().y
+    const offsetOnlyItems = getTopRowOffset()
 
     const offsetOnlyLoader =
       offsetWithLoader - offsetOnlyItems < 0 ? 0 : offsetWithLoader - offsetOnlyItems

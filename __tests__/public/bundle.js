@@ -546,16 +546,16 @@
 
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[38] = list[i];
+    	child_ctx[39] = list[i];
     	return child_ctx;
     }
 
     const get_item_slot_changes = dirty => ({ item: dirty[0] & /*visible*/ 256 });
-    const get_item_slot_context = ctx => ({ item: /*row*/ ctx[38].data });
+    const get_item_slot_context = ctx => ({ item: /*row*/ ctx[39].data });
     const get_loader_slot_changes = dirty => ({});
     const get_loader_slot_context = ctx => ({});
 
-    // (269:4) {#if loading && direction === 'top'}
+    // (270:4) {#if loading && direction === 'top'}
     function create_if_block_3(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[22].loader;
@@ -595,7 +595,7 @@
     	};
     }
 
-    // (270:26) Loading...
+    // (271:26) Loading...
     function fallback_block_3(ctx) {
     	let t;
 
@@ -612,7 +612,7 @@
     	};
     }
 
-    // (279:47) 
+    // (280:47) 
     function create_if_block_2(ctx) {
     	let current;
     	const empty_slot_template = /*#slots*/ ctx[22].empty;
@@ -652,14 +652,14 @@
     	};
     }
 
-    // (273:4) {#if visible.length > 0}
+    // (274:4) {#if visible.length > 0}
     function create_if_block_1(ctx) {
     	let each_blocks = [];
     	let each_1_lookup = new Map();
     	let each_1_anchor;
     	let current;
     	let each_value = /*visible*/ ctx[8];
-    	const get_key = ctx => /*row*/ ctx[38].index;
+    	const get_key = ctx => /*row*/ ctx[39].index;
 
     	for (let i = 0; i < each_value.length; i += 1) {
     		let child_ctx = get_each_context(ctx, each_value, i);
@@ -717,7 +717,7 @@
     	};
     }
 
-    // (280:25) Empty!!!
+    // (281:25) Empty!!!
     function fallback_block_2(ctx) {
     	let t;
 
@@ -734,7 +734,7 @@
     	};
     }
 
-    // (276:44) Template Not Found!!!
+    // (277:44) Template Not Found!!!
     function fallback_block_1(ctx) {
     	let t;
 
@@ -751,7 +751,7 @@
     	};
     }
 
-    // (274:6) {#each visible as row (row.index)}
+    // (275:6) {#each visible as row (row.index)}
     function create_each_block(key_1, ctx) {
     	let virtual_infinite_list_row;
     	let t;
@@ -805,7 +805,7 @@
     	};
     }
 
-    // (283:4) {#if loading && direction === 'bottom'}
+    // (284:4) {#if loading && direction === 'bottom'}
     function create_if_block(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[22].loader;
@@ -845,7 +845,7 @@
     	};
     }
 
-    // (284:26) Loading...
+    // (285:26) Loading...
     function fallback_block(ctx) {
     	let t;
 
@@ -873,13 +873,13 @@
     	let current;
     	let mounted;
     	let dispose;
-    	let if_block0 = /*loading*/ ctx[1] && /*direction*/ ctx[2] === "top" && create_if_block_3(ctx);
+    	let if_block0 = /*loading*/ ctx[0] && /*direction*/ ctx[1] === "top" && create_if_block_3(ctx);
     	const if_block_creators = [create_if_block_1, create_if_block_2];
     	const if_blocks = [];
 
     	function select_block_type(ctx, dirty) {
     		if (/*visible*/ ctx[8].length > 0) return 0;
-    		if (!/*loading*/ ctx[1] && /*visible*/ ctx[8].length === 0) return 1;
+    		if (!/*loading*/ ctx[0] && /*visible*/ ctx[8].length === 0) return 1;
     		return -1;
     	}
 
@@ -887,7 +887,7 @@
     		if_block1 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
     	}
 
-    	let if_block2 = /*loading*/ ctx[1] && /*direction*/ ctx[2] === "bottom" && create_if_block(ctx);
+    	let if_block2 = /*loading*/ ctx[0] && /*direction*/ ctx[1] === "bottom" && create_if_block(ctx);
 
     	return {
     		c() {
@@ -901,7 +901,7 @@
     			set_style(virtual_infinite_list_contents, "padding-top", /*top*/ ctx[6] + "px");
     			set_style(virtual_infinite_list_contents, "padding-bottom", /*bottom*/ ctx[7] + "px");
     			set_custom_element_data(virtual_infinite_list_contents, "class", "svelte-1kggtm4");
-    			set_style(virtual_infinite_list_viewport, "height", /*height*/ ctx[0]);
+    			set_style(virtual_infinite_list_viewport, "height", /*height*/ ctx[2]);
     			set_custom_element_data(virtual_infinite_list_viewport, "class", "svelte-1kggtm4");
     			add_render_callback(() => /*virtual_infinite_list_viewport_elementresize_handler*/ ctx[25].call(virtual_infinite_list_viewport));
     		},
@@ -932,11 +932,11 @@
     			}
     		},
     		p(ctx, dirty) {
-    			if (/*loading*/ ctx[1] && /*direction*/ ctx[2] === "top") {
+    			if (/*loading*/ ctx[0] && /*direction*/ ctx[1] === "top") {
     				if (if_block0) {
     					if_block0.p(ctx, dirty);
 
-    					if (dirty[0] & /*loading, direction*/ 6) {
+    					if (dirty[0] & /*loading, direction*/ 3) {
     						transition_in(if_block0, 1);
     					}
     				} else {
@@ -990,11 +990,11 @@
     				}
     			}
 
-    			if (/*loading*/ ctx[1] && /*direction*/ ctx[2] === "bottom") {
+    			if (/*loading*/ ctx[0] && /*direction*/ ctx[1] === "bottom") {
     				if (if_block2) {
     					if_block2.p(ctx, dirty);
 
-    					if (dirty[0] & /*loading, direction*/ 6) {
+    					if (dirty[0] & /*loading, direction*/ 3) {
     						transition_in(if_block2, 1);
     					}
     				} else {
@@ -1021,8 +1021,8 @@
     				set_style(virtual_infinite_list_contents, "padding-bottom", /*bottom*/ ctx[7] + "px");
     			}
 
-    			if (!current || dirty[0] & /*height*/ 1) {
-    				set_style(virtual_infinite_list_viewport, "height", /*height*/ ctx[0]);
+    			if (!current || dirty[0] & /*height*/ 4) {
+    				set_style(virtual_infinite_list_viewport, "height", /*height*/ ctx[2]);
     			}
     		},
     		i(local) {
@@ -1065,11 +1065,11 @@
     	let { $$slots: slots = {}, $$scope } = $$props;
     	const dispatch = createEventDispatcher();
     	let { items } = $$props;
+    	let { loading } = $$props;
+    	let { direction } = $$props;
     	let { height = "100%" } = $$props;
     	let { itemHeight = undefined } = $$props;
     	let { maxItemCountPerLoad = 0 } = $$props;
-    	let { loading } = $$props;
-    	let { direction } = $$props;
 
     	function scrollTo(offset) {
     		mounted && viewport && $$invalidate(3, viewport.scrollTop = offset, viewport);
@@ -1088,13 +1088,15 @@
     	let averageHeight = 0;
     	let preItems = [];
 
-    	async function loadNewItemsOnReachedTop() {
-    		const offsetWithLoader = viewport.querySelector("virtual-infinite-list-row")
-    		? viewport.querySelector("virtual-infinite-list-row").getBoundingClientRect().y
-    		: 0;
+    	function getTopRowOffset() {
+    		const element = viewport.querySelector("virtual-infinite-list-row");
+    		return element?.getBoundingClientRect().y ?? 0;
+    	}
 
+    	async function loadNewItemsOnReachedTop() {
+    		const offsetWithLoader = getTopRowOffset();
     		await refresh(items, viewportHeight, itemHeight);
-    		const offsetOnlyItems = viewport.querySelector("virtual-infinite-list-row").getBoundingClientRect().y;
+    		const offsetOnlyItems = getTopRowOffset();
 
     		const offsetOnlyLoader = offsetWithLoader - offsetOnlyItems < 0
     		? 0
@@ -1277,11 +1279,11 @@
 
     	$$self.$$set = $$props => {
     		if ("items" in $$props) $$invalidate(13, items = $$props.items);
-    		if ("height" in $$props) $$invalidate(0, height = $$props.height);
+    		if ("loading" in $$props) $$invalidate(0, loading = $$props.loading);
+    		if ("direction" in $$props) $$invalidate(1, direction = $$props.direction);
+    		if ("height" in $$props) $$invalidate(2, height = $$props.height);
     		if ("itemHeight" in $$props) $$invalidate(14, itemHeight = $$props.itemHeight);
     		if ("maxItemCountPerLoad" in $$props) $$invalidate(15, maxItemCountPerLoad = $$props.maxItemCountPerLoad);
-    		if ("loading" in $$props) $$invalidate(1, loading = $$props.loading);
-    		if ("direction" in $$props) $$invalidate(2, direction = $$props.direction);
     		if ("start" in $$props) $$invalidate(11, start = $$props.start);
     		if ("end" in $$props) $$invalidate(12, end = $$props.end);
     		if ("$$scope" in $$props) $$invalidate(21, $$scope = $$props.$$scope);
@@ -1309,7 +1311,7 @@
     			}
     		}
 
-    		if ($$self.$$.dirty[0] & /*initialized, loading*/ 524290) {
+    		if ($$self.$$.dirty[0] & /*initialized, loading*/ 524289) {
     			$$invalidate(19, initialized = initialized || !loading);
     		}
 
@@ -1317,7 +1319,7 @@
     			$$invalidate(20, newItemsLoaded = mounted && items && items.length > 0 && items.length - preItems.length > 0);
     		}
 
-    		if ($$self.$$.dirty[0] & /*newItemsLoaded, initialized, viewport, direction*/ 1572876) {
+    		if ($$self.$$.dirty[0] & /*newItemsLoaded, initialized, viewport, direction*/ 1572874) {
     			if (newItemsLoaded && initialized) {
     				const reachedTop = viewport.scrollTop === 0;
 
@@ -1345,9 +1347,9 @@
     	};
 
     	return [
-    		height,
     		loading,
     		direction,
+    		height,
     		viewport,
     		contents,
     		viewportHeight,
@@ -1387,11 +1389,11 @@
     			safe_not_equal,
     			{
     				items: 13,
-    				height: 0,
+    				loading: 0,
+    				direction: 1,
+    				height: 2,
     				itemHeight: 14,
     				maxItemCountPerLoad: 15,
-    				loading: 1,
-    				direction: 2,
     				scrollTo: 16,
     				start: 11,
     				end: 12
