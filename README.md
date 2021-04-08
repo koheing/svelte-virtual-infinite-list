@@ -36,10 +36,10 @@ npm i svelte-virtual-infinite-list
   ]
 
   let loading = true
-  let virtualInfiniteList: VirtualInfiniteList
+  let viewport
 
   function onInitialize() {
-    virtualInfiniteList.scrollTo(99999999)
+    viewport && (viewport.scrollTop = 999999)
   }
 
   async function onInfinite({ detail }: InfiniteEvent) {
@@ -53,6 +53,7 @@ npm i svelte-virtual-infinite-list
   }
 
   onMount(async () => {
+    viewport = document.querySelector('virtual-infinite-list-viewport')
     const data = await find(30)
     things = [...data]
     loading = false

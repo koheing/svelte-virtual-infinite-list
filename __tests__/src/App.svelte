@@ -10,6 +10,7 @@
   let virtualInfiniteList
   let start
   let end
+  let viewport
 
   async function onClick() {
     loading = true
@@ -22,7 +23,7 @@
   }
 
   function onInitialize() {
-    direction === 'top' && virtualInfiniteList?.scrollTo(999999)
+    direction === 'top' && viewport && (viewport.scrollTop = 999999)
   }
 
   async function onInfinite({ detail }) {
@@ -36,6 +37,7 @@
 
   onMount(async () => {
     loading = true
+    viewport = document.querySelector('virtual-infinite-list-viewport')
     const animals = await find(30)
     items = [...animals]
     loading = false
