@@ -52,7 +52,8 @@
     : []
 
   $: if (newItemsLoaded && initialized) {
-    loadRequiredAtTop(viewport) ? onLoadAtTop() : onLoadAtBottom()
+    const reachedTop = viewport.scrollTop === 0
+    reachedTop ? onLoadAtTop() : onLoadAtBottom()
   }
 
   $: if (mounted && items && items.length === 0) {
