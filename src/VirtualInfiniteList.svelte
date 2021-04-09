@@ -42,6 +42,19 @@
   let loaderTop
   let firstItemTop
 
+  $: initialized = initialized || !loading
+  $: newItemsLoaded = mounted && items && items.length > 0 && items.length - preItems.length > 0
+  $: preItemsExisted = mounted && preItems.length > 0
+  $: visible = initialized
+    ? items.slice(start, end + maxItemCountPerLoad).map((data, i) => {
+        return { index: i + start, data }
+      })
+    : []
+
+  $: if (newItemsLoaded && initialized) {
+    loadRequiredAtTop(viewport) ? onLoadAtTop() : onLoadAtBottom()
+  }
+
   $: if (mounted && items && items.length === 0) {
     initialized = false
     preItemsExisted = false
@@ -59,20 +72,10 @@
     end = 0
   }
 
-  $: initialized = initialized || !loading
-  $: newItemsLoaded = mounted && items && items.length > 0 && items.length - preItems.length > 0
-  $: if (newItemsLoaded && initialized) {
-    const reachedTop = viewport.scrollTop === 0
-    reachedTop && direction === 'top' ? loadNewItemsOnReachedTop() : loadNewItemsOnReachedBottom()
-  }
+  $: itemsRemoved = mounted && items && items.length > 0 && items.length - preItems.length < 0
+  if (itemsRemoved) onRemove()
 
-  function getRowTop() {
-    const element = viewport.querySelector('virtual-infinite-list-row')
-    return element?.getBoundingClientRect().top ?? 0
-  }
-
-  $: preItemsExisted = mounted && preItems.length > 0
-  async function loadNewItemsOnReachedTop() {
+  async function onLoadAtTop() {
     if (!loaderTop) loaderTop = getRowTop()
 
     await refresh(items, viewportHeight, itemHeight)
@@ -83,7 +86,33 @@
 
     const diff = items.length - preItems.length
     if (initialized) {
-      const previousTopDom = rows[diff]
+      const scrollTop = calculateScrollTop(diff, loaderHeight)
+      viewport.scrollTop = scrollTop === 0 ? scrollTop + 5 : scrollTop
+    }
+
+    if (initialized && !preItemsExisted) dispatch('initialize')
+
+    preItems = [...items]
+  }
+
+  async function onLoadAtBottom() {
+    await refresh(items, viewportHeight, itemHeight)
+    if (initialized && !preItemsExisted) dispatch('initialize')
+
+    preItems = [...items]
+  }
+
+  async function onRemove() {
+    const beforeScrollTop = viewport.scrollTop
+    await refresh(items, viewportHeight, itemHeight)
+    viewport.scrollTop = beforeScrollTop
+
+    preItems = [...items]
+  }
+
+  // use when direction = 'top'
+  function calculateScrollTop(diff, loaderHeight) {
+    const previousTopDom = rows[diff]
         ? rows[diff].firstChild // after second time
         : rows[diff - 1] // first time
         ? rows[diff - 1].firstChild
@@ -97,48 +126,16 @@
 
       const viewportTop = viewport.getBoundingClientRect().top
       const topFromTop = viewportTop + loaderHeight
-      const place = previousTopDom
+      const scrollTop = previousTopDom
         ? previousTopDom.getBoundingClientRect().top - topFromTop
         : heightMap.slice(0, diff).reduce((pre, curr) => pre + curr) - topFromTop
 
-      viewport.scrollTop = place === 0 ? place + 5 : place
-    }
-
-    if (initialized && !preItemsExisted) dispatch('initialize')
-
-    preItems = [...items]
+      return scrollTop
   }
 
-  async function loadNewItemsOnReachedBottom() {
-    await refresh(items, viewportHeight, itemHeight)
-    if (initialized && !preItemsExisted) dispatch('initialize')
-
-    preItems = [...items]
-  }
-
-  $: itemsRemoved = mounted && items && items.length > 0 && items.length - preItems.length < 0
-  if (itemsRemoved) {
-    removeItems()
-  }
-
-  async function removeItems() {
-    const beforeScrollTop = viewport.scrollTop
-    await refresh(items, viewportHeight, itemHeight)
-    viewport.scrollTop = beforeScrollTop
-
-    preItems = [...items]
-  }
-
-  $: visible = initialized
-    ? items.slice(start, end + maxItemCountPerLoad).map((data, i) => {
-        return { index: i + start, data }
-      })
-    : []
-
-  function reachedTopOrBottom(viewport) {
-    const reachedBottom = viewport.scrollHeight - viewport.scrollTop === viewport.clientHeight
-    const reachedTop = viewport.scrollTop === 0
-    return (reachedTop && direction === 'top') || (reachedBottom && direction === 'bottom')
+  function getRowTop() {
+    const element = viewport.querySelector('virtual-infinite-list-row')
+    return element?.getBoundingClientRect().top ?? 0
   }
 
   async function refresh(items, viewportHeight, itemHeight) {
@@ -216,10 +213,11 @@
   }
 
   function scrollListener() {
+    const loadRequired = loadRequiredAtTop(viewport) || loadRequiredAtBottom(viewport)
     if (
       !initialized ||
       loading ||
-      !reachedTopOrBottom(viewport) ||
+      !loadRequired ||
       items.length === 0 ||
       preItems.length === 0
     )
@@ -228,6 +226,16 @@
     const reachedTop = viewport.scrollTop === 0
     const on = reachedTop ? 'top' : 'bottom'
     dispatch('infinite', { on })
+  }
+
+  function loadRequiredAtTop(viewport) {
+    const reachedTop = viewport.scrollTop === 0
+    return reachedTop && direction === 'top'
+  }
+
+  function loadRequiredAtBottom(viewport) {
+    const reachedBottom = viewport.scrollHeight - viewport.scrollTop === viewport.clientHeight
+    return reachedBottom && direction === 'bottom'
   }
 
   // trigger initial refresh

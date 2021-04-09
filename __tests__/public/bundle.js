@@ -546,16 +546,16 @@
 
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[41] = list[i];
+    	child_ctx[43] = list[i];
     	return child_ctx;
     }
 
     const get_item_slot_changes = dirty => ({ item: dirty[0] & /*visible*/ 256 });
-    const get_item_slot_context = ctx => ({ item: /*row*/ ctx[41].data });
+    const get_item_slot_context = ctx => ({ item: /*row*/ ctx[43].data });
     const get_loader_slot_changes = dirty => ({});
     const get_loader_slot_context = ctx => ({});
 
-    // (272:4) {#if loading && direction === 'top'}
+    // (280:4) {#if loading && direction === 'top'}
     function create_if_block_3(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[22].loader;
@@ -594,7 +594,7 @@
     	};
     }
 
-    // (282:47) 
+    // (290:47) 
     function create_if_block_2(ctx) {
     	let current;
     	const empty_slot_template = /*#slots*/ ctx[22].empty;
@@ -633,14 +633,14 @@
     	};
     }
 
-    // (276:4) {#if visible.length > 0}
+    // (284:4) {#if visible.length > 0}
     function create_if_block_1(ctx) {
     	let each_blocks = [];
     	let each_1_lookup = new Map();
     	let each_1_anchor;
     	let current;
     	let each_value = /*visible*/ ctx[8];
-    	const get_key = ctx => /*row*/ ctx[41].index;
+    	const get_key = ctx => /*row*/ ctx[43].index;
 
     	for (let i = 0; i < each_value.length; i += 1) {
     		let child_ctx = get_each_context(ctx, each_value, i);
@@ -698,7 +698,7 @@
     	};
     }
 
-    // (279:44) Template Not Found!!!
+    // (287:44) Template Not Found!!!
     function fallback_block(ctx) {
     	let t;
 
@@ -715,7 +715,7 @@
     	};
     }
 
-    // (277:6) {#each visible as row (row.index)}
+    // (285:6) {#each visible as row (row.index)}
     function create_each_block(key_1, ctx) {
     	let virtual_infinite_list_row;
     	let t;
@@ -769,7 +769,7 @@
     	};
     }
 
-    // (286:4) {#if loading && direction === 'bottom'}
+    // (294:4) {#if loading && direction === 'bottom'}
     function create_if_block(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[22].loader;
@@ -1006,8 +1006,8 @@
     	let initialized;
     	let newItemsLoaded;
     	let preItemsExisted;
-    	let itemsRemoved;
     	let visible;
+    	let itemsRemoved;
     	let { $$slots: slots = {}, $$scope } = $$props;
     	const dispatch = createEventDispatcher();
     	let { items } = $$props;
@@ -1035,13 +1035,9 @@
     	let preItems = [];
     	let loaderTop;
     	let firstItemTop;
+    	if (itemsRemoved) onRemove();
 
-    	function getRowTop() {
-    		const element = viewport.querySelector("virtual-infinite-list-row");
-    		return element?.getBoundingClientRect().top ?? 0;
-    	}
-
-    	async function loadNewItemsOnReachedTop() {
+    	async function onLoadAtTop() {
     		if (!loaderTop) loaderTop = getRowTop();
     		await refresh(items, viewportHeight, itemHeight);
     		if (!firstItemTop) firstItemTop = getRowTop();
@@ -1053,52 +1049,53 @@
     		const diff = items.length - preItems.length;
 
     		if (initialized) {
-    			const previousTopDom = rows[diff]
-    			? rows[diff].firstChild
-    			: rows[diff - 1] ? rows[diff - 1].firstChild : undefined; // after second time
-    			// first time
-
-    			if (!previousTopDom || maxItemCountPerLoad === 0) {
-    				console.warn(`[Virtual Infinite List]
-  The number of items exceeds 'maxItemCountPerLoad',
-  so the offset after loaded may be significantly shift.`);
-    			}
-
-    			const viewportTop = viewport.getBoundingClientRect().top;
-    			const topFromTop = viewportTop + loaderHeight;
-
-    			const place = previousTopDom
-    			? previousTopDom.getBoundingClientRect().top - topFromTop
-    			: heightMap.slice(0, diff).reduce((pre, curr) => pre + curr) - topFromTop;
-
-    			$$invalidate(3, viewport.scrollTop = place === 0 ? place + 5 : place, viewport);
+    			const scrollTop = calculateScrollTop(diff, loaderHeight);
+    			$$invalidate(3, viewport.scrollTop = scrollTop === 0 ? scrollTop + 5 : scrollTop, viewport);
     		}
 
     		if (initialized && !preItemsExisted) dispatch("initialize");
     		$$invalidate(18, preItems = [...items]);
     	}
 
-    	async function loadNewItemsOnReachedBottom() {
+    	async function onLoadAtBottom() {
     		await refresh(items, viewportHeight, itemHeight);
     		if (initialized && !preItemsExisted) dispatch("initialize");
     		$$invalidate(18, preItems = [...items]);
     	}
 
-    	if (itemsRemoved) {
-    		removeItems();
-    	}
-
-    	async function removeItems() {
+    	async function onRemove() {
     		const beforeScrollTop = viewport.scrollTop;
     		await refresh(items, viewportHeight, itemHeight);
     		$$invalidate(3, viewport.scrollTop = beforeScrollTop, viewport);
     		$$invalidate(18, preItems = [...items]);
     	}
 
-    	function reachedTopOrBottom(viewport) {
-    		const reachedBottom = viewport.scrollHeight - viewport.scrollTop === viewport.clientHeight;
-    		const reachedTop = viewport.scrollTop === 0;
-    		return reachedTop && direction === "top" || reachedBottom && direction === "bottom";
+    	// use when direction = 'top'
+    	function calculateScrollTop(diff, loaderHeight) {
+    		const previousTopDom = rows[diff]
+    		? rows[diff].firstChild
+    		: rows[diff - 1] ? rows[diff - 1].firstChild : undefined; // after second time
+    		// first time
+
+    		if (!previousTopDom || maxItemCountPerLoad === 0) {
+    			console.warn(`[Virtual Infinite List]
+  The number of items exceeds 'maxItemCountPerLoad',
+  so the offset after loaded may be significantly shift.`);
+    		}
+
+    		const viewportTop = viewport.getBoundingClientRect().top;
+    		const topFromTop = viewportTop + loaderHeight;
+
+    		const scrollTop = previousTopDom
+    		? previousTopDom.getBoundingClientRect().top - topFromTop
+    		: heightMap.slice(0, diff).reduce((pre, curr) => pre + curr) - topFromTop;
+
+    		return scrollTop;
+    	}
+
+    	function getRowTop() {
+    		const element = viewport.querySelector("virtual-infinite-list-row");
+    		return element?.getBoundingClientRect().top ?? 0;
     	}
 
     	async function refresh(items, viewportHeight, itemHeight) {
@@ -1189,10 +1186,21 @@
     	}
 
     	function scrollListener() {
-    		if (!initialized || loading || !reachedTopOrBottom(viewport) || items.length === 0 || preItems.length === 0) return;
+    		const loadRequired = loadRequiredAtTop(viewport) || loadRequiredAtBottom(viewport);
+    		if (!initialized || loading || !loadRequired || items.length === 0 || preItems.length === 0) return;
     		const reachedTop = viewport.scrollTop === 0;
     		const on = reachedTop ? "top" : "bottom";
     		dispatch("infinite", { on });
+    	}
+
+    	function loadRequiredAtTop(viewport) {
+    		const reachedTop = viewport.scrollTop === 0;
+    		return reachedTop && direction === "top";
+    	}
+
+    	function loadRequiredAtBottom(viewport) {
+    		const reachedBottom = viewport.scrollHeight - viewport.scrollTop === viewport.clientHeight;
+    		return reachedBottom && direction === "bottom";
     	}
 
     	// trigger initial refresh
@@ -1238,6 +1246,10 @@
     	};
 
     	$$self.$$.update = () => {
+    		if ($$self.$$.dirty[0] & /*initialized, loading*/ 524289) {
+    			$$invalidate(19, initialized = initialized || !loading);
+    		}
+
     		if ($$self.$$.dirty[0] & /*mounted, items*/ 139264) {
     			if (mounted && items && items.length === 0) {
     				$$invalidate(19, initialized = false);
@@ -1250,6 +1262,14 @@
     			}
     		}
 
+    		if ($$self.$$.dirty[0] & /*mounted, items, preItems*/ 401408) {
+    			$$invalidate(20, newItemsLoaded = mounted && items && items.length > 0 && items.length - preItems.length > 0);
+    		}
+
+    		if ($$self.$$.dirty[0] & /*mounted, preItems*/ 393216) {
+    			preItemsExisted = mounted && preItems.length > 0;
+    		}
+
     		if ($$self.$$.dirty[0] & /*items, preItems*/ 270336) {
     			if (items.length - preItems.length < 0) {
     				$$invalidate(6, top = 0);
@@ -1259,38 +1279,24 @@
     			}
     		}
 
-    		if ($$self.$$.dirty[0] & /*initialized, loading*/ 524289) {
-    			$$invalidate(19, initialized = initialized || !loading);
-    		}
-
-    		if ($$self.$$.dirty[0] & /*mounted, items, preItems*/ 401408) {
-    			$$invalidate(20, newItemsLoaded = mounted && items && items.length > 0 && items.length - preItems.length > 0);
-    		}
-
-    		if ($$self.$$.dirty[0] & /*newItemsLoaded, initialized, viewport, direction*/ 1572874) {
-    			if (newItemsLoaded && initialized) {
-    				const reachedTop = viewport.scrollTop === 0;
-
-    				reachedTop && direction === "top"
-    				? loadNewItemsOnReachedTop()
-    				: loadNewItemsOnReachedBottom();
-    			}
-    		}
-
-    		if ($$self.$$.dirty[0] & /*mounted, preItems*/ 393216) {
-    			preItemsExisted = mounted && preItems.length > 0;
-    		}
-
-    		if ($$self.$$.dirty[0] & /*mounted, items, preItems*/ 401408) {
-    			itemsRemoved = mounted && items && items.length > 0 && items.length - preItems.length < 0;
-    		}
-
     		if ($$self.$$.dirty[0] & /*initialized, items, start, end, maxItemCountPerLoad*/ 571392) {
     			$$invalidate(8, visible = initialized
     			? items.slice(start, end + maxItemCountPerLoad).map((data, i) => {
     					return { index: i + start, data };
     				})
     			: []);
+    		}
+
+    		if ($$self.$$.dirty[0] & /*newItemsLoaded, initialized, viewport*/ 1572872) {
+    			if (newItemsLoaded && initialized) {
+    				loadRequiredAtTop(viewport)
+    				? onLoadAtTop()
+    				: onLoadAtBottom();
+    			}
+    		}
+
+    		if ($$self.$$.dirty[0] & /*mounted, items, preItems*/ 401408) {
+    			itemsRemoved = mounted && items && items.length > 0 && items.length - preItems.length < 0;
     		}
     	};
 
