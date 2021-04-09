@@ -39,6 +39,8 @@
   let bottom = 0
   let averageHeight = 0
   let preItems = []
+  let loaderTop
+  let firstItemTop
 
   $: if (mounted && items && items.length === 0) {
     initialized = false
@@ -64,21 +66,21 @@
     reachedTop && direction === 'top' ? loadNewItemsOnReachedTop() : loadNewItemsOnReachedBottom()
   }
 
-  function getTopRowOffset() {
+  function getRowTop() {
     const element = viewport.querySelector('virtual-infinite-list-row')
-    return element?.getBoundingClientRect().y ?? 0
+    return element?.getBoundingClientRect().top ?? 0
   }
 
   $: preItemsExisted = mounted && preItems.length > 0
   async function loadNewItemsOnReachedTop() {
-    const offsetWithLoader = getTopRowOffset()
+    if (!loaderTop) loaderTop = getRowTop()
 
     await refresh(items, viewportHeight, itemHeight)
 
-    const offsetOnlyItems = getTopRowOffset()
+    if (!firstItemTop) firstItemTop = getRowTop()
 
-    const offsetOnlyLoader =
-      offsetWithLoader - offsetOnlyItems < 0 ? 0 : offsetWithLoader - offsetOnlyItems
+    const loaderHeight = loaderTop - firstItemTop < 0 ? 0 : loaderTop - firstItemTop
+
     const diff = items.length - preItems.length
     if (initialized) {
       const previousTopDom = rows[diff]
@@ -94,10 +96,10 @@
       }
 
       const viewportTop = viewport.getBoundingClientRect().top
-      const offsetFromTop = viewportTop + offsetOnlyLoader
+      const topFromTop = viewportTop + loaderHeight
       const place = previousTopDom
-        ? previousTopDom.getBoundingClientRect().top - offsetFromTop
-        : heightMap.slice(0, diff).reduce((pre, curr) => pre + curr) - offsetFromTop
+        ? previousTopDom.getBoundingClientRect().top - topFromTop
+        : heightMap.slice(0, diff).reduce((pre, curr) => pre + curr) - topFromTop
 
       viewport.scrollTop = place === 0 ? place + 5 : place
     }
@@ -268,7 +270,7 @@
     bind:this={contents}
     style="padding-top: {top}px; padding-bottom: {bottom}px;">
     {#if loading && direction === 'top'}
-      <slot name="loader">Loading...</slot>
+      <slot name="loader" />
     {/if}
 
     {#if visible.length > 0}
@@ -278,11 +280,11 @@
         </virtual-infinite-list-row>
       {/each}
     {:else if !loading && visible.length === 0}
-      <slot name="empty">Empty!!!</slot>
+      <slot name="empty" />
     {/if}
 
     {#if loading && direction === 'bottom'}
-      <slot name="loader">Loading...</slot>
+      <slot name="loader" />
     {/if}
   </virtual-infinite-list-contents>
 </virtual-infinite-list-viewport>
