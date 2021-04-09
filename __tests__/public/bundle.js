@@ -546,29 +546,28 @@
 
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[39] = list[i];
+    	child_ctx[41] = list[i];
     	return child_ctx;
     }
 
     const get_item_slot_changes = dirty => ({ item: dirty[0] & /*visible*/ 256 });
-    const get_item_slot_context = ctx => ({ item: /*row*/ ctx[39].data });
+    const get_item_slot_context = ctx => ({ item: /*row*/ ctx[41].data });
     const get_loader_slot_changes = dirty => ({});
     const get_loader_slot_context = ctx => ({});
 
-    // (270:4) {#if loading && direction === 'top'}
+    // (272:4) {#if loading && direction === 'top'}
     function create_if_block_3(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[22].loader;
     	const loader_slot = create_slot(loader_slot_template, ctx, /*$$scope*/ ctx[21], get_loader_slot_context);
-    	const loader_slot_or_fallback = loader_slot || fallback_block_3();
 
     	return {
     		c() {
-    			if (loader_slot_or_fallback) loader_slot_or_fallback.c();
+    			if (loader_slot) loader_slot.c();
     		},
     		m(target, anchor) {
-    			if (loader_slot_or_fallback) {
-    				loader_slot_or_fallback.m(target, anchor);
+    			if (loader_slot) {
+    				loader_slot.m(target, anchor);
     			}
 
     			current = true;
@@ -582,50 +581,32 @@
     		},
     		i(local) {
     			if (current) return;
-    			transition_in(loader_slot_or_fallback, local);
+    			transition_in(loader_slot, local);
     			current = true;
     		},
     		o(local) {
-    			transition_out(loader_slot_or_fallback, local);
+    			transition_out(loader_slot, local);
     			current = false;
     		},
     		d(detaching) {
-    			if (loader_slot_or_fallback) loader_slot_or_fallback.d(detaching);
+    			if (loader_slot) loader_slot.d(detaching);
     		}
     	};
     }
 
-    // (271:26) Loading...
-    function fallback_block_3(ctx) {
-    	let t;
-
-    	return {
-    		c() {
-    			t = text("Loading...");
-    		},
-    		m(target, anchor) {
-    			insert(target, t, anchor);
-    		},
-    		d(detaching) {
-    			if (detaching) detach(t);
-    		}
-    	};
-    }
-
-    // (280:47) 
+    // (282:47) 
     function create_if_block_2(ctx) {
     	let current;
     	const empty_slot_template = /*#slots*/ ctx[22].empty;
     	const empty_slot = create_slot(empty_slot_template, ctx, /*$$scope*/ ctx[21], get_empty_slot_context);
-    	const empty_slot_or_fallback = empty_slot || fallback_block_2();
 
     	return {
     		c() {
-    			if (empty_slot_or_fallback) empty_slot_or_fallback.c();
+    			if (empty_slot) empty_slot.c();
     		},
     		m(target, anchor) {
-    			if (empty_slot_or_fallback) {
-    				empty_slot_or_fallback.m(target, anchor);
+    			if (empty_slot) {
+    				empty_slot.m(target, anchor);
     			}
 
     			current = true;
@@ -639,27 +620,27 @@
     		},
     		i(local) {
     			if (current) return;
-    			transition_in(empty_slot_or_fallback, local);
+    			transition_in(empty_slot, local);
     			current = true;
     		},
     		o(local) {
-    			transition_out(empty_slot_or_fallback, local);
+    			transition_out(empty_slot, local);
     			current = false;
     		},
     		d(detaching) {
-    			if (empty_slot_or_fallback) empty_slot_or_fallback.d(detaching);
+    			if (empty_slot) empty_slot.d(detaching);
     		}
     	};
     }
 
-    // (274:4) {#if visible.length > 0}
+    // (276:4) {#if visible.length > 0}
     function create_if_block_1(ctx) {
     	let each_blocks = [];
     	let each_1_lookup = new Map();
     	let each_1_anchor;
     	let current;
     	let each_value = /*visible*/ ctx[8];
-    	const get_key = ctx => /*row*/ ctx[39].index;
+    	const get_key = ctx => /*row*/ ctx[41].index;
 
     	for (let i = 0; i < each_value.length; i += 1) {
     		let child_ctx = get_each_context(ctx, each_value, i);
@@ -717,25 +698,8 @@
     	};
     }
 
-    // (281:25) Empty!!!
-    function fallback_block_2(ctx) {
-    	let t;
-
-    	return {
-    		c() {
-    			t = text("Empty!!!");
-    		},
-    		m(target, anchor) {
-    			insert(target, t, anchor);
-    		},
-    		d(detaching) {
-    			if (detaching) detach(t);
-    		}
-    	};
-    }
-
-    // (277:44) Template Not Found!!!
-    function fallback_block_1(ctx) {
+    // (279:44) Template Not Found!!!
+    function fallback_block(ctx) {
     	let t;
 
     	return {
@@ -751,14 +715,14 @@
     	};
     }
 
-    // (275:6) {#each visible as row (row.index)}
+    // (277:6) {#each visible as row (row.index)}
     function create_each_block(key_1, ctx) {
     	let virtual_infinite_list_row;
     	let t;
     	let current;
     	const item_slot_template = /*#slots*/ ctx[22].item;
     	const item_slot = create_slot(item_slot_template, ctx, /*$$scope*/ ctx[21], get_item_slot_context);
-    	const item_slot_or_fallback = item_slot || fallback_block_1();
+    	const item_slot_or_fallback = item_slot || fallback_block();
 
     	return {
     		key: key_1,
@@ -805,20 +769,19 @@
     	};
     }
 
-    // (284:4) {#if loading && direction === 'bottom'}
+    // (286:4) {#if loading && direction === 'bottom'}
     function create_if_block(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[22].loader;
     	const loader_slot = create_slot(loader_slot_template, ctx, /*$$scope*/ ctx[21], get_loader_slot_context_1);
-    	const loader_slot_or_fallback = loader_slot || fallback_block();
 
     	return {
     		c() {
-    			if (loader_slot_or_fallback) loader_slot_or_fallback.c();
+    			if (loader_slot) loader_slot.c();
     		},
     		m(target, anchor) {
-    			if (loader_slot_or_fallback) {
-    				loader_slot_or_fallback.m(target, anchor);
+    			if (loader_slot) {
+    				loader_slot.m(target, anchor);
     			}
 
     			current = true;
@@ -832,32 +795,15 @@
     		},
     		i(local) {
     			if (current) return;
-    			transition_in(loader_slot_or_fallback, local);
+    			transition_in(loader_slot, local);
     			current = true;
     		},
     		o(local) {
-    			transition_out(loader_slot_or_fallback, local);
+    			transition_out(loader_slot, local);
     			current = false;
     		},
     		d(detaching) {
-    			if (loader_slot_or_fallback) loader_slot_or_fallback.d(detaching);
-    		}
-    	};
-    }
-
-    // (285:26) Loading...
-    function fallback_block(ctx) {
-    	let t;
-
-    	return {
-    		c() {
-    			t = text("Loading...");
-    		},
-    		m(target, anchor) {
-    			insert(target, t, anchor);
-    		},
-    		d(detaching) {
-    			if (detaching) detach(t);
+    			if (loader_slot) loader_slot.d(detaching);
     		}
     	};
     }
@@ -1087,20 +1033,22 @@
     	let bottom = 0;
     	let averageHeight = 0;
     	let preItems = [];
+    	let loaderTop;
+    	let firstItemTop;
 
-    	function getTopRowOffset() {
+    	function getRowTop() {
     		const element = viewport.querySelector("virtual-infinite-list-row");
-    		return element?.getBoundingClientRect().y ?? 0;
+    		return element?.getBoundingClientRect().top ?? 0;
     	}
 
     	async function loadNewItemsOnReachedTop() {
-    		const offsetWithLoader = getTopRowOffset();
+    		if (!loaderTop) loaderTop = getRowTop();
     		await refresh(items, viewportHeight, itemHeight);
-    		const offsetOnlyItems = getTopRowOffset();
+    		if (!firstItemTop) firstItemTop = getRowTop();
 
-    		const offsetOnlyLoader = offsetWithLoader - offsetOnlyItems < 0
+    		const loaderHeight = loaderTop - firstItemTop < 0
     		? 0
-    		: offsetWithLoader - offsetOnlyItems;
+    		: loaderTop - firstItemTop;
 
     		const diff = items.length - preItems.length;
 
@@ -1117,11 +1065,11 @@
     			}
 
     			const viewportTop = viewport.getBoundingClientRect().top;
-    			const offsetFromTop = viewportTop + offsetOnlyLoader;
+    			const topFromTop = viewportTop + loaderHeight;
 
     			const place = previousTopDom
-    			? previousTopDom.getBoundingClientRect().top - offsetFromTop
-    			: heightMap.slice(0, diff).reduce((pre, curr) => pre + curr) - offsetFromTop;
+    			? previousTopDom.getBoundingClientRect().top - topFromTop
+    			: heightMap.slice(0, diff).reduce((pre, curr) => pre + curr) - topFromTop;
 
     			$$invalidate(3, viewport.scrollTop = place === 0 ? place + 5 : place, viewport);
     		}

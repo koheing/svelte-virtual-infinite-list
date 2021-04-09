@@ -15,9 +15,7 @@ describe('VirtualInfiniteList.svelte', () => {
       maxItemCountPerLoad: 30,
     })
 
-    expect(container.querySelector('virtual-infinite-list-contents').innerHTML.trim()).toEqual(
-      'Empty!!!'
-    )
+    expect(container.querySelector('virtual-infinite-list-contents').innerHTML.trim()).toEqual('')
 
     unmount()
   })
@@ -30,9 +28,7 @@ describe('VirtualInfiniteList.svelte', () => {
       maxItemCountPerLoad: 30,
     })
 
-    expect(container.querySelector('virtual-infinite-list-contents').innerHTML.trim()).toEqual(
-      'Loading...'
-    )
+    expect(container.querySelector('virtual-infinite-list-contents').innerHTML.trim()).toEqual('')
 
     unmount()
   })
@@ -45,9 +41,7 @@ describe('VirtualInfiniteList.svelte', () => {
       maxItemCountPerLoad: 30,
     })
 
-    expect(container.querySelector('virtual-infinite-list-contents').innerHTML.trim()).toEqual(
-      'Loading...'
-    )
+    expect(container.querySelector('virtual-infinite-list-contents').innerHTML.trim()).toEqual('')
 
     unmount()
   })
