@@ -108,3 +108,9 @@ npm i svelte-virtual-infinite-list
 | 1 |  `item` | Displayed item   |
 | 2 |  `loader` | Displayed element if loading is `true` |
 | 3 |  `empty` | Displayed element if items is `[]` and loading is `false` |
+
+## LICENSE
+
+[LIL (original)](https://github.com/sveltejs/svelte-virtual-list/blob/master/LICENSE)
+
+[LIL+MIT](https://github.com/koheing/svelte-virtual-infinite-list/blob/main/LICENSE)
