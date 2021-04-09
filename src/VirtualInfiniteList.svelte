@@ -87,7 +87,7 @@
 
     const diff = items.length - preItems.length
     if (initialized) {
-      const scrollTop = calculateScrollTop(diff, loaderHeight)
+      const scrollTop = calculateScrollTop(rows, viewport, heightMap, diff, loaderHeight)
       viewport.scrollTop = scrollTop === 0 ? scrollTop + 5 : scrollTop
     }
 
@@ -112,7 +112,7 @@
   }
 
   // use when direction = 'top'
-  function calculateScrollTop(diff, loaderHeight) {
+  function calculateScrollTop(rows, viewport, heightMap, diff, loaderHeight) {
     const previousTopDom = rows[diff]
       ? rows[diff].firstChild // after second time
       : rows[diff - 1] // first time
