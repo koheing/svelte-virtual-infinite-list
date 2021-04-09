@@ -113,24 +113,24 @@
   // use when direction = 'top'
   function calculateScrollTop(diff, loaderHeight) {
     const previousTopDom = rows[diff]
-        ? rows[diff].firstChild // after second time
-        : rows[diff - 1] // first time
-        ? rows[diff - 1].firstChild
-        : undefined
+      ? rows[diff].firstChild // after second time
+      : rows[diff - 1] // first time
+      ? rows[diff - 1].firstChild
+      : undefined
 
-      if (!previousTopDom || maxItemCountPerLoad === 0) {
-        console.warn(`[Virtual Infinite List]
+    if (!previousTopDom || maxItemCountPerLoad === 0) {
+      console.warn(`[Virtual Infinite List]
   The number of items exceeds 'maxItemCountPerLoad',
   so the offset after loaded may be significantly shift.`)
-      }
+    }
 
-      const viewportTop = viewport.getBoundingClientRect().top
-      const topFromTop = viewportTop + loaderHeight
-      const scrollTop = previousTopDom
-        ? previousTopDom.getBoundingClientRect().top - topFromTop
-        : heightMap.slice(0, diff).reduce((pre, curr) => pre + curr) - topFromTop
+    const viewportTop = viewport.getBoundingClientRect().top
+    const topFromTop = viewportTop + loaderHeight
+    const scrollTop = previousTopDom
+      ? previousTopDom.getBoundingClientRect().top - topFromTop
+      : heightMap.slice(0, diff).reduce((pre, curr) => pre + curr) - topFromTop
 
-      return scrollTop
+    return scrollTop
   }
 
   function getRowTop() {
@@ -214,13 +214,7 @@
 
   function scrollListener() {
     const loadRequired = loadRequiredAtTop(viewport) || loadRequiredAtBottom(viewport)
-    if (
-      !initialized ||
-      loading ||
-      !loadRequired ||
-      items.length === 0 ||
-      preItems.length === 0
-    )
+    if (!initialized || loading || !loadRequired || items.length === 0 || preItems.length === 0)
       return
 
     const reachedTop = viewport.scrollTop === 0
