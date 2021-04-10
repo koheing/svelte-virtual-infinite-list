@@ -9,8 +9,6 @@ export interface InitializeEvent extends CustomEvent<any>{}
 
 export interface VirtualInfiniteListProps {
   items: any[]
-  loading: boolean
-  direction: 'top' | 'bottom'
   /**
    * @default '100%'
    */
@@ -28,6 +26,8 @@ export interface VirtualInfiniteListProps {
    * @default 0
    */
   maxItemCountPerLoad?: number
+  loading: boolean
+  direction: 'top' | 'bottom'
   scrollTo?: (offset: number) => void
   /**
    * read-only, but visible to consumers via bind:start
