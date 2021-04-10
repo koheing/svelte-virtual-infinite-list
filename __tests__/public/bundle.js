@@ -546,16 +546,16 @@
 
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[43] = list[i];
+    	child_ctx[42] = list[i];
     	return child_ctx;
     }
 
     const get_item_slot_changes = dirty => ({ item: dirty[0] & /*visible*/ 256 });
-    const get_item_slot_context = ctx => ({ item: /*row*/ ctx[43].data });
+    const get_item_slot_context = ctx => ({ item: /*row*/ ctx[42].data });
     const get_loader_slot_changes = dirty => ({});
     const get_loader_slot_context = ctx => ({});
 
-    // (273:4) {#if loading && direction === 'top'}
+    // (275:4) {#if loading && direction === 'top'}
     function create_if_block_3(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[22].loader;
@@ -594,7 +594,7 @@
     	};
     }
 
-    // (283:47) 
+    // (285:47) 
     function create_if_block_2(ctx) {
     	let current;
     	const empty_slot_template = /*#slots*/ ctx[22].empty;
@@ -633,14 +633,14 @@
     	};
     }
 
-    // (277:4) {#if visible.length > 0}
+    // (279:4) {#if visible.length > 0}
     function create_if_block_1(ctx) {
     	let each_blocks = [];
     	let each_1_lookup = new Map();
     	let each_1_anchor;
     	let current;
     	let each_value = /*visible*/ ctx[8];
-    	const get_key = ctx => /*row*/ ctx[43].index;
+    	const get_key = ctx => /*row*/ ctx[42].index;
 
     	for (let i = 0; i < each_value.length; i += 1) {
     		let child_ctx = get_each_context(ctx, each_value, i);
@@ -698,7 +698,7 @@
     	};
     }
 
-    // (280:44) Template Not Found!!!
+    // (282:44) Template Not Found!!!
     function fallback_block(ctx) {
     	let t;
 
@@ -715,7 +715,7 @@
     	};
     }
 
-    // (278:6) {#each visible as row (row.index)}
+    // (280:6) {#each visible as row (row.index)}
     function create_each_block(key_1, ctx) {
     	let virtual_infinite_list_row;
     	let t;
@@ -769,7 +769,7 @@
     	};
     }
 
-    // (287:4) {#if loading && direction === 'bottom'}
+    // (289:4) {#if loading && direction === 'bottom'}
     function create_if_block(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[22].loader;
@@ -1033,18 +1033,19 @@
     	let bottom = 0;
     	let averageHeight = 0;
     	let preItems = [];
-    	let loaderTop;
-    	let firstItemTop;
+    	let loaderHeight;
     	if (itemsRemoved) onRemove();
 
     	async function onLoadAtTop() {
-    		if (!loaderTop) loaderTop = getRowTop();
+    		let firstItemTopOnLoading;
+    		if (!loaderHeight) firstItemTopOnLoading = getRowTop();
     		await refresh(items, viewportHeight, itemHeight);
-    		if (!firstItemTop) firstItemTop = getRowTop();
 
-    		const loaderHeight = loaderTop - firstItemTop < 0
-    		? 0
-    		: loaderTop - firstItemTop;
+    		if (!loaderHeight) {
+    			const firstItemTopOnLoaded = getRowTop();
+    			const height = firstItemTopOnLoading - firstItemTopOnLoaded;
+    			loaderHeight = height < 0 ? 0 : height;
+    		}
 
     		const diff = items.length - preItems.length;
 
