@@ -70,7 +70,7 @@
   }
 
   $: itemsRemoved = mounted && items && items.length > 0 && items.length - preItems.length < 0
-  if (itemsRemoved) onRemove()
+  $: if (itemsRemoved) onRemove()
 
   async function onLoadAtTop() {
     let firstItemTopOnLoading
