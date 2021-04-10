@@ -555,7 +555,7 @@
     const get_loader_slot_changes = dirty => ({});
     const get_loader_slot_context = ctx => ({});
 
-    // (275:4) {#if loading && direction === 'top'}
+    // (273:4) {#if loading && direction === 'top'}
     function create_if_block_3(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[22].loader;
@@ -594,7 +594,7 @@
     	};
     }
 
-    // (285:47) 
+    // (283:47) 
     function create_if_block_2(ctx) {
     	let current;
     	const empty_slot_template = /*#slots*/ ctx[22].empty;
@@ -633,7 +633,7 @@
     	};
     }
 
-    // (279:4) {#if visible.length > 0}
+    // (277:4) {#if visible.length > 0}
     function create_if_block_1(ctx) {
     	let each_blocks = [];
     	let each_1_lookup = new Map();
@@ -698,7 +698,7 @@
     	};
     }
 
-    // (282:44) Template Not Found!!!
+    // (280:44) Template Not Found!!!
     function fallback_block(ctx) {
     	let t;
 
@@ -715,7 +715,7 @@
     	};
     }
 
-    // (280:6) {#each visible as row (row.index)}
+    // (278:6) {#each visible as row (row.index)}
     function create_each_block(key_1, ctx) {
     	let virtual_infinite_list_row;
     	let t;
@@ -769,7 +769,7 @@
     	};
     }
 
-    // (289:4) {#if loading && direction === 'bottom'}
+    // (287:4) {#if loading && direction === 'bottom'}
     function create_if_block(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[22].loader;
@@ -1281,9 +1281,7 @@
 
     		if ($$self.$$.dirty[0] & /*initialized, items, start, end, maxItemCountPerLoad*/ 571392) {
     			$$invalidate(8, visible = initialized
-    			? items.slice(start, end + maxItemCountPerLoad).map((data, i) => {
-    					return { index: i + start, data };
-    				})
+    			? items.slice(start, end + maxItemCountPerLoad).map((data, i) => ({ index: i + start, data }))
     			: []);
     		}
 
