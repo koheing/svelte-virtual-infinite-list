@@ -39,7 +39,8 @@
   let bottom = 0
   let averageHeight = 0
   let preItems = []
-  let loaderHeight
+  let firstItemTopOnLoading
+  let firstItemTopOnLoaded
 
   $: initialized = initialized || !loading
   $: newItemsLoaded = mounted && items && items.length > 0 && items.length - preItems.length > 0
@@ -60,6 +61,8 @@
     bottom = 0
     start = 0
     end = 0
+    firstItemTopOnLoading = 0
+    firstItemTopOnLoaded = 0
   }
 
   $: if (items.length - preItems.length < 0) {
@@ -73,16 +76,16 @@
   $: if (itemsRemoved) onRemove()
 
   async function onLoadAtTop() {
-    let firstItemTopOnLoading
-    if (!loaderHeight) firstItemTopOnLoading = getRowTop()
+    if (!firstItemTopOnLoading) firstItemTopOnLoading = getRowTop()
 
     await refresh(items, viewportHeight, itemHeight)
 
-    if (!loaderHeight) {
-      const firstItemTopOnLoaded = getRowTop()
-      const height = firstItemTopOnLoading - firstItemTopOnLoaded
-      loaderHeight = height < 0 ? 0 : height
-    }
+    if (!firstItemTopOnLoaded) firstItemTopOnLoaded = getRowTop()
+
+    const loaderHeight =
+      firstItemTopOnLoading - firstItemTopOnLoaded < 0
+        ? 0
+        : firstItemTopOnLoading - firstItemTopOnLoaded
 
     const diff = items.length - preItems.length
     if (initialized) {
