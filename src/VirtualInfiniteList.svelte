@@ -142,7 +142,7 @@
     const topFromTop = viewportTop + loaderHeight + slotItemMarginTop
     const scrollTop = previousTopDom
       ? previousTopDom.getBoundingClientRect().top - topFromTop
-      : heightMap.slice(0, diff).reduce((pre, curr) => pre + curr) - topFromTop - slotItemMarginTop
+      : heightMap.slice(0, diff).reduce((pre, curr) => pre + curr) - topFromTop
 
     return scrollTop
   }
