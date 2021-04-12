@@ -555,7 +555,7 @@
     const get_loader_slot_changes = dirty => ({});
     const get_loader_slot_context = ctx => ({});
 
-    // (296:4) {#if loading && direction === 'top'}
+    // (297:4) {#if loading && direction === 'top'}
     function create_if_block_3(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[23].loader;
@@ -594,7 +594,7 @@
     	};
     }
 
-    // (306:47) 
+    // (307:47) 
     function create_if_block_2(ctx) {
     	let current;
     	const empty_slot_template = /*#slots*/ ctx[23].empty;
@@ -633,7 +633,7 @@
     	};
     }
 
-    // (300:4) {#if visible.length > 0}
+    // (301:4) {#if visible.length > 0}
     function create_if_block_1(ctx) {
     	let each_blocks = [];
     	let each_1_lookup = new Map();
@@ -698,7 +698,7 @@
     	};
     }
 
-    // (303:44) Template Not Found!!!
+    // (304:44) Template Not Found!!!
     function fallback_block(ctx) {
     	let t;
 
@@ -715,7 +715,7 @@
     	};
     }
 
-    // (301:6) {#each visible as row (row.index)}
+    // (302:6) {#each visible as row (row.index)}
     function create_each_block(key_1, ctx) {
     	let virtual_infinite_list_row;
     	let t;
@@ -769,7 +769,7 @@
     	};
     }
 
-    // (310:4) {#if loading && direction === 'bottom'}
+    // (311:4) {#if loading && direction === 'bottom'}
     function create_if_block(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[23].loader;
@@ -1052,9 +1052,9 @@
     	let slotItemMarginTop;
 
     	async function onLoadAtTop() {
-    		if (typeof firstItemTopOnLoading === "undefined") firstItemTopOnLoading = getRowTop(viewport);
+    		if (!firstItemTopOnLoading) firstItemTopOnLoading = getRowTop(viewport);
     		await refresh(items, viewportHeight, itemHeight);
-    		if (typeof firstItemTopOnLoaded === "undefined") firstItemTopOnLoaded = getRowTop(viewport);
+    		if (!firstItemTopOnLoaded) firstItemTopOnLoaded = getRowTop(viewport);
     		if (typeof slotItemMarginTop === "undefined") slotItemMarginTop = getSlotItemMarginTop(viewport);
 
     		const loaderHeight = firstItemTopOnLoading - firstItemTopOnLoaded < 0
@@ -1064,7 +1064,7 @@
     		const diff = items.length - preItems.length;
 
     		if (initialized) {
-    			const scrollTop = calculateScrollTop(rows, viewport, heightMap, diff, loaderHeight);
+    			const scrollTop = calculateScrollTop(rows, viewport, heightMap, diff, loaderHeight, slotItemMarginTop);
     			$$invalidate(3, viewport.scrollTop = scrollTop === 0 ? scrollTop + 5 : scrollTop, viewport);
     		}
 
@@ -1083,6 +1083,29 @@
     		await refresh(items, viewportHeight, itemHeight);
     		$$invalidate(3, viewport.scrollTop = beforeScrollTop, viewport);
     		$$invalidate(18, preItems = [...items]);
+    	}
+
+    	// use when direction = 'top'
+    	function calculateScrollTop(rows, viewport, heightMap, diff, loaderHeight, slotItemMarginTop) {
+    		const previousTopDom = rows[diff]
+    		? rows[diff].firstChild
+    		: rows[diff - 1] ? rows[diff - 1].firstChild : undefined; // after second time
+    		// first time
+
+    		if (!previousTopDom || maxItemCountPerLoad === 0) {
+    			console.warn(`[Virtual Infinite List]
+  The number of items exceeds 'maxItemCountPerLoad',
+  so the offset after loaded may be significantly shift.`);
+    		}
+
+    		const viewportTop = viewport.getBoundingClientRect().top;
+    		const topFromTop = viewportTop + loaderHeight + slotItemMarginTop;
+
+    		const scrollTop = previousTopDom
+    		? previousTopDom.getBoundingClientRect().top - topFromTop
+    		: heightMap.slice(0, diff).reduce((pre, curr) => pre + curr) - topFromTop - slotItemMarginTop;
+
+    		return scrollTop;
     	}
 
     	async function refresh(items, viewportHeight, itemHeight) {
@@ -1172,29 +1195,6 @@
     		initialized && viewport && await refresh(items, viewportHeight, itemHeight);
     	}
 
-    	// use when direction = 'top'
-    	function calculateScrollTop(rows, viewport, heightMap, diff, loaderHeight) {
-    		const previousTopDom = rows[diff]
-    		? rows[diff].firstChild
-    		: rows[diff - 1] ? rows[diff - 1].firstChild : undefined; // after second time
-    		// first time
-
-    		if (!previousTopDom || maxItemCountPerLoad === 0) {
-    			console.warn(`[Virtual Infinite List]
-  The number of items exceeds 'maxItemCountPerLoad',
-  so the offset after loaded may be significantly shift.`);
-    		}
-
-    		const viewportTop = viewport.getBoundingClientRect().top;
-    		const topFromTop = viewportTop + loaderHeight + slotItemMarginTop;
-
-    		const scrollTop = previousTopDom
-    		? previousTopDom.getBoundingClientRect().top - topFromTop
-    		: heightMap.slice(0, diff).reduce((pre, curr) => pre + curr) - topFromTop;
-
-    		return scrollTop;
-    	}
-
     	function scrollListener() {
     		const loadRequired = loadRequiredAtTop(viewport) || loadRequiredAtBottom(viewport);
     		if (!initialized || loading || !loadRequired || items.length === 0 || preItems.length === 0) return;
@@ -1269,8 +1269,8 @@
     				$$invalidate(7, bottom = 0);
     				$$invalidate(11, start = 0);
     				$$invalidate(12, end = 0);
-    				firstItemTopOnLoading = undefined;
-    				firstItemTopOnLoaded = undefined;
+    				firstItemTopOnLoading = 0;
+    				firstItemTopOnLoaded = 0;
     				slotItemMarginTop = undefined;
     			}
     		}

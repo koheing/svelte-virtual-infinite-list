@@ -24,7 +24,7 @@ npm i svelte-virtual-infinite-list
 <script lang="ts">
   import VirtualInfiniteList from 'svelte-virtual-infinite-list'
   import type { InfiniteEvent } from 'svelte-virtual-infinite-list'
-  import { find } from './find.ts'
+  import { find } from './find'
 
   const things = [
     // these can be any values you like

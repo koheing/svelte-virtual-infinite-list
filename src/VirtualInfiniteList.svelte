@@ -62,8 +62,8 @@
     bottom = 0
     start = 0
     end = 0
-    firstItemTopOnLoading = undefined
-    firstItemTopOnLoaded = undefined
+    firstItemTopOnLoading = 0
+    firstItemTopOnLoaded = 0
     slotItemMarginTop = undefined
   }
 
@@ -78,11 +78,12 @@
   $: if (itemsRemoved) onRemove()
 
   async function onLoadAtTop() {
-    if (typeof firstItemTopOnLoading === 'undefined') firstItemTopOnLoading = getRowTop(viewport)
+    if (!firstItemTopOnLoading) firstItemTopOnLoading = getRowTop(viewport)
 
     await refresh(items, viewportHeight, itemHeight)
 
-    if (typeof firstItemTopOnLoaded === 'undefined') firstItemTopOnLoaded = getRowTop(viewport)
+    if (!firstItemTopOnLoaded) firstItemTopOnLoaded = getRowTop(viewport)
+
     if (typeof slotItemMarginTop === 'undefined') slotItemMarginTop = getSlotItemMarginTop(viewport)
 
     const loaderHeight =
@@ -121,6 +122,43 @@
     viewport.scrollTop = beforeScrollTop
 
     preItems = [...items]
+  }
+
+  // use when direction = 'top'
+  function calculateScrollTop(rows, viewport, heightMap, diff, loaderHeight, slotItemMarginTop) {
+    const previousTopDom = rows[diff]
+      ? rows[diff].firstChild // after second time
+      : rows[diff - 1] // first time
+      ? rows[diff - 1].firstChild
+      : undefined
+
+    if (!previousTopDom || maxItemCountPerLoad === 0) {
+      console.warn(`[Virtual Infinite List]
+  The number of items exceeds 'maxItemCountPerLoad',
+  so the offset after loaded may be significantly shift.`)
+    }
+
+    const viewportTop = viewport.getBoundingClientRect().top
+    const topFromTop = viewportTop + loaderHeight + slotItemMarginTop
+    const scrollTop = previousTopDom
+      ? previousTopDom.getBoundingClientRect().top - topFromTop
+      : heightMap.slice(0, diff).reduce((pre, curr) => pre + curr) - topFromTop - slotItemMarginTop
+
+    return scrollTop
+  }
+
+  function getRowTop(viewport) {
+    const element = viewport.querySelector('virtual-infinite-list-row')
+    return element?.getBoundingClientRect().top ?? 0
+  }
+
+  function getSlotItemMarginTop(viewport) {
+    const slotTemplate = viewport.querySelector('virtual-infinite-list-row').firstElementChild
+    if (!slotTemplate) return 0
+    const slotItemTemplate = slotTemplate.firstElementChild
+    if (!slotItemTemplate) return 0
+    const style = getComputedStyle(slotItemTemplate)
+    return Number(style.marginTop.replace('px', ''))
   }
 
   async function refresh(items, viewportHeight, itemHeight) {
@@ -195,43 +233,6 @@
 
   async function onResize() {
     initialized && viewport && (await refresh(items, viewportHeight, itemHeight))
-  }
-
-  // use when direction = 'top'
-  function calculateScrollTop(rows, viewport, heightMap, diff, loaderHeight) {
-    const previousTopDom = rows[diff]
-      ? rows[diff].firstChild // after second time
-      : rows[diff - 1] // first time
-      ? rows[diff - 1].firstChild
-      : undefined
-
-    if (!previousTopDom || maxItemCountPerLoad === 0) {
-      console.warn(`[Virtual Infinite List]
-  The number of items exceeds 'maxItemCountPerLoad',
-  so the offset after loaded may be significantly shift.`)
-    }
-
-    const viewportTop = viewport.getBoundingClientRect().top
-    const topFromTop = viewportTop + loaderHeight + slotItemMarginTop
-    const scrollTop = previousTopDom
-      ? previousTopDom.getBoundingClientRect().top - topFromTop
-      : heightMap.slice(0, diff).reduce((pre, curr) => pre + curr) - topFromTop
-
-    return scrollTop
-  }
-
-  function getRowTop(viewport) {
-    const element = viewport.querySelector('virtual-infinite-list-row')
-    return element?.getBoundingClientRect().top ?? 0
-  }
-
-  function getSlotItemMarginTop(viewport) {
-    const slotTemplate = viewport.querySelector('virtual-infinite-list-row').firstElementChild
-    if (!slotTemplate) return 0
-    const slotItemTemplate = slotTemplate.firstElementChild
-    if (!slotItemTemplate) return 0
-    const style = getComputedStyle(slotItemTemplate)
-    return Number(style.marginTop.replace('px', ''))
   }
 
   function scrollListener() {
