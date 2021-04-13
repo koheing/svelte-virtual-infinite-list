@@ -304,12 +304,13 @@
           <slot name="item" item={row.data}>Template Not Found!!!</slot>
         </virtual-infinite-list-row>
       {/each}
-    {:else if !loading && visible.length === 0}
-      <slot name="empty" />
     {/if}
 
     {#if loading && direction === 'bottom'}
       <slot name="loader" />
     {/if}
   </virtual-infinite-list-contents>
+  {#if !loading && visible.length === 0}
+    <slot name="empty" />
+  {/if}
 </virtual-infinite-list-viewport>
