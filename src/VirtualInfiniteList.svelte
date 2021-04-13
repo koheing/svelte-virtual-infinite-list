@@ -132,7 +132,7 @@
       ? rows[diff - 1].firstChild
       : undefined
 
-    if (!previousTopDom || maxItemCountPerLoad === 0) {
+    if ((!previousTopDom || maxItemCountPerLoad === 0) && preItemsExisted) {
       console.warn(`[Virtual Infinite List]
   The number of items exceeds 'maxItemCountPerLoad',
   so the offset after loaded may be significantly shift.`)
