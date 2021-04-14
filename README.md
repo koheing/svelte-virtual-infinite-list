@@ -43,11 +43,11 @@ npm i svelte-virtual-infinite-list
   }
 
   async function onInfinite({ detail }: InfiniteEvent) {
+    if (detail.on === 'bottom') return
     loading = true
 
     const data = await find(30)
-    if (detail.on === 'top') [...data, ...things]
-    else [...things, ...data]
+    things = [...data, ...things]
 
     loading = false
   }
