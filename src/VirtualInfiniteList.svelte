@@ -43,19 +43,20 @@
   let firstItemTopOnLoaded
   let slotItemMarginTop
 
-  $: initialized = initialized || !loading
   $: newItemsLoaded = mounted && items && items.length > 0 && items.length - preItems.length > 0
   $: preItemsExisted = mounted && preItems.length > 0
-  $: visible = initialized
-    ? items.slice(start, end + maxItemCountPerLoad).map((data, i) => ({ index: i + start, data }))
-    : []
+  $: visible = items
+    .slice(start, end + maxItemCountPerLoad)
+    .map((data, i) => ({ index: i + start, data }))
+  $: itemsRemoved = mounted && items && items.length > 0 && items.length - preItems.length < 0
 
-  $: if (newItemsLoaded && initialized) {
+  $: if (newItemsLoaded) {
     loadRequiredAtTop(viewport) ? onLoadAtTop() : onLoadAtBottom()
   }
 
+  $: if (itemsRemoved) onRemove()
+
   $: if (mounted && items && items.length === 0) {
-    initialized = false
     preItemsExisted = false
     preItems = []
     top = 0
@@ -74,9 +75,6 @@
     end = 0
   }
 
-  $: itemsRemoved = mounted && items && items.length > 0 && items.length - preItems.length < 0
-  $: if (itemsRemoved) onRemove()
-
   async function onLoadAtTop() {
     if (!firstItemTopOnLoading) firstItemTopOnLoading = getRowTop(viewport)
 
@@ -92,7 +90,7 @@
         : firstItemTopOnLoading - firstItemTopOnLoaded
 
     const diff = items.length - preItems.length
-    if (initialized) {
+    if (preItemsExisted) {
       const scrollTop = calculateScrollTop(
         rows,
         viewport,
@@ -104,14 +102,14 @@
       viewport.scrollTop = scrollTop === 0 ? scrollTop + 5 : scrollTop
     }
 
-    if (initialized && !preItemsExisted) dispatch('initialize')
+    if (!preItemsExisted) dispatch('initialize')
 
     preItems = [...items]
   }
 
   async function onLoadAtBottom() {
     await refresh(items, viewportHeight, itemHeight)
-    if (initialized && !preItemsExisted) dispatch('initialize')
+    if (!preItemsExisted) dispatch('initialize')
 
     preItems = [...items]
   }
@@ -232,13 +230,12 @@
   }
 
   async function onResize() {
-    initialized && viewport && (await refresh(items, viewportHeight, itemHeight))
+    mounted && viewport && (await refresh(items, viewportHeight, itemHeight))
   }
 
   function scrollListener() {
     const loadRequired = loadRequiredAtTop(viewport) || loadRequiredAtBottom(viewport)
-    if (!initialized || loading || !loadRequired || items.length === 0 || preItems.length === 0)
-      return
+    if (!mounted || loading || !loadRequired || items.length === 0 || preItems.length === 0) return
 
     const reachedTop = viewport.scrollTop === 0
     const on = reachedTop ? 'top' : 'bottom'
