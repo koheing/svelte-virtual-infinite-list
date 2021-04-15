@@ -43,20 +43,19 @@
   let firstItemTopOnLoaded
   let slotItemMarginTop
 
+  $: initialized = initialized || !loading
   $: newItemsLoaded = mounted && items && items.length > 0 && items.length - preItems.length > 0
   $: preItemsExisted = mounted && preItems.length > 0
   $: visible = items
     .slice(start, end + maxItemCountPerLoad)
     .map((data, i) => ({ index: i + start, data }))
-  $: itemsRemoved = mounted && items && items.length > 0 && items.length - preItems.length < 0
 
-  $: if (newItemsLoaded) {
+  $: if (newItemsLoaded && initialized) {
     loadRequiredAtTop(viewport) ? onLoadAtTop() : onLoadAtBottom()
   }
 
-  $: if (itemsRemoved) onRemove()
-
   $: if (mounted && items && items.length === 0) {
+    initialized = false
     preItemsExisted = false
     preItems = []
     top = 0
@@ -75,6 +74,9 @@
     end = 0
   }
 
+  $: itemsRemoved = mounted && items && items.length > 0 && items.length - preItems.length < 0
+  $: if (itemsRemoved) onRemove()
+
   async function onLoadAtTop() {
     if (!firstItemTopOnLoading) firstItemTopOnLoading = getRowTop(viewport)
 
@@ -90,7 +92,7 @@
         : firstItemTopOnLoading - firstItemTopOnLoaded
 
     const diff = items.length - preItems.length
-    if (preItemsExisted) {
+    if (initialized) {
       const scrollTop = calculateScrollTop(
         rows,
         viewport,
@@ -102,14 +104,14 @@
       viewport.scrollTop = scrollTop === 0 ? scrollTop + 5 : scrollTop
     }
 
-    if (!preItemsExisted) dispatch('initialize')
+    if (initialized && !preItemsExisted) dispatch('initialize')
 
     preItems = [...items]
   }
 
   async function onLoadAtBottom() {
     await refresh(items, viewportHeight, itemHeight)
-    if (!preItemsExisted) dispatch('initialize')
+    if (initialized && !preItemsExisted) dispatch('initialize')
 
     preItems = [...items]
   }
@@ -153,10 +155,17 @@
   function getSlotItemMarginTop(viewport) {
     const slotTemplate = viewport.querySelector('virtual-infinite-list-row').firstElementChild
     if (!slotTemplate) return 0
+    const marginTop = getMarginTop(slotTemplate)
+    if (marginTop > 0) return marginTop
     const slotItemTemplate = slotTemplate.firstElementChild
     if (!slotItemTemplate) return 0
-    const style = getComputedStyle(slotItemTemplate)
-    return Number(style.marginTop.replace('px', ''))
+    return getMarginTop(slotItemTemplate)
+  }
+
+  function getMarginTop(element) {
+    const style = getComputedStyle(element)
+    const marginTop = Number(style.marginTop.replace('px', ''))
+    return marginTop
   }
 
   async function refresh(items, viewportHeight, itemHeight) {
@@ -230,12 +239,13 @@
   }
 
   async function onResize() {
-    mounted && viewport && (await refresh(items, viewportHeight, itemHeight))
+    initialized && viewport && (await refresh(items, viewportHeight, itemHeight))
   }
 
   function scrollListener() {
     const loadRequired = loadRequiredAtTop(viewport) || loadRequiredAtBottom(viewport)
-    if (!mounted || loading || !loadRequired || items.length === 0 || preItems.length === 0) return
+    if (!initialized || loading || !loadRequired || items.length === 0 || preItems.length === 0)
+      return
 
     const reachedTop = viewport.scrollTop === 0
     const on = reachedTop ? 'top' : 'bottom'
