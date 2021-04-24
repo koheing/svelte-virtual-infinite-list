@@ -43,6 +43,12 @@
     loading = false
     loadCount++
   })
+
+  let value
+
+  $: if (value) {
+    scrollToIndex = Number(value)
+  }
 </script>
 
 <style>
@@ -66,6 +72,9 @@
 <main>
   <button on:click={onClick}>Change Direction</button>
   <div class="load-count">{loadCount}</div>
+  <input bind:value />
+  <button on:click={() => virtualInfiniteList.scrollToIndex(Number(value))} >Get</button>
+  
   <div>
     <VirtualInfiniteList
       height="500px"

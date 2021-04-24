@@ -8,6 +8,7 @@
   export let direction
   export let height = '100%'
   export let itemHeight = undefined
+
   /**
    * [**For direction-top infinite scroll user**]
    * Maximum number of items loaded per load.
@@ -18,6 +19,54 @@
 
   export function scrollTo(offset) {
     mounted && viewport && (viewport.scrollTop = offset)
+  }
+
+  export async function scrollToIndex(index) {
+    searching = true
+
+    const element = contents.querySelector(`#${items[index].id}`)
+    if (element) {
+      const top = element.getBoundingClientRect().top
+      const viewportTop = viewport.getBoundingClientRect().top
+      const topFromTop = viewportTop + slotItemMarginTop
+      viewport.scrollTo({ left: 0, top: viewport.scrollTop + top + slotItemMarginTop - topFromTop })
+      await onScroll()
+      return true
+    }
+
+    const { found, top } = await search(index)
+    if (!found) {
+      searching = false
+      return false
+    }
+
+    viewport.scrollTo({ left: 0, top })
+    await onScroll()
+
+    searching = false
+    return true
+  }
+
+  async function search(index) {
+    const viewportTop = viewport.getBoundingClientRect().top
+    const topFromTop = viewportTop + slotItemMarginTop
+    viewport.scrollTo({ left: 0, top: 0 })
+    await onScroll()
+
+    const isVisible = index < maxItemCountPerLoad + 1
+    const to = isVisible ? items.length - 1 : index - maxItemCountPerLoad + 1
+
+    if (!isVisible) {
+      const h = heightMap.slice(0, to).reduce((h, curr) => h + curr, 0)
+
+      viewport.scrollTo({ left: 0, top: h + topFromTop + slotItemMarginTop })
+      await onScroll()
+    }
+
+    const element = contents.querySelector(`#${items[index].id}`)
+    if (!element) return { found: false, top: 0 }
+    const top = element.getBoundingClientRect().top
+    return { found: true, top: viewport.scrollTop + top + slotItemMarginTop - topFromTop }
   }
 
   /**
@@ -42,6 +91,7 @@
   let firstItemTopOnLoading
   let firstItemTopOnLoaded
   let slotItemMarginTop
+  let searching = false
 
   $: initialized = initialized || !loading
   $: newItemsLoaded = mounted && items && items.length > 0 && items.length - preItems.length > 0
@@ -244,7 +294,14 @@
 
   function scrollListener() {
     const loadRequired = loadRequiredAtTop(viewport) || loadRequiredAtBottom(viewport)
-    if (!initialized || loading || !loadRequired || items.length === 0 || preItems.length === 0)
+    if (
+      !initialized ||
+      loading ||
+      searching ||
+      !loadRequired ||
+      items.length === 0 ||
+      preItems.length === 0
+    )
       return
 
     const reachedTop = viewport.scrollTop === 0
@@ -307,7 +364,7 @@
 
     {#if visible.length > 0}
       {#each visible as row (row.index)}
-        <virtual-infinite-list-row>
+        <virtual-infinite-list-row id={row.data.id}>
           <slot name="item" item={row.data}>Template Not Found!!!</slot>
         </virtual-infinite-list-row>
       {/each}

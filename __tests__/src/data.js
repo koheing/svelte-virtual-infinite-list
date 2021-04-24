@@ -1,6 +1,7 @@
 const sleep = (seconds) => new Promise((resolve) => setTimeout(resolve, seconds * 1000))
+let _count = 0
 export async function find(count) {
-  const data = Array.from(new Array(count)).map((_) => {
+  const data = Array.from(new Array(count)).map((_, index) => {
     const animal = animals[Math.floor(Math.random() * animals.length)]
     const name =
       Math.random() < 0.3
@@ -8,10 +9,11 @@ export async function find(count) {
             .map((_) => animal)
             .join('')
         : animal
-    return { name }
+    return { name, id: 'data' + (_count + index) }
   })
 
   await sleep(0.3)
+  _count = count + _count
   return data
 }
 
