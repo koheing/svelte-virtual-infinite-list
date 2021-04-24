@@ -54,7 +54,7 @@
     await onScroll()
 
     const isVisible = index < maxItemCountPerLoad + 1
-    const to = isVisible ? items.length - 1 : index - maxItemCountPerLoad + 1
+    const to = isVisible ? 1 : index - maxItemCountPerLoad + 1
 
     if (!isVisible) {
       const h = heightMap.slice(0, to).reduce((h, curr) => h + curr, 0)

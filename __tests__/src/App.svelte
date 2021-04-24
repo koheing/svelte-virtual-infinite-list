@@ -45,10 +45,6 @@
   })
 
   let value
-
-  $: if (value) {
-    scrollToIndex = Number(value)
-  }
 </script>
 
 <style>
