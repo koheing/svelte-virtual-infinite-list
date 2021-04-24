@@ -558,7 +558,7 @@
     const get_loader_slot_changes = dirty => ({});
     const get_loader_slot_context = ctx => ({});
 
-    // (361:4) {#if loading && direction === 'top'}
+    // (350:4) {#if loading && direction === 'top'}
     function create_if_block_3(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[24].loader;
@@ -597,7 +597,7 @@
     	};
     }
 
-    // (365:4) {#if visible.length > 0}
+    // (354:4) {#if visible.length > 0}
     function create_if_block_2(ctx) {
     	let each_blocks = [];
     	let each_1_lookup = new Map();
@@ -662,7 +662,7 @@
     	};
     }
 
-    // (368:44) Template Not Found!!!
+    // (357:44) Template Not Found!!!
     function fallback_block(ctx) {
     	let t;
 
@@ -679,7 +679,7 @@
     	};
     }
 
-    // (366:6) {#each visible as row (row.index)}
+    // (355:6) {#each visible as row (row.index)}
     function create_each_block(key_1, ctx) {
     	let virtual_infinite_list_row;
     	let t;
@@ -739,7 +739,7 @@
     	};
     }
 
-    // (373:4) {#if loading && direction === 'bottom'}
+    // (362:4) {#if loading && direction === 'bottom'}
     function create_if_block_1(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[24].loader;
@@ -778,7 +778,7 @@
     	};
     }
 
-    // (377:2) {#if !loading && visible.length === 0}
+    // (366:2) {#if !loading && visible.length === 0}
     function create_if_block(ctx) {
     	let current;
     	const empty_slot_template = /*#slots*/ ctx[24].empty;
@@ -1051,22 +1051,6 @@
 
     	async function scrollToIndex(index) {
     		searching = true;
-    		const element = contents.querySelector(`#${items[index].id}`);
-
-    		if (element) {
-    			const top = element.getBoundingClientRect().top;
-    			const viewportTop = viewport.getBoundingClientRect().top;
-    			const topFromTop = viewportTop + slotItemMarginTop;
-
-    			viewport.scrollTo({
-    				left: 0,
-    				top: viewport.scrollTop + top + slotItemMarginTop - topFromTop
-    			});
-
-    			await onScroll();
-    			return true;
-    		}
-
     		const { found, top } = await search(index);
 
     		if (!found) {
@@ -1074,7 +1058,7 @@
     			return false;
     		}
 
-    		viewport.scrollTo({ left: 0, top });
+    		viewport.scrollTo({ left: 0, top: top > 0 ? top : 1 });
     		await onScroll();
     		searching = false;
     		return true;
@@ -1082,7 +1066,6 @@
 
     	async function search(index) {
     		const viewportTop = viewport.getBoundingClientRect().top;
-    		const topFromTop = viewportTop + slotItemMarginTop;
     		viewport.scrollTo({ left: 0, top: 0 });
     		await onScroll();
     		const isVisible = index < maxItemCountPerLoad + 1;
@@ -1090,12 +1073,7 @@
 
     		if (!isVisible) {
     			const h = heightMap.slice(0, to).reduce((h, curr) => h + curr, 0);
-
-    			viewport.scrollTo({
-    				left: 0,
-    				top: h + topFromTop + slotItemMarginTop
-    			});
-
+    			viewport.scrollTo({ left: 0, top: h });
     			await onScroll();
     		}
 
@@ -1105,7 +1083,7 @@
 
     		return {
     			found: true,
-    			top: viewport.scrollTop + top + slotItemMarginTop - topFromTop
+    			top: viewport.scrollTop + top - viewportTop
     		};
     	}
 

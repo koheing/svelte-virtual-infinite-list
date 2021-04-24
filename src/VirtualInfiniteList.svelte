@@ -24,23 +24,13 @@
   export async function scrollToIndex(index) {
     searching = true
 
-    const element = contents.querySelector(`#${items[index].id}`)
-    if (element) {
-      const top = element.getBoundingClientRect().top
-      const viewportTop = viewport.getBoundingClientRect().top
-      const topFromTop = viewportTop + slotItemMarginTop
-      viewport.scrollTo({ left: 0, top: viewport.scrollTop + top + slotItemMarginTop - topFromTop })
-      await onScroll()
-      return true
-    }
-
     const { found, top } = await search(index)
     if (!found) {
       searching = false
       return false
     }
 
-    viewport.scrollTo({ left: 0, top })
+    viewport.scrollTo({ left: 0, top: top > 0 ? top : 1 })
     await onScroll()
 
     searching = false
@@ -49,7 +39,6 @@
 
   async function search(index) {
     const viewportTop = viewport.getBoundingClientRect().top
-    const topFromTop = viewportTop + slotItemMarginTop
     viewport.scrollTo({ left: 0, top: 0 })
     await onScroll()
 
@@ -59,14 +48,14 @@
     if (!isVisible) {
       const h = heightMap.slice(0, to).reduce((h, curr) => h + curr, 0)
 
-      viewport.scrollTo({ left: 0, top: h + topFromTop + slotItemMarginTop })
+      viewport.scrollTo({ left: 0, top: h })
       await onScroll()
     }
 
     const element = contents.querySelector(`#${items[index].id}`)
     if (!element) return { found: false, top: 0 }
     const top = element.getBoundingClientRect().top
-    return { found: true, top: viewport.scrollTop + top + slotItemMarginTop - topFromTop }
+    return { found: true, top: viewport.scrollTop + top - viewportTop }
   }
 
   /**
