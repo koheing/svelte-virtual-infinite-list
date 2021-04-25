@@ -558,7 +558,7 @@
     const get_loader_slot_changes = dirty => ({});
     const get_loader_slot_context = ctx => ({});
 
-    // (364:4) {#if loading && direction === 'top'}
+    // (365:4) {#if loading && direction === 'top'}
     function create_if_block_3(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[25].loader;
@@ -597,7 +597,7 @@
     	};
     }
 
-    // (368:4) {#if visible.length > 0}
+    // (369:4) {#if visible.length > 0}
     function create_if_block_2(ctx) {
     	let each_blocks = [];
     	let each_1_lookup = new Map();
@@ -662,7 +662,7 @@
     	};
     }
 
-    // (371:44) Template Not Found!!!
+    // (372:44) Template Not Found!!!
     function fallback_block(ctx) {
     	let t;
 
@@ -679,7 +679,7 @@
     	};
     }
 
-    // (369:6) {#each visible as row (row.index)}
+    // (370:6) {#each visible as row (row.index)}
     function create_each_block(key_1, ctx) {
     	let virtual_infinite_list_row;
     	let t;
@@ -739,7 +739,7 @@
     	};
     }
 
-    // (376:4) {#if loading && direction === 'bottom'}
+    // (377:4) {#if loading && direction === 'bottom'}
     function create_if_block_1(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[25].loader;
@@ -778,7 +778,7 @@
     	};
     }
 
-    // (380:2) {#if !loading && visible.length === 0}
+    // (381:2) {#if !loading && visible.length === 0}
     function create_if_block(ctx) {
     	let current;
     	const empty_slot_template = /*#slots*/ ctx[25].empty;
@@ -1046,8 +1046,9 @@
     	let { uniqueKey = undefined } = $$props;
     	let { maxItemCountPerLoad = 0 } = $$props;
 
-    	function scrollTo(offset) {
+    	async function scrollTo(offset) {
     		mounted && viewport && $$invalidate(4, viewport.scrollTop = offset, viewport);
+    		await onScroll();
     	}
 
     	async function scrollToIndex(index) {
