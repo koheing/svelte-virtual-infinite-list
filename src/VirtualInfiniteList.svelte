@@ -316,7 +316,7 @@
       await onScroll()
     }
 
-    const element = contents.querySelector(`#${items[index].id}`)
+    const element = contents.querySelector(`#${items[index][uniqueKey]}`)
     if (!element) return { found: false, top: 0 }
     const top = element.getBoundingClientRect().top
     return { found: true, top: viewport.scrollTop + top - viewportTop }
