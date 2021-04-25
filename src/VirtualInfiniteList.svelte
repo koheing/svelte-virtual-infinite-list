@@ -23,7 +23,8 @@
   export let maxItemCountPerLoad = 0
 
   export async function scrollTo(offset) {
-    mounted && viewport && (viewport.scrollTop = offset)
+    if (!mounted || !viewport) return
+    viewport.scrollTop = offset
     await onScroll()
   }
 
