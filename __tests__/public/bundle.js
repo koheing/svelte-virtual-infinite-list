@@ -558,7 +558,7 @@
     const get_loader_slot_changes = dirty => ({});
     const get_loader_slot_context = ctx => ({});
 
-    // (365:4) {#if loading && direction === 'top'}
+    // (364:4) {#if loading && direction === 'top'}
     function create_if_block_3(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[25].loader;
@@ -597,7 +597,7 @@
     	};
     }
 
-    // (369:4) {#if visible.length > 0}
+    // (368:4) {#if visible.length > 0}
     function create_if_block_2(ctx) {
     	let each_blocks = [];
     	let each_1_lookup = new Map();
@@ -662,7 +662,7 @@
     	};
     }
 
-    // (372:44) Template Not Found!!!
+    // (371:44) Template Not Found!!!
     function fallback_block(ctx) {
     	let t;
 
@@ -679,7 +679,7 @@
     	};
     }
 
-    // (370:6) {#each visible as row (row.index)}
+    // (369:6) {#each visible as row (row.index)}
     function create_each_block(key_1, ctx) {
     	let virtual_infinite_list_row;
     	let t;
@@ -739,7 +739,7 @@
     	};
     }
 
-    // (377:4) {#if loading && direction === 'bottom'}
+    // (376:4) {#if loading && direction === 'bottom'}
     function create_if_block_1(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[25].loader;
@@ -778,7 +778,7 @@
     	};
     }
 
-    // (381:2) {#if !loading && visible.length === 0}
+    // (380:2) {#if !loading && visible.length === 0}
     function create_if_block(ctx) {
     	let current;
     	const empty_slot_template = /*#slots*/ ctx[25].empty;
@@ -1054,9 +1054,7 @@
     		if (typeof items[index] === "undefined" || !mounted) return false;
 
     		if (!uniqueKey) {
-    			console.warn(`[Virtual Infinite List]
-  You have to set 'uniqueKey' if you use this method.`);
-
+    			console.warn(`[Virtual Infinite List] You have to set 'uniqueKey' if you use this method.`);
     			return false;
     		}
 

@@ -34,7 +34,7 @@
     }
     searching = true
 
-    const { found, top } = await search(index, direction)
+    const { found, top } = await search(index)
     if (!found) {
       searching = false
       return false
