@@ -39,9 +39,8 @@ npm i svelte-virtual-infinite-list
   let viewport: HTMLElement | null = null
   let virtualInfiniteList: VirtualInfiniteList
 
-  function onInitialize() {
-    viewport && (viewport.scrollTop = 999999)
-    // virtualInfiniteList.scrollTo(99999)
+  async function onInitialize() {
+    await virtualInfiniteList.scrollTo(1)
   }
 
   async function onInfinite({ detail }: InfiniteEvent) {
