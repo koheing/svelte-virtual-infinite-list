@@ -552,7 +552,7 @@
     const get_loader_slot_changes = dirty => ({});
     const get_loader_slot_context = ctx => ({});
 
-    // (366:4) {#if loading && direction === 'top'}
+    // (367:4) {#if loading && direction === 'top'}
     function create_if_block_3(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[25].loader;
@@ -591,7 +591,7 @@
     	};
     }
 
-    // (370:4) {#if visible.length > 0}
+    // (371:4) {#if visible.length > 0}
     function create_if_block_2(ctx) {
     	let each_blocks = [];
     	let each_1_lookup = new Map();
@@ -656,7 +656,7 @@
     	};
     }
 
-    // (373:44) Template Not Found!!!
+    // (374:44) Template Not Found!!!
     function fallback_block(ctx) {
     	let t;
 
@@ -673,7 +673,7 @@
     	};
     }
 
-    // (371:6) {#each visible as row (row.index)}
+    // (372:6) {#each visible as row (row.index)}
     function create_each_block(key_1, ctx) {
     	let virtual_infinite_list_row;
     	let t;
@@ -733,7 +733,7 @@
     	};
     }
 
-    // (378:4) {#if loading && direction === 'bottom'}
+    // (379:4) {#if loading && direction === 'bottom'}
     function create_if_block_1(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[25].loader;
@@ -772,7 +772,7 @@
     	};
     }
 
-    // (382:2) {#if !loading && visible.length === 0}
+    // (383:2) {#if !loading && visible.length === 0}
     function create_if_block(ctx) {
     	let current;
     	const empty_slot_template = /*#slots*/ ctx[25].empty;
@@ -1228,7 +1228,8 @@
 
     	// more. maybe we can just call handle_scroll again?
     	async function onResize() {
-    		initialized && viewport && await refresh(items, viewportHeight, itemHeight);
+    		if (!initialized || !viewport) return;
+    		await refresh(items, viewportHeight, itemHeight);
     	}
 
     	function scrollListener() {

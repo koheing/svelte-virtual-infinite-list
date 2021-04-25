@@ -272,7 +272,8 @@
   }
 
   async function onResize() {
-    initialized && viewport && (await refresh(items, viewportHeight, itemHeight))
+    if (!initialized || !viewport) return
+    await refresh(items, viewportHeight, itemHeight)
   }
 
   function scrollListener() {
