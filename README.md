@@ -37,9 +37,11 @@ npm i svelte-virtual-infinite-list
 
   let loading = true
   let viewport: HTMLElement | null = null
+  let virtualInfiniteList: VirtualInfiniteList
 
   function onInitialize() {
     viewport && (viewport.scrollTop = 999999)
+    // virtualInfiniteList.scrollTo(99999)
   }
 
   async function onInfinite({ detail }: InfiniteEvent) {
@@ -59,6 +61,10 @@ npm i svelte-virtual-infinite-list
     loading = false
   })
 
+  async function scrollToIndex(item) {
+    const index = things.findIndex((it) => it)
+    await virtualInfiniteList.scrollToIndex(index)
+  }
 </script>
 
 <VirtualInfiniteList
@@ -68,6 +74,7 @@ npm i svelte-virtual-infinite-list
   maxItemCountPerLoad={30}
   on:initialize={onInitialize}
   on:infinite={onInfinite}
+  bind:this={virtualInfiniteList}
   let:item
 >
   <!-- this will be rendered for each currently visible item -->
@@ -108,6 +115,13 @@ npm i svelte-virtual-infinite-list
 | 1 |  `item` | Displayed item   |
 | 2 |  `loader` | Displayed element if loading is `true` |
 | 3 |  `empty` | Displayed element if items is `[]` and loading is `false` |
+
+## Additional Methods
+
+| No | Method Name | Type | Note |  
+| :--: | :-- | :-- | :-- |
+| 1 |  `scrollTo` | (offset: number) => void | This can scroll to offset.  |
+| 2 |  `scrollToIndex` | (index: number) => Promise< void > | This allows you to scroll to a specific item using the index. Returns `true` if this is possible. |
 
 ## LICENSE
 

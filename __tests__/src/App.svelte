@@ -77,6 +77,7 @@
       {direction}
       {loading}
       {items}
+      uniqueKey={'id'}
       maxItemCountPerLoad={30}
       on:initialize={onInitialize}
       on:infinite={onInfinite}

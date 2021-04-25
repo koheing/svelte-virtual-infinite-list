@@ -8,7 +8,12 @@
   export let direction
   export let height = '100%'
   export let itemHeight = undefined
-
+  /**
+   * You need to specify one unique property like `id` in the item object here
+   * if you want to use the `scrollToIndex` method.
+   * @default undefined
+   */
+  export let uniqueKey = undefined
   /**
    * [**For direction-top infinite scroll user**]
    * Maximum number of items loaded per load.
@@ -23,6 +28,10 @@
 
   export async function scrollToIndex(index) {
     if (typeof items[index] === 'undefined' || !mounted) return false
+    if (!uniqueKey) {
+      console.warn(`[Virtual Infinite List] You have to set 'uniqueKey' if you use this method.`)
+      return false
+    }
     searching = true
 
     const { found, top } = await search(index, direction)
@@ -358,7 +367,7 @@
 
     {#if visible.length > 0}
       {#each visible as row (row.index)}
-        <virtual-infinite-list-row id={row.data.id}>
+        <virtual-infinite-list-row id={String(row.data[uniqueKey])}>
           <slot name="item" item={row.data}>Template Not Found!!!</slot>
         </virtual-infinite-list-row>
       {/each}

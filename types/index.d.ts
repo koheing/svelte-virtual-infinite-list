@@ -20,6 +20,12 @@ export interface VirtualInfiniteListProps {
    */
   itemHeight?: number
   /**
+   * You need to set specify one unique property like `id` in the item object 
+   * if you want to use the `scrollToIndex` method.
+   * @default undefined
+   */
+  uniqueKey?: string
+  /**
    * [**For direction-top infinite scroll user**]
    * Maximum number of items loaded per load.
    * The offset after loaded may be significantly shift
@@ -29,6 +35,7 @@ export interface VirtualInfiniteListProps {
    */
   maxItemCountPerLoad?: number
   scrollTo?: (offset: number) => void
+  scrollToIndex?: (index: number) => Promise<boolean>
   /**
    * read-only, but visible to consumers via bind:start
    * 
