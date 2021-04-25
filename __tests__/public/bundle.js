@@ -1705,7 +1705,7 @@
     	append(document_1.head, style);
     }
 
-    // (88:6) 
+    // (92:6) 
     function create_item_slot(ctx) {
     	let div1;
     	let div0;
@@ -1736,21 +1736,23 @@
 
     function create_fragment(ctx) {
     	let main;
+    	let div0;
     	let button0;
     	let t1;
-    	let div0;
+    	let div1;
     	let t2;
     	let t3;
     	let input;
     	let t4;
+    	let div2;
     	let button1;
     	let t6;
-    	let div1;
+    	let div3;
     	let virtualinfinitelist;
     	let updating_start;
     	let updating_end;
     	let t7;
-    	let div2;
+    	let div4;
     	let t8;
     	let t9;
     	let t10;
@@ -1801,46 +1803,52 @@
     	return {
     		c() {
     			main = element("main");
+    			div0 = element("div");
     			button0 = element("button");
     			button0.textContent = "Change Direction";
     			t1 = space();
-    			div0 = element("div");
+    			div1 = element("div");
     			t2 = text(/*loadCount*/ ctx[3]);
     			t3 = space();
     			input = element("input");
     			t4 = space();
+    			div2 = element("div");
     			button1 = element("button");
-    			button1.textContent = "Get";
+    			button1.textContent = "moveTo";
     			t6 = space();
-    			div1 = element("div");
+    			div3 = element("div");
     			create_component(virtualinfinitelist.$$.fragment);
     			t7 = space();
-    			div2 = element("div");
+    			div4 = element("div");
     			t8 = text(/*start*/ ctx[5]);
     			t9 = text(" - ");
     			t10 = text(/*end*/ ctx[6]);
-    			attr(div0, "class", "load-count svelte-yby8h8");
+    			attr(div0, "id", "direction");
+    			attr(div1, "class", "load-count svelte-yby8h8");
+    			attr(div2, "id", "scrollTo");
     			attr(main, "class", "svelte-yby8h8");
     		},
     		m(target, anchor) {
     			insert(target, main, anchor);
-    			append(main, button0);
-    			append(main, t1);
     			append(main, div0);
-    			append(div0, t2);
+    			append(div0, button0);
+    			append(main, t1);
+    			append(main, div1);
+    			append(div1, t2);
     			append(main, t3);
     			append(main, input);
     			set_input_value(input, /*value*/ ctx[7]);
     			append(main, t4);
-    			append(main, button1);
-    			append(main, t6);
-    			append(main, div1);
-    			mount_component(virtualinfinitelist, div1, null);
-    			append(main, t7);
     			append(main, div2);
-    			append(div2, t8);
-    			append(div2, t9);
-    			append(div2, t10);
+    			append(div2, button1);
+    			append(main, t6);
+    			append(main, div3);
+    			mount_component(virtualinfinitelist, div3, null);
+    			append(main, t7);
+    			append(main, div4);
+    			append(div4, t8);
+    			append(div4, t9);
+    			append(div4, t10);
     			current = true;
 
     			if (!mounted) {

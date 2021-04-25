@@ -66,10 +66,14 @@
 </style>
 
 <main>
-  <button on:click={onClick}>Change Direction</button>
+  <div id="direction">
+    <button on:click={onClick}>Change Direction</button>
+  </div>
   <div class="load-count">{loadCount}</div>
   <input bind:value />
-  <button on:click={() => virtualInfiniteList.scrollToIndex(Number(value))} >Get</button>
+  <div id="scrollTo">
+    <button on:click={() => virtualInfiniteList.scrollToIndex(Number(value))} >moveTo</button>
+  </div>
   
   <div>
     <VirtualInfiniteList
