@@ -22,40 +22,23 @@
   }
 
   export async function scrollToIndex(index) {
+    if (typeof items[index] === 'undefined' || !mounted) return false
     searching = true
 
-    const { found, top } = await search(index)
+    const { found, top } = await search(index, direction)
     if (!found) {
       searching = false
       return false
     }
 
-    viewport.scrollTo({ left: 0, top: top > 0 ? top : 1 })
+    viewport.scrollTo({ left: 0, top })
     await onScroll()
+
+    if (loadRequiredAtTop(viewport)) viewport.scrollTop = 1
+    if (loadRequiredAtBottom(viewport)) viewport.scrollTop -= 1
 
     searching = false
     return true
-  }
-
-  async function search(index) {
-    const viewportTop = viewport.getBoundingClientRect().top
-    viewport.scrollTo({ left: 0, top: 0 })
-    await onScroll()
-
-    const isVisible = index < maxItemCountPerLoad + 1
-    const to = isVisible ? 1 : index - maxItemCountPerLoad + 1
-
-    if (!isVisible) {
-      const h = heightMap.slice(0, to).reduce((h, curr) => h + curr, 0)
-
-      viewport.scrollTo({ left: 0, top: h })
-      await onScroll()
-    }
-
-    const element = contents.querySelector(`#${items[index].id}`)
-    if (!element) return { found: false, top: 0 }
-    const top = element.getBoundingClientRect().top
-    return { found: true, top: viewport.scrollTop + top - viewportTop }
   }
 
   /**
@@ -306,6 +289,28 @@
   function loadRequiredAtBottom(viewport) {
     const reachedBottom = viewport.scrollHeight - viewport.scrollTop === viewport.clientHeight
     return reachedBottom && direction === 'bottom'
+  }
+
+  async function search(index) {
+    const viewportTop = viewport.getBoundingClientRect().top
+    viewport.scrollTo({ left: 0, top: 0 })
+    await onScroll()
+
+    const isInBuffer = index < maxItemCountPerLoad + 1
+    const coef = maxItemCountPerLoad - 1
+    const to = isInBuffer ? 1 : index - coef
+
+    if (!isInBuffer) {
+      const h = heightMap.slice(0, to).reduce((h, curr) => h + curr, 0)
+
+      viewport.scrollTo({ left: 0, top: h })
+      await onScroll()
+    }
+
+    const element = contents.querySelector(`#${items[index].id}`)
+    if (!element) return { found: false, top: 0 }
+    const top = element.getBoundingClientRect().top
+    return { found: true, top: viewport.scrollTop + top - viewportTop }
   }
 
   // trigger initial refresh

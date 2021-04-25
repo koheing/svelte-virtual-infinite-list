@@ -558,7 +558,7 @@
     const get_loader_slot_changes = dirty => ({});
     const get_loader_slot_context = ctx => ({});
 
-    // (350:4) {#if loading && direction === 'top'}
+    // (356:4) {#if loading && direction === 'top'}
     function create_if_block_3(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[24].loader;
@@ -597,7 +597,7 @@
     	};
     }
 
-    // (354:4) {#if visible.length > 0}
+    // (360:4) {#if visible.length > 0}
     function create_if_block_2(ctx) {
     	let each_blocks = [];
     	let each_1_lookup = new Map();
@@ -662,7 +662,7 @@
     	};
     }
 
-    // (357:44) Template Not Found!!!
+    // (363:44) Template Not Found!!!
     function fallback_block(ctx) {
     	let t;
 
@@ -679,7 +679,7 @@
     	};
     }
 
-    // (355:6) {#each visible as row (row.index)}
+    // (361:6) {#each visible as row (row.index)}
     function create_each_block(key_1, ctx) {
     	let virtual_infinite_list_row;
     	let t;
@@ -739,7 +739,7 @@
     	};
     }
 
-    // (362:4) {#if loading && direction === 'bottom'}
+    // (368:4) {#if loading && direction === 'bottom'}
     function create_if_block_1(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[24].loader;
@@ -778,7 +778,7 @@
     	};
     }
 
-    // (366:2) {#if !loading && visible.length === 0}
+    // (372:2) {#if !loading && visible.length === 0}
     function create_if_block(ctx) {
     	let current;
     	const empty_slot_template = /*#slots*/ ctx[24].empty;
@@ -1050,28 +1050,33 @@
     	}
 
     	async function scrollToIndex(index) {
+    		if (typeof items[index] === "undefined") return false;
     		searching = true;
     		const { found, top } = await search(index);
+    		console.log({ found, top }, items[index]);
 
     		if (!found) {
     			searching = false;
     			return false;
     		}
 
-    		viewport.scrollTo({ left: 0, top: top > 0 ? top : 1 });
+    		viewport.scrollTo({ left: 0, top });
     		await onScroll();
+    		if (loadRequiredAtTop(viewport)) $$invalidate(3, viewport.scrollTop = 1, viewport);
+    		if (loadRequiredAtBottom(viewport)) $$invalidate(3, viewport.scrollTop -= 1, viewport);
     		searching = false;
     		return true;
     	}
 
-    	async function search(index) {
+    	async function search(index, direction) {
     		const viewportTop = viewport.getBoundingClientRect().top;
     		viewport.scrollTo({ left: 0, top: 0 });
     		await onScroll();
-    		const isVisible = index < maxItemCountPerLoad + 1;
-    		const to = isVisible ? 1 : index - maxItemCountPerLoad + 1;
+    		const isInBuffer = index < maxItemCountPerLoad + 1;
+    		const coef = maxItemCountPerLoad - 1;
+    		const to = isInBuffer ? 1 : index - coef;
 
-    		if (!isVisible) {
+    		if (!isInBuffer) {
     			const h = heightMap.slice(0, to).reduce((h, curr) => h + curr, 0);
     			viewport.scrollTo({ left: 0, top: h });
     			await onScroll();
