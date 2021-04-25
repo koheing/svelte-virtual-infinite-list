@@ -26,7 +26,7 @@ npm i svelte-virtual-infinite-list
   import type { InfiniteEvent } from 'svelte-virtual-infinite-list'
   import { find } from './find'
 
-  const things = [
+  let things = [
     // these can be any values you like
     { name: 'one', number: 1 },
     { name: 'two', number: 2 },
