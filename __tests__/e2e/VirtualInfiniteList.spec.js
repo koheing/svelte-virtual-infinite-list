@@ -21,7 +21,7 @@ context('VirtualInfiniteList', () => {
   })
 
   it('[direction=bottom] can load virtual list', () => {
-    cy.get('button')
+    cy.get('#direction')
       .click()
       .wait(500)
       .get('virtual-infinite-list-row')
@@ -31,7 +31,7 @@ context('VirtualInfiniteList', () => {
   })
 
   it('[direction=bottom] load more data when scroll bottom', () => {
-    cy.get('button')
+    cy.get('#direction')
       .click()
       .wait(500)
       .get('virtual-infinite-list-viewport')

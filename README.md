@@ -26,7 +26,7 @@ npm i svelte-virtual-infinite-list
   import type { InfiniteEvent } from 'svelte-virtual-infinite-list'
   import { find } from './find'
 
-  const things = [
+  let things = [
     // these can be any values you like
     { name: 'one', number: 1 },
     { name: 'two', number: 2 },
@@ -37,9 +37,10 @@ npm i svelte-virtual-infinite-list
 
   let loading = true
   let viewport: HTMLElement | null = null
+  let virtualInfiniteList: VirtualInfiniteList
 
-  function onInitialize() {
-    viewport && (viewport.scrollTop = 999999)
+  async function onInitialize() {
+    await virtualInfiniteList.scrollTo(1)
   }
 
   async function onInfinite({ detail }: InfiniteEvent) {
@@ -59,6 +60,10 @@ npm i svelte-virtual-infinite-list
     loading = false
   })
 
+  async function scrollToIndex(item) {
+    const index = things.findIndex((it) => it)
+    await virtualInfiniteList.scrollToIndex(index)
+  }
 </script>
 
 <VirtualInfiniteList
@@ -66,8 +71,10 @@ npm i svelte-virtual-infinite-list
   {loading}
   direction="top"
   maxItemCountPerLoad={30}
+  uniqueKey={'number'}
   on:initialize={onInitialize}
   on:infinite={onInfinite}
+  bind:this={virtualInfiniteList}
   let:item
 >
   <!-- this will be rendered for each currently visible item -->
@@ -93,7 +100,8 @@ npm i svelte-virtual-infinite-list
 | :--: | :-- | :-- | :-- |
 | 1 |  `loading` | boolean | - |
 | 2 |  `direction` | `'top'` or `'bottom'` | Loading direction. |
-| 3 |  `maxItemCountPerLoad` | number | [**For direction-top infinite scroll user**] Maximum number of items loaded per load. The offset after loaded may be significantly shift if the number of items that exceeds this value is loaded. `Default value is 0.` |   
+| 3 |  `maxItemCountPerLoad` | number | [**For direction-top infinite scroll user**] Maximum number of items loaded per load. The offset after loaded may be significantly shift if the number of items that exceeds this value is loaded. `Default value is 0.` |
+| 4 | `uniqueKey` | string | You need to set specify one unique property like `id` in the item object if you want to use the `scrollToIndex` method. `Default value is undefined.` |   
 
 ## Additional Events
 
@@ -108,6 +116,13 @@ npm i svelte-virtual-infinite-list
 | 1 |  `item` | Displayed item   |
 | 2 |  `loader` | Displayed element if loading is `true` |
 | 3 |  `empty` | Displayed element if items is `[]` and loading is `false` |
+
+## Additional Methods
+
+| No | Method Name | Type | Note |  
+| :--: | :-- | :-- | :-- |
+| 1 |  `scrollTo` | (offset: number) =>  Promise< void > | This allows you to scroll to a specific offset.  |
+| 2 |  `scrollToIndex` | (index: number) => Promise< boolean > | This allows you to scroll to a specific item using the index. Returns `true` if this is possible. |
 
 ## LICENSE
 

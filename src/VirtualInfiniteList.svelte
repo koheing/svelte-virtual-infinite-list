@@ -9,6 +9,12 @@
   export let height = '100%'
   export let itemHeight = undefined
   /**
+   * You need to specify one unique property like `id` in the item object here
+   * if you want to use the `scrollToIndex` method.
+   * @default undefined
+   */
+  export let uniqueKey = undefined
+  /**
    * [**For direction-top infinite scroll user**]
    * Maximum number of items loaded per load.
    * The offset after loaded may be significantly shift
@@ -16,8 +22,34 @@
    */
   export let maxItemCountPerLoad = 0
 
-  export function scrollTo(offset) {
-    mounted && viewport && (viewport.scrollTop = offset)
+  export async function scrollTo(offset) {
+    if (!mounted || !viewport) return
+    viewport.scrollTop = offset
+    await onScroll()
+  }
+
+  export async function scrollToIndex(index) {
+    if (typeof items[index] === 'undefined' || !mounted) return false
+    if (!uniqueKey) {
+      console.warn(`[Virtual Infinite List] You have to set 'uniqueKey' if you use this method.`)
+      return false
+    }
+    searching = true
+
+    const { found, top } = await search(index)
+    if (!found) {
+      searching = false
+      return false
+    }
+
+    viewport.scrollTo({ left: 0, top })
+    await onScroll()
+
+    if (loadRequiredAtTop(viewport)) viewport.scrollTop = 1
+    if (loadRequiredAtBottom(viewport)) viewport.scrollTop -= 1
+
+    searching = false
+    return true
   }
 
   /**
@@ -42,6 +74,7 @@
   let firstItemTopOnLoading
   let firstItemTopOnLoaded
   let slotItemMarginTop
+  let searching = false
 
   $: initialized = initialized || !loading
   $: newItemsLoaded = mounted && items && items.length > 0 && items.length - preItems.length > 0
@@ -239,12 +272,20 @@
   }
 
   async function onResize() {
-    initialized && viewport && (await refresh(items, viewportHeight, itemHeight))
+    if (!initialized || !viewport) return
+    await refresh(items, viewportHeight, itemHeight)
   }
 
   function scrollListener() {
     const loadRequired = loadRequiredAtTop(viewport) || loadRequiredAtBottom(viewport)
-    if (!initialized || loading || !loadRequired || items.length === 0 || preItems.length === 0)
+    if (
+      !initialized ||
+      loading ||
+      searching ||
+      !loadRequired ||
+      items.length === 0 ||
+      preItems.length === 0
+    )
       return
 
     const reachedTop = viewport.scrollTop === 0
@@ -260,6 +301,28 @@
   function loadRequiredAtBottom(viewport) {
     const reachedBottom = viewport.scrollHeight - viewport.scrollTop === viewport.clientHeight
     return reachedBottom && direction === 'bottom'
+  }
+
+  async function search(index) {
+    const viewportTop = viewport.getBoundingClientRect().top
+    viewport.scrollTo({ left: 0, top: 0 })
+    await onScroll()
+
+    const isInBuffer = index < maxItemCountPerLoad + 1
+    const coef = maxItemCountPerLoad - 1
+    const to = isInBuffer ? 1 : index - coef
+
+    if (!isInBuffer) {
+      const h = heightMap.slice(0, to).reduce((h, curr) => h + curr, 0)
+
+      viewport.scrollTo({ left: 0, top: h })
+      await onScroll()
+    }
+
+    const element = contents.querySelector(`#${items[index][uniqueKey]}`)
+    if (!element) return { found: false, top: 0 }
+    const top = element.getBoundingClientRect().top
+    return { found: true, top: viewport.scrollTop + top - viewportTop }
   }
 
   // trigger initial refresh
@@ -307,7 +370,7 @@
 
     {#if visible.length > 0}
       {#each visible as row (row.index)}
-        <virtual-infinite-list-row>
+        <virtual-infinite-list-row id={String(row.data[uniqueKey])}>
           <slot name="item" item={row.data}>Template Not Found!!!</slot>
         </virtual-infinite-list-row>
       {/each}
