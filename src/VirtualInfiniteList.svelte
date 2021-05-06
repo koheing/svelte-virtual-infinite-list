@@ -52,6 +52,21 @@
     return true
   }
 
+  export async function scrollToTop() {
+    if (!mounted || !viewport) return
+    viewport.scrollTop = 0
+    await onScroll()
+    viewport.scrollTop = 0
+    await refresh(items, viewportHeight, itemHeight)
+  }
+
+  export async function scrollToBottom() {
+    if (!mounted || !viewport) return
+    viewport.scrollTop = viewport.scrollHeight
+    await onScroll()
+    await refresh(items, viewportHeight, itemHeight)
+  }
+
   /**
    * read-only, but visible to consumers via bind:start
    */
