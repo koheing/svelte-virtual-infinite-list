@@ -124,7 +124,7 @@ npm i svelte-virtual-infinite-list
 | 1 |  `scrollTo` | (offset: number) =>  Promise< void > | This allows you to scroll to a specific offset.  |
 | 2 |  `scrollToIndex` | (index: number) => Promise< boolean > | This allows you to scroll to a specific item using the index. Returns `true` if this is possible. |
 | 3 |  `scrollToTop` | () =>  Promise< void > | This allows you to scroll to top.  |
-| 3 |  `scrollToBottom` | () =>  Promise< void > | This allows you to scroll to bottom.  |
+| 4 |  `scrollToBottom` | () =>  Promise< void > | This allows you to scroll to bottom.  |
 
 ## LICENSE
 
