@@ -34,8 +34,6 @@ export interface VirtualInfiniteListProps {
    * @default 0
    */
   maxItemCountPerLoad?: number
-  scrollTo?: (offset: number) => Promise<void>
-  scrollToIndex?: (index: number) => Promise<boolean>
   /**
    * read-only, but visible to consumers via bind:start
    * 
@@ -48,6 +46,11 @@ export interface VirtualInfiniteListProps {
    * @default 0
    */
   readonly end?: number
+
+  scrollTo?: (offset: number) => Promise<void>
+  scrollToIndex?: (index: number) => Promise<boolean>
+  scrollToBottom: () => Promise<void>
+  scrollToTop: () => Promise<void>
 }
 
 export interface VirtualInfiniteListEvents {
