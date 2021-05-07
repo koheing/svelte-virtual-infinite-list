@@ -94,9 +94,9 @@
   $: initialized = initialized || !loading
   $: newItemsLoaded = mounted && items && items.length > 0 && items.length - preItems.length > 0
   $: preItemsExisted = mounted && preItems.length > 0
-  $: visible = initialized
-    ? items.slice(start, end + maxItemCountPerLoad).map((data, i) => ({ index: i + start, data }))
-    : []
+  $: visible = items
+    .slice(start, end + maxItemCountPerLoad)
+    .map((data, i) => ({ index: i + start, data }))
 
   $: if (newItemsLoaded && initialized) {
     loadRequiredAtTop(viewport) ? onLoadAtTop() : onLoadAtBottom()
