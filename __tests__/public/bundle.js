@@ -543,20 +543,20 @@
 
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[49] = list[i];
+    	child_ctx[50] = list[i];
     	return child_ctx;
     }
 
     const get_item_slot_changes = dirty => ({ item: dirty[0] & /*visible*/ 512 });
-    const get_item_slot_context = ctx => ({ item: /*row*/ ctx[49].data });
+    const get_item_slot_context = ctx => ({ item: /*row*/ ctx[50].data });
     const get_loader_slot_changes = dirty => ({});
     const get_loader_slot_context = ctx => ({});
 
-    // (382:4) {#if loading && direction === 'top'}
+    // (393:4) {#if loading && direction === 'top'}
     function create_if_block_3(ctx) {
     	let current;
-    	const loader_slot_template = /*#slots*/ ctx[27].loader;
-    	const loader_slot = create_slot(loader_slot_template, ctx, /*$$scope*/ ctx[26], get_loader_slot_context);
+    	const loader_slot_template = /*#slots*/ ctx[28].loader;
+    	const loader_slot = create_slot(loader_slot_template, ctx, /*$$scope*/ ctx[27], get_loader_slot_context);
 
     	return {
     		c() {
@@ -571,8 +571,8 @@
     		},
     		p(ctx, dirty) {
     			if (loader_slot) {
-    				if (loader_slot.p && dirty[0] & /*$$scope*/ 67108864) {
-    					update_slot(loader_slot, loader_slot_template, ctx, /*$$scope*/ ctx[26], dirty, get_loader_slot_changes, get_loader_slot_context);
+    				if (loader_slot.p && dirty[0] & /*$$scope*/ 134217728) {
+    					update_slot(loader_slot, loader_slot_template, ctx, /*$$scope*/ ctx[27], dirty, get_loader_slot_changes, get_loader_slot_context);
     				}
     			}
     		},
@@ -591,14 +591,14 @@
     	};
     }
 
-    // (386:4) {#if visible.length > 0}
+    // (397:4) {#if visible.length > 0}
     function create_if_block_2(ctx) {
     	let each_blocks = [];
     	let each_1_lookup = new Map();
     	let each_1_anchor;
     	let current;
     	let each_value = /*visible*/ ctx[9];
-    	const get_key = ctx => /*row*/ ctx[49].index;
+    	const get_key = ctx => /*row*/ ctx[50].index;
 
     	for (let i = 0; i < each_value.length; i += 1) {
     		let child_ctx = get_each_context(ctx, each_value, i);
@@ -623,7 +623,7 @@
     			current = true;
     		},
     		p(ctx, dirty) {
-    			if (dirty[0] & /*visible, uniqueKey, $$scope*/ 67109384) {
+    			if (dirty[0] & /*visible, uniqueKey, $$scope*/ 134218248) {
     				each_value = /*visible*/ ctx[9];
     				group_outros();
     				each_blocks = update_keyed_each(each_blocks, dirty, get_key, 1, ctx, each_value, each_1_lookup, each_1_anchor.parentNode, outro_and_destroy_block, create_each_block, each_1_anchor, get_each_context);
@@ -656,7 +656,7 @@
     	};
     }
 
-    // (389:44) Template Not Found!!!
+    // (400:44) Template Not Found!!!
     function fallback_block(ctx) {
     	let t;
 
@@ -673,14 +673,14 @@
     	};
     }
 
-    // (387:6) {#each visible as row (row.index)}
+    // (398:6) {#each visible as row (row.index)}
     function create_each_block(key_1, ctx) {
     	let virtual_infinite_list_row;
     	let t;
     	let virtual_infinite_list_row_id_value;
     	let current;
-    	const item_slot_template = /*#slots*/ ctx[27].item;
-    	const item_slot = create_slot(item_slot_template, ctx, /*$$scope*/ ctx[26], get_item_slot_context);
+    	const item_slot_template = /*#slots*/ ctx[28].item;
+    	const item_slot = create_slot(item_slot_template, ctx, /*$$scope*/ ctx[27], get_item_slot_context);
     	const item_slot_or_fallback = item_slot || fallback_block();
 
     	return {
@@ -690,7 +690,7 @@
     			virtual_infinite_list_row = element("virtual-infinite-list-row");
     			if (item_slot_or_fallback) item_slot_or_fallback.c();
     			t = space();
-    			set_custom_element_data(virtual_infinite_list_row, "id", virtual_infinite_list_row_id_value = String(/*row*/ ctx[49].data[/*uniqueKey*/ ctx[3]]));
+    			set_custom_element_data(virtual_infinite_list_row, "id", virtual_infinite_list_row_id_value = "_item_" + String(/*row*/ ctx[50].data[/*uniqueKey*/ ctx[3]]));
     			set_custom_element_data(virtual_infinite_list_row, "class", "svelte-1kggtm4");
     			this.first = virtual_infinite_list_row;
     		},
@@ -708,12 +708,12 @@
     			ctx = new_ctx;
 
     			if (item_slot) {
-    				if (item_slot.p && dirty[0] & /*$$scope, visible*/ 67109376) {
-    					update_slot(item_slot, item_slot_template, ctx, /*$$scope*/ ctx[26], dirty, get_item_slot_changes, get_item_slot_context);
+    				if (item_slot.p && dirty[0] & /*$$scope, visible*/ 134218240) {
+    					update_slot(item_slot, item_slot_template, ctx, /*$$scope*/ ctx[27], dirty, get_item_slot_changes, get_item_slot_context);
     				}
     			}
 
-    			if (!current || dirty[0] & /*visible, uniqueKey*/ 520 && virtual_infinite_list_row_id_value !== (virtual_infinite_list_row_id_value = String(/*row*/ ctx[49].data[/*uniqueKey*/ ctx[3]]))) {
+    			if (!current || dirty[0] & /*visible, uniqueKey*/ 520 && virtual_infinite_list_row_id_value !== (virtual_infinite_list_row_id_value = "_item_" + String(/*row*/ ctx[50].data[/*uniqueKey*/ ctx[3]]))) {
     				set_custom_element_data(virtual_infinite_list_row, "id", virtual_infinite_list_row_id_value);
     			}
     		},
@@ -733,11 +733,11 @@
     	};
     }
 
-    // (394:4) {#if loading && direction === 'bottom'}
+    // (405:4) {#if loading && direction === 'bottom'}
     function create_if_block_1(ctx) {
     	let current;
-    	const loader_slot_template = /*#slots*/ ctx[27].loader;
-    	const loader_slot = create_slot(loader_slot_template, ctx, /*$$scope*/ ctx[26], get_loader_slot_context_1);
+    	const loader_slot_template = /*#slots*/ ctx[28].loader;
+    	const loader_slot = create_slot(loader_slot_template, ctx, /*$$scope*/ ctx[27], get_loader_slot_context_1);
 
     	return {
     		c() {
@@ -752,8 +752,8 @@
     		},
     		p(ctx, dirty) {
     			if (loader_slot) {
-    				if (loader_slot.p && dirty[0] & /*$$scope*/ 67108864) {
-    					update_slot(loader_slot, loader_slot_template, ctx, /*$$scope*/ ctx[26], dirty, get_loader_slot_changes_1, get_loader_slot_context_1);
+    				if (loader_slot.p && dirty[0] & /*$$scope*/ 134217728) {
+    					update_slot(loader_slot, loader_slot_template, ctx, /*$$scope*/ ctx[27], dirty, get_loader_slot_changes_1, get_loader_slot_context_1);
     				}
     			}
     		},
@@ -772,11 +772,11 @@
     	};
     }
 
-    // (398:2) {#if !loading && visible.length === 0}
+    // (409:2) {#if !loading && visible.length === 0}
     function create_if_block(ctx) {
     	let current;
-    	const empty_slot_template = /*#slots*/ ctx[27].empty;
-    	const empty_slot = create_slot(empty_slot_template, ctx, /*$$scope*/ ctx[26], get_empty_slot_context);
+    	const empty_slot_template = /*#slots*/ ctx[28].empty;
+    	const empty_slot = create_slot(empty_slot_template, ctx, /*$$scope*/ ctx[27], get_empty_slot_context);
 
     	return {
     		c() {
@@ -791,8 +791,8 @@
     		},
     		p(ctx, dirty) {
     			if (empty_slot) {
-    				if (empty_slot.p && dirty[0] & /*$$scope*/ 67108864) {
-    					update_slot(empty_slot, empty_slot_template, ctx, /*$$scope*/ ctx[26], dirty, get_empty_slot_changes, get_empty_slot_context);
+    				if (empty_slot.p && dirty[0] & /*$$scope*/ 134217728) {
+    					update_slot(empty_slot, empty_slot_template, ctx, /*$$scope*/ ctx[27], dirty, get_empty_slot_changes, get_empty_slot_context);
     				}
     			}
     		},
@@ -842,7 +842,7 @@
     			set_custom_element_data(virtual_infinite_list_contents, "class", "svelte-1kggtm4");
     			set_style(virtual_infinite_list_viewport, "height", /*height*/ ctx[2]);
     			set_custom_element_data(virtual_infinite_list_viewport, "class", "svelte-1kggtm4");
-    			add_render_callback(() => /*virtual_infinite_list_viewport_elementresize_handler*/ ctx[30].call(virtual_infinite_list_viewport));
+    			add_render_callback(() => /*virtual_infinite_list_viewport_elementresize_handler*/ ctx[31].call(virtual_infinite_list_viewport));
     		},
     		m(target, anchor) {
     			insert(target, virtual_infinite_list_viewport, anchor);
@@ -852,11 +852,11 @@
     			if (if_block1) if_block1.m(virtual_infinite_list_contents, null);
     			append(virtual_infinite_list_contents, t1);
     			if (if_block2) if_block2.m(virtual_infinite_list_contents, null);
-    			/*virtual_infinite_list_contents_binding*/ ctx[28](virtual_infinite_list_contents);
+    			/*virtual_infinite_list_contents_binding*/ ctx[29](virtual_infinite_list_contents);
     			append(virtual_infinite_list_viewport, t2);
     			if (if_block3) if_block3.m(virtual_infinite_list_viewport, null);
-    			/*virtual_infinite_list_viewport_binding*/ ctx[29](virtual_infinite_list_viewport);
-    			virtual_infinite_list_viewport_resize_listener = add_resize_listener(virtual_infinite_list_viewport, /*virtual_infinite_list_viewport_elementresize_handler*/ ctx[30].bind(virtual_infinite_list_viewport));
+    			/*virtual_infinite_list_viewport_binding*/ ctx[30](virtual_infinite_list_viewport);
+    			virtual_infinite_list_viewport_resize_listener = add_resize_listener(virtual_infinite_list_viewport, /*virtual_infinite_list_viewport_elementresize_handler*/ ctx[31].bind(virtual_infinite_list_viewport));
     			current = true;
 
     			if (!mounted) {
@@ -993,9 +993,9 @@
     			if (if_block0) if_block0.d();
     			if (if_block1) if_block1.d();
     			if (if_block2) if_block2.d();
-    			/*virtual_infinite_list_contents_binding*/ ctx[28](null);
+    			/*virtual_infinite_list_contents_binding*/ ctx[29](null);
     			if (if_block3) if_block3.d();
-    			/*virtual_infinite_list_viewport_binding*/ ctx[29](null);
+    			/*virtual_infinite_list_viewport_binding*/ ctx[30](null);
     			virtual_infinite_list_viewport_resize_listener();
     			mounted = false;
     			run_all(dispose);
@@ -1025,7 +1025,6 @@
     }
 
     function instance$1($$self, $$props, $$invalidate) {
-    	let initialized;
     	let newItemsLoaded;
     	let preItemsExisted;
     	let visible;
@@ -1041,13 +1040,13 @@
     	let { maxItemCountPerLoad = 0 } = $$props;
 
     	async function scrollTo(offset) {
-    		if (!mounted || !viewport) return;
+    		if (!initialized || !viewport) return;
     		$$invalidate(4, viewport.scrollTop = offset, viewport);
     		await onScroll();
     	}
 
     	async function scrollToIndex(index) {
-    		if (typeof items[index] === "undefined" || !mounted) return false;
+    		if (typeof items[index] === "undefined" || !initialized) return false;
 
     		if (!uniqueKey) {
     			console.warn(`[Virtual Infinite List] You have to set 'uniqueKey' if you use this method.`);
@@ -1071,7 +1070,7 @@
     	}
 
     	async function scrollToTop() {
-    		if (!mounted || !viewport) return;
+    		if (!initialized || !viewport) return;
     		$$invalidate(4, viewport.scrollTop = 0, viewport);
     		await onScroll();
     		$$invalidate(4, viewport.scrollTop = 0, viewport);
@@ -1079,10 +1078,25 @@
     	}
 
     	async function scrollToBottom() {
-    		if (!mounted || !viewport) return;
+    		if (!initialized || !viewport) return;
     		$$invalidate(4, viewport.scrollTop = viewport.scrollHeight, viewport);
     		await onScroll();
     		await refresh(items, viewportHeight, itemHeight);
+    	}
+
+    	async function reset() {
+    		$$invalidate(24, initialized = false);
+    		preItemsExisted = false;
+    		$$invalidate(23, preItems = []);
+    		$$invalidate(12, items = undefined);
+    		$$invalidate(7, top = 0);
+    		$$invalidate(8, bottom = 0);
+    		$$invalidate(13, start = 0);
+    		$$invalidate(14, end = 0);
+    		firstItemTopOnLoading = 0;
+    		firstItemTopOnLoaded = 0;
+    		slotItemMarginTop = undefined;
+    		await tick();
     	}
 
     	let { start = 0 } = $$props;
@@ -1101,6 +1115,7 @@
     	let firstItemTopOnLoaded;
     	let slotItemMarginTop;
     	let searching = false;
+    	let initialized = false;
 
     	async function onLoadAtTop() {
     		if (!firstItemTopOnLoading) firstItemTopOnLoading = getRowTop(viewport);
@@ -1120,20 +1135,20 @@
     		}
 
     		if (initialized && !preItemsExisted) dispatch("initialize");
-    		$$invalidate(22, preItems = [...items]);
+    		$$invalidate(23, preItems = [...items]);
     	}
 
     	async function onLoadAtBottom() {
     		await refresh(items, viewportHeight, itemHeight);
     		if (initialized && !preItemsExisted) dispatch("initialize");
-    		$$invalidate(22, preItems = [...items]);
+    		$$invalidate(23, preItems = [...items]);
     	}
 
     	async function onRemove() {
     		const beforeScrollTop = viewport.scrollTop;
     		await refresh(items, viewportHeight, itemHeight);
     		$$invalidate(4, viewport.scrollTop = beforeScrollTop, viewport);
-    		$$invalidate(22, preItems = [...items]);
+    		$$invalidate(23, preItems = [...items]);
     	}
 
     	// use when direction = 'top'
@@ -1145,8 +1160,8 @@
 
     		if ((!previousTopDom || maxItemCountPerLoad === 0) && preItemsExisted) {
     			console.warn(`[Virtual Infinite List]
-  The number of items exceeds 'maxItemCountPerLoad',
-  so the offset after loaded may be significantly shift.`);
+    The number of items exceeds 'maxItemCountPerLoad',
+    so the offset after loaded may be significantly shift.`);
     		}
 
     		const viewportTop = viewport.getBoundingClientRect().top;
@@ -1169,7 +1184,7 @@
     			let row = rows[i - start];
 
     			if (!row) {
-    				$$invalidate(13, end = i + 1);
+    				$$invalidate(14, end = i + 1);
     				await tick(); // render the newly visible row
     				row = rows[i - start];
     			}
@@ -1179,7 +1194,7 @@
     			i += 1;
     		}
 
-    		$$invalidate(13, end = i);
+    		$$invalidate(14, end = i);
     		const remaining = items.length - end;
     		averageHeight = (top + contentHeight) / end;
     		$$invalidate(8, bottom = remaining * averageHeight);
@@ -1187,6 +1202,11 @@
     	}
 
     	async function onScroll() {
+    		if (!items) {
+    			await tick();
+    			return;
+    		}
+
     		const { scrollTop } = viewport;
     		const oldStart = start;
 
@@ -1201,7 +1221,7 @@
     			const rowHeight = heightMap[i] || averageHeight;
 
     			if (y + rowHeight > scrollTop) {
-    				$$invalidate(12, start = i);
+    				$$invalidate(13, start = i);
     				$$invalidate(7, top = y);
     				break;
     			}
@@ -1216,7 +1236,7 @@
     			if (y > scrollTop + viewportHeight) break;
     		}
 
-    		$$invalidate(13, end = i);
+    		$$invalidate(14, end = i);
     		const remaining = items.length - end;
     		averageHeight = y / end;
     		while (i < items.length) heightMap[i++] = averageHeight;
@@ -1279,7 +1299,7 @@
     			await onScroll();
     		}
 
-    		const element = contents.querySelector(`#${items[index][uniqueKey]}`);
+    		const element = contents.querySelector(`#_item_${items[index][uniqueKey]}`);
     		if (!element) return { found: false, top: 0 };
     		const top = element.getBoundingClientRect().top;
 
@@ -1292,7 +1312,7 @@
     	// trigger initial refresh
     	onMount(() => {
     		rows = contents.getElementsByTagName("virtual-infinite-list-row");
-    		$$invalidate(21, mounted = true);
+    		$$invalidate(22, mounted = true);
     		viewport.addEventListener("scroll", scrollListener, { passive: true });
     	});
 
@@ -1320,60 +1340,47 @@
     	}
 
     	$$self.$$set = $$props => {
-    		if ("items" in $$props) $$invalidate(14, items = $$props.items);
+    		if ("items" in $$props) $$invalidate(12, items = $$props.items);
     		if ("loading" in $$props) $$invalidate(0, loading = $$props.loading);
     		if ("direction" in $$props) $$invalidate(1, direction = $$props.direction);
     		if ("height" in $$props) $$invalidate(2, height = $$props.height);
     		if ("itemHeight" in $$props) $$invalidate(15, itemHeight = $$props.itemHeight);
     		if ("uniqueKey" in $$props) $$invalidate(3, uniqueKey = $$props.uniqueKey);
     		if ("maxItemCountPerLoad" in $$props) $$invalidate(16, maxItemCountPerLoad = $$props.maxItemCountPerLoad);
-    		if ("start" in $$props) $$invalidate(12, start = $$props.start);
-    		if ("end" in $$props) $$invalidate(13, end = $$props.end);
-    		if ("$$scope" in $$props) $$invalidate(26, $$scope = $$props.$$scope);
+    		if ("start" in $$props) $$invalidate(13, start = $$props.start);
+    		if ("end" in $$props) $$invalidate(14, end = $$props.end);
+    		if ("$$scope" in $$props) $$invalidate(27, $$scope = $$props.$$scope);
     	};
 
     	$$self.$$.update = () => {
-    		if ($$self.$$.dirty[0] & /*initialized, loading*/ 8388609) {
-    			$$invalidate(23, initialized = initialized || !loading);
+    		if ($$self.$$.dirty[0] & /*initialized, loading, items*/ 16781313) {
+    			if (!initialized && !loading && items) $$invalidate(24, initialized = true);
     		}
 
-    		if ($$self.$$.dirty[0] & /*mounted, items*/ 2113536) {
-    			if (mounted && items && items.length === 0) {
-    				$$invalidate(23, initialized = false);
-    				preItemsExisted = false;
-    				$$invalidate(22, preItems = []);
-    				$$invalidate(7, top = 0);
-    				$$invalidate(8, bottom = 0);
-    				$$invalidate(12, start = 0);
-    				$$invalidate(13, end = 0);
-    				firstItemTopOnLoading = 0;
-    				firstItemTopOnLoaded = 0;
-    				slotItemMarginTop = undefined;
-    			}
+    		if ($$self.$$.dirty[0] & /*mounted, items, preItems*/ 12587008) {
+    			$$invalidate(25, newItemsLoaded = mounted && items && items.length > 0 && items.length - preItems.length > 0);
     		}
 
-    		if ($$self.$$.dirty[0] & /*mounted, items, preItems*/ 6307840) {
-    			$$invalidate(24, newItemsLoaded = mounted && items && items.length > 0 && items.length - preItems.length > 0);
-    		}
-
-    		if ($$self.$$.dirty[0] & /*mounted, preItems*/ 6291456) {
+    		if ($$self.$$.dirty[0] & /*mounted, preItems*/ 12582912) {
     			preItemsExisted = mounted && preItems.length > 0;
     		}
 
-    		if ($$self.$$.dirty[0] & /*items, preItems*/ 4210688) {
+    		if ($$self.$$.dirty[0] & /*items, preItems*/ 8392704) {
     			if (items.length - preItems.length < 0) {
     				$$invalidate(7, top = 0);
     				$$invalidate(8, bottom = 0);
-    				$$invalidate(12, start = 0);
-    				$$invalidate(13, end = 0);
+    				$$invalidate(13, start = 0);
+    				$$invalidate(14, end = 0);
     			}
     		}
 
-    		if ($$self.$$.dirty[0] & /*items, start, end, maxItemCountPerLoad*/ 94208) {
-    			$$invalidate(9, visible = items.slice(start, end + maxItemCountPerLoad).map((data, i) => ({ index: i + start, data })));
+    		if ($$self.$$.dirty[0] & /*initialized, items, start, end, maxItemCountPerLoad*/ 16871424) {
+    			$$invalidate(9, visible = initialized
+    			? items.slice(start, end + maxItemCountPerLoad).map((data, i) => ({ index: i + start, data }))
+    			: []);
     		}
 
-    		if ($$self.$$.dirty[0] & /*newItemsLoaded, initialized, viewport*/ 25165840) {
+    		if ($$self.$$.dirty[0] & /*newItemsLoaded, initialized, viewport*/ 50331664) {
     			if (newItemsLoaded && initialized) {
     				loadRequiredAtTop(viewport)
     				? onLoadAtTop()
@@ -1381,11 +1388,15 @@
     			}
     		}
 
-    		if ($$self.$$.dirty[0] & /*mounted, items, preItems*/ 6307840) {
-    			$$invalidate(25, itemsRemoved = mounted && items && items.length > 0 && items.length - preItems.length < 0);
+    		if ($$self.$$.dirty[0] & /*mounted, items, preItems*/ 12587008) {
+    			if (mounted && items && items.length === 0 && preItems.length > 0) reset();
     		}
 
-    		if ($$self.$$.dirty[0] & /*itemsRemoved*/ 33554432) {
+    		if ($$self.$$.dirty[0] & /*mounted, items, preItems*/ 12587008) {
+    			$$invalidate(26, itemsRemoved = mounted && items && items.length > 0 && items.length - preItems.length < 0);
+    		}
+
+    		if ($$self.$$.dirty[0] & /*itemsRemoved*/ 67108864) {
     			if (itemsRemoved) onRemove();
     		}
     	};
@@ -1403,15 +1414,16 @@
     		visible,
     		onScroll,
     		onResize,
+    		items,
     		start,
     		end,
-    		items,
     		itemHeight,
     		maxItemCountPerLoad,
     		scrollTo,
     		scrollToIndex,
     		scrollToTop,
     		scrollToBottom,
+    		reset,
     		mounted,
     		preItems,
     		initialized,
@@ -1437,7 +1449,7 @@
     			create_fragment$1,
     			safe_not_equal,
     			{
-    				items: 14,
+    				items: 12,
     				loading: 0,
     				direction: 1,
     				height: 2,
@@ -1448,8 +1460,9 @@
     				scrollToIndex: 18,
     				scrollToTop: 19,
     				scrollToBottom: 20,
-    				start: 12,
-    				end: 13
+    				reset: 21,
+    				start: 13,
+    				end: 14
     			},
     			[-1, -1]
     		);
@@ -1469,6 +1482,10 @@
 
     	get scrollToBottom() {
     		return this.$$.ctx[20];
+    	}
+
+    	get reset() {
+    		return this.$$.ctx[21];
     	}
     }
 

@@ -51,6 +51,7 @@ export interface VirtualInfiniteListProps {
   scrollToIndex?: (index: number) => Promise<boolean>
   scrollToBottom?: () => Promise<void>
   scrollToTop?: () => Promise<void>
+  reset?: () => Promise<void>
 }
 
 export interface VirtualInfiniteListEvents {
