@@ -23,13 +23,13 @@
   export let maxItemCountPerLoad = 0
 
   export async function scrollTo(offset) {
-    if (!mounted || !viewport) return
+    if (!initialized || !viewport) return
     viewport.scrollTop = offset
     await onScroll()
   }
 
   export async function scrollToIndex(index) {
-    if (typeof items[index] === 'undefined' || !mounted) return false
+    if (typeof items[index] === 'undefined' || !initialized) return false
     if (!uniqueKey) {
       console.warn(`[Virtual Infinite List] You have to set 'uniqueKey' if you use this method.`)
       return false
@@ -53,7 +53,7 @@
   }
 
   export async function scrollToTop() {
-    if (!mounted || !viewport) return
+    if (!initialized || !viewport) return
     viewport.scrollTop = 0
     await onScroll()
     viewport.scrollTop = 0
@@ -61,10 +61,26 @@
   }
 
   export async function scrollToBottom() {
-    if (!mounted || !viewport) return
+    if (!initialized || !viewport) return
     viewport.scrollTop = viewport.scrollHeight
     await onScroll()
     await refresh(items, viewportHeight, itemHeight)
+  }
+
+  export async function reset() {
+    initialized = false
+    preItemsExisted = false
+    preItems = []
+    items = undefined
+    top = 0
+    bottom = 0
+    start = 0
+    end = 0
+    firstItemTopOnLoading = 0
+    firstItemTopOnLoaded = 0
+    slotItemMarginTop = undefined
+
+    await tick()
   }
 
   /**
@@ -90,30 +106,21 @@
   let firstItemTopOnLoaded
   let slotItemMarginTop
   let searching = false
+  let initialized = false
 
-  $: initialized = initialized || !loading
+  $: if (!initialized && !loading && items) initialized = true
+
   $: newItemsLoaded = mounted && items && items.length > 0 && items.length - preItems.length > 0
   $: preItemsExisted = mounted && preItems.length > 0
-  $: visible = items
-    .slice(start, end + maxItemCountPerLoad)
-    .map((data, i) => ({ index: i + start, data }))
+  $: visible = initialized
+    ? items.slice(start, end + maxItemCountPerLoad).map((data, i) => ({ index: i + start, data }))
+    : []
 
   $: if (newItemsLoaded && initialized) {
     loadRequiredAtTop(viewport) ? onLoadAtTop() : onLoadAtBottom()
   }
 
-  $: if (mounted && items && items.length === 0) {
-    initialized = false
-    preItemsExisted = false
-    preItems = []
-    top = 0
-    bottom = 0
-    start = 0
-    end = 0
-    firstItemTopOnLoading = 0
-    firstItemTopOnLoaded = 0
-    slotItemMarginTop = undefined
-  }
+  $: if (mounted && items && items.length === 0 && preItems.length > 0) reset()
 
   $: if (items.length - preItems.length < 0) {
     top = 0
@@ -182,8 +189,8 @@
 
     if ((!previousTopDom || maxItemCountPerLoad === 0) && preItemsExisted) {
       console.warn(`[Virtual Infinite List]
-  The number of items exceeds 'maxItemCountPerLoad',
-  so the offset after loaded may be significantly shift.`)
+    The number of items exceeds 'maxItemCountPerLoad',
+    so the offset after loaded may be significantly shift.`)
     }
 
     const viewportTop = viewport.getBoundingClientRect().top
@@ -240,6 +247,10 @@
   }
 
   async function onScroll() {
+    if (!items) {
+      await tick()
+      return
+    }
     const { scrollTop } = viewport
     const oldStart = start
     for (let v = 0; v < rows.length; v += 1) {
@@ -334,7 +345,7 @@
       await onScroll()
     }
 
-    const element = contents.querySelector(`#${items[index][uniqueKey]}`)
+    const element = contents.querySelector(`#_item_${items[index][uniqueKey]}`)
     if (!element) return { found: false, top: 0 }
     const top = element.getBoundingClientRect().top
     return { found: true, top: viewport.scrollTop + top - viewportTop }
@@ -385,7 +396,7 @@
 
     {#if visible.length > 0}
       {#each visible as row (row.index)}
-        <virtual-infinite-list-row id={String(row.data[uniqueKey])}>
+        <virtual-infinite-list-row id={'_item_' + String(row.data[uniqueKey])}>
           <slot name="item" item={row.data}>Template Not Found!!!</slot>
         </virtual-infinite-list-row>
       {/each}
