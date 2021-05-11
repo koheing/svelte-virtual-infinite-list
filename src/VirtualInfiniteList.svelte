@@ -122,13 +122,6 @@
 
   $: if (mounted && items && items.length === 0 && preItems.length > 0) reset()
 
-  $: if (items.length - preItems.length < 0) {
-    top = 0
-    bottom = 0
-    start = 0
-    end = 0
-  }
-
   $: itemsRemoved = mounted && items && items.length > 0 && items.length - preItems.length < 0
   $: if (itemsRemoved) onRemove()
 
@@ -173,8 +166,10 @@
 
   async function onRemove() {
     const beforeScrollTop = viewport.scrollTop
+    await tick()
+    viewport.scrollTo({ left: 0, top: beforeScrollTop })
+    await onScroll()
     await refresh(items, viewportHeight, itemHeight)
-    viewport.scrollTop = beforeScrollTop
 
     preItems = [...items]
   }
