@@ -552,7 +552,7 @@
     const get_loader_slot_changes = dirty => ({});
     const get_loader_slot_context = ctx => ({});
 
-    // (393:4) {#if loading && direction === 'top'}
+    // (388:4) {#if loading && direction === 'top'}
     function create_if_block_3(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[28].loader;
@@ -591,7 +591,7 @@
     	};
     }
 
-    // (397:4) {#if visible.length > 0}
+    // (392:4) {#if visible.length > 0}
     function create_if_block_2(ctx) {
     	let each_blocks = [];
     	let each_1_lookup = new Map();
@@ -656,7 +656,7 @@
     	};
     }
 
-    // (400:44) Template Not Found!!!
+    // (395:44) Template Not Found!!!
     function fallback_block(ctx) {
     	let t;
 
@@ -673,7 +673,7 @@
     	};
     }
 
-    // (398:6) {#each visible as row (row.index)}
+    // (393:6) {#each visible as row (row.index)}
     function create_each_block(key_1, ctx) {
     	let virtual_infinite_list_row;
     	let t;
@@ -733,7 +733,7 @@
     	};
     }
 
-    // (405:4) {#if loading && direction === 'bottom'}
+    // (400:4) {#if loading && direction === 'bottom'}
     function create_if_block_1(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[28].loader;
@@ -772,7 +772,7 @@
     	};
     }
 
-    // (409:2) {#if !loading && visible.length === 0}
+    // (404:2) {#if !loading && visible.length === 0}
     function create_if_block(ctx) {
     	let current;
     	const empty_slot_template = /*#slots*/ ctx[28].empty;
@@ -1146,8 +1146,10 @@
 
     	async function onRemove() {
     		const beforeScrollTop = viewport.scrollTop;
+    		await tick();
+    		viewport.scrollTo({ left: 0, top: beforeScrollTop });
+    		await onScroll();
     		await refresh(items, viewportHeight, itemHeight);
-    		$$invalidate(4, viewport.scrollTop = beforeScrollTop, viewport);
     		$$invalidate(23, preItems = [...items]);
     	}
 
@@ -1363,15 +1365,6 @@
 
     		if ($$self.$$.dirty[0] & /*mounted, preItems*/ 12582912) {
     			preItemsExisted = mounted && preItems.length > 0;
-    		}
-
-    		if ($$self.$$.dirty[0] & /*items, preItems*/ 8392704) {
-    			if (items.length - preItems.length < 0) {
-    				$$invalidate(7, top = 0);
-    				$$invalidate(8, bottom = 0);
-    				$$invalidate(13, start = 0);
-    				$$invalidate(14, end = 0);
-    			}
     		}
 
     		if ($$self.$$.dirty[0] & /*initialized, items, start, end, maxItemCountPerLoad*/ 16871424) {
