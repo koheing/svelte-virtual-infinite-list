@@ -126,6 +126,7 @@ npm i svelte-virtual-infinite-list
 | 3 |  `scrollToTop` | () =>  Promise< void > | This allows you to scroll to top.  |
 | 4 |  `scrollToBottom` | () =>  Promise< void > | This allows you to scroll to bottom.  |
 | 5 |  `reset` | () =>  Promise< void > | This allows you to reset VirtualInfiniteList.  |
+| 6 |  `forceRefresh` | () =>  Promise< void > | This allows you to tick and render VirtualInfiniteList.  |
 
 ## LICENSE
 
