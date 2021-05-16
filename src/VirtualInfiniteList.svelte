@@ -83,6 +83,12 @@
     await tick()
   }
 
+  export async function forceRefresh() {
+    if (!initialized || !viewport) return
+    await refresh(items, viewportHeight, itemHeight)
+    await onScroll()
+  }
+
   /**
    * read-only, but visible to consumers via bind:start
    */
