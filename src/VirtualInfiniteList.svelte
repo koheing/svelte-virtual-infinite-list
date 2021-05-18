@@ -3,8 +3,8 @@
 
   const dispatch = createEventDispatcher()
 
-  export let items
-  export let loading
+  export let items = []
+  export let loading = false
   export let direction
   export let height = '100%'
   export let itemHeight = undefined
@@ -175,7 +175,6 @@
     await tick()
     viewport.scrollTo({ left: 0, top: beforeScrollTop })
     await onScroll()
-    await refresh(items, viewportHeight, itemHeight)
 
     preItems = [...items]
   }
