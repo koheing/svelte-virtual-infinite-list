@@ -1,6 +1,6 @@
 {
   "name": "svelte-virtual-infinite-list",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "main": "lib/index.js",
   "module": "lib/index.mjs",
   "svelte": "src/index.js",
