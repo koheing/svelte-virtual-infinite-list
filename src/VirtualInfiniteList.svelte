@@ -71,7 +71,7 @@
     initialized = false
     preItemsExisted = false
     preItems = []
-    items = undefined
+    items = []
     top = 0
     bottom = 0
     start = 0
@@ -160,14 +160,14 @@
 
     if (initialized && !preItemsExisted) dispatch('initialize')
 
-    preItems = [...items]
+    preItems = items ? [...items] : []
   }
 
   async function onLoadAtBottom() {
     await refresh(items, viewportHeight, itemHeight)
     if (initialized && !preItemsExisted) dispatch('initialize')
 
-    preItems = [...items]
+    preItems = items ? [...items] : []
   }
 
   async function onRemove() {
@@ -176,7 +176,7 @@
     viewport.scrollTo({ left: 0, top: beforeScrollTop })
     await onScroll()
 
-    preItems = [...items]
+    preItems = items ? [...items] : []
   }
 
   // use when direction = 'top'
