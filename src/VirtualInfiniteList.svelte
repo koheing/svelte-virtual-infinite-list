@@ -25,7 +25,8 @@
   export async function scrollTo(offset) {
     if (!initialized || !viewport) return
     viewport.scrollTo({ left: 0, top: offset })
-    await forceRefresh()
+    await onScroll()
+    await refresh(items, viewportHeight, itemHeight)
   }
 
   export async function scrollToIndex(index) {
@@ -43,7 +44,8 @@
     }
 
     viewport.scrollTo({ left: 0, top })
-    await forceRefresh()
+    await onScroll()
+    await refresh(items, viewportHeight, itemHeight)
 
     if (loadRequiredAtTop(viewport)) viewport.scrollTop = 1
     if (loadRequiredAtBottom(viewport)) viewport.scrollTop -= 1
@@ -63,7 +65,8 @@
   export async function scrollToBottom() {
     if (!initialized || !viewport) return
     viewport.scrollTop = viewport.scrollHeight
-    await forceRefresh()
+    await onScroll()
+    await refresh(items, viewportHeight, itemHeight)
   }
 
   export async function reset() {
@@ -86,6 +89,7 @@
     if (!initialized || !viewport) return
     await refresh(items, viewportHeight, itemHeight)
     await onScroll()
+    await refresh(items, viewportHeight, itemHeight)
   }
 
   /**
