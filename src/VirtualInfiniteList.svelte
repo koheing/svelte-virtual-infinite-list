@@ -24,8 +24,9 @@
 
   export async function scrollTo(offset) {
     if (!initialized || !viewport) return
-    viewport.scrollTop = offset
+    viewport.scrollTo({ left: 0, top: offset })
     await onScroll()
+    await refresh(items, viewportHeight, itemHeight)
   }
 
   export async function scrollToIndex(index) {
@@ -44,6 +45,7 @@
 
     viewport.scrollTo({ left: 0, top })
     await onScroll()
+    await refresh(items, viewportHeight, itemHeight)
 
     if (loadRequiredAtTop(viewport)) viewport.scrollTop = 1
     if (loadRequiredAtBottom(viewport)) viewport.scrollTop -= 1
@@ -87,6 +89,7 @@
     if (!initialized || !viewport) return
     await refresh(items, viewportHeight, itemHeight)
     await onScroll()
+    await refresh(items, viewportHeight, itemHeight)
   }
 
   /**
@@ -332,7 +335,7 @@
   async function search(index) {
     const viewportTop = viewport.getBoundingClientRect().top
     viewport.scrollTo({ left: 0, top: 0 })
-    await onScroll()
+    await forceRefresh()
 
     const isInBuffer = index < maxItemCountPerLoad + 1
     const coef = maxItemCountPerLoad - 1
@@ -342,7 +345,7 @@
       const h = heightMap.slice(0, to).reduce((h, curr) => h + curr, 0)
 
       viewport.scrollTo({ left: 0, top: h })
-      await onScroll()
+      await forceRefresh()
     }
 
     const element = contents.querySelector(`#_item_${items[index][uniqueKey]}`)
