@@ -78,9 +78,6 @@
     bottom = 0
     start = 0
     end = 0
-    firstItemTopOnLoading = 0
-    firstItemTopOnLoaded = 0
-    slotItemMarginTop = undefined
 
     await tick()
   }
@@ -111,9 +108,6 @@
   let bottom = 0
   let averageHeight = 0
   let preItems = []
-  let firstItemTopOnLoading
-  let firstItemTopOnLoaded
-  let slotItemMarginTop
   let searching = false
   let initialized = false
 
@@ -135,13 +129,13 @@
   $: if (itemsRemoved) onRemove()
 
   async function onLoadAtTop() {
-    if (!firstItemTopOnLoading) firstItemTopOnLoading = getRowTop(viewport)
+    const firstItemTopOnLoading = getRowTop(viewport)
 
     await refresh(items, viewportHeight, itemHeight)
 
-    if (!firstItemTopOnLoaded) firstItemTopOnLoaded = getRowTop(viewport)
+    const firstItemTopOnLoaded = getRowTop(viewport)
 
-    if (typeof slotItemMarginTop === 'undefined') slotItemMarginTop = getSlotItemMarginTop(viewport)
+    const slotItemMarginTop = getSlotItemMarginTop(viewport)
 
     const loaderHeight =
       firstItemTopOnLoading - firstItemTopOnLoaded < 0
