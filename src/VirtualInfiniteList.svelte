@@ -38,6 +38,7 @@
     searching = true
 
     const { found, top } = await search(index)
+    console.log({ found, top, name: items[index] })
 
     if (!found) {
       searching = false
@@ -177,7 +178,7 @@
     preItems = items ? [...items] : []
   }
 
-  // use when direction = 'top'
+  // use when direction = 'top' | 'vertical'
   function calculateScrollTop(rows, viewport, heightMap, diff, loaderHeight, slotItemMarginTop) {
     const previousTopDom = rows[diff]
       ? rows[diff].firstChild // after second time
@@ -319,12 +320,12 @@
 
   function loadRequiredAtTop(viewport) {
     const reachedTop = viewport.scrollTop === 0
-    return reachedTop && direction === 'top'
+    return reachedTop && direction !== 'bottom'
   }
 
   function loadRequiredAtBottom(viewport) {
     const reachedBottom = viewport.scrollHeight - viewport.scrollTop === viewport.clientHeight
-    return reachedBottom && direction === 'bottom'
+    return reachedBottom && direction !== 'top'
   }
 
   async function search(index) {
