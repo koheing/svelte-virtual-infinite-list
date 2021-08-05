@@ -99,7 +99,7 @@ npm i svelte-virtual-infinite-list
 | No | Property Name | Type | Note |  
 | :--: | :-- | :-- | :-- |
 | 1 |  `loading` | boolean | - |
-| 2 |  `direction` | `'top'` or `'bottom'` | Loading direction. |
+| 2 |  `direction` | `'top'` or `'bottom'` or `'vertical'` | Loading direction. |
 | 3 |  `maxItemCountPerLoad` | number | [**For direction-top infinite scroll user**] Maximum number of items loaded per load. The offset after loaded may be significantly shift if the number of items that exceeds this value is loaded. `Default value is 0.` |
 | 4 | `uniqueKey` | string | You need to set specify one unique property like `id` in the item object if you want to use the `scrollToIndex` method. `Default value is undefined.` |   
 
