@@ -552,7 +552,7 @@
     const get_loader_slot_changes = dirty => ({});
     const get_loader_slot_context = ctx => ({});
 
-    // (414:4) {#if loading && direction === 'top'}
+    // (413:4) {#if loading && direction === 'top'}
     function create_if_block_3(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[29].loader;
@@ -591,7 +591,7 @@
     	};
     }
 
-    // (418:4) {#if visible.length > 0}
+    // (417:4) {#if visible.length > 0}
     function create_if_block_2(ctx) {
     	let each_blocks = [];
     	let each_1_lookup = new Map();
@@ -656,7 +656,7 @@
     	};
     }
 
-    // (421:44) Template Not Found!!!
+    // (420:44) Template Not Found!!!
     function fallback_block(ctx) {
     	let t;
 
@@ -673,7 +673,7 @@
     	};
     }
 
-    // (419:6) {#each visible as row (row.index)}
+    // (418:6) {#each visible as row (row.index)}
     function create_each_block(key_1, ctx) {
     	let virtual_infinite_list_row;
     	let t;
@@ -733,7 +733,7 @@
     	};
     }
 
-    // (426:4) {#if loading && direction === 'bottom'}
+    // (425:4) {#if loading && direction === 'bottom'}
     function create_if_block_1(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[29].loader;
@@ -772,7 +772,7 @@
     	};
     }
 
-    // (430:2) {#if !loading && visible.length === 0}
+    // (429:2) {#if !loading && visible.length === 0}
     function create_if_block(ctx) {
     	let current;
     	const empty_slot_template = /*#slots*/ ctx[29].empty;
@@ -1056,7 +1056,6 @@
 
     		searching = true;
     		const { found, top } = await search(index);
-    		console.log({ found, top, name: items[index] });
 
     		if (!found) {
     			searching = false;

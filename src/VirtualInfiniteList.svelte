@@ -38,7 +38,6 @@
     searching = true
 
     const { found, top } = await search(index)
-    console.log({ found, top, name: items[index] })
 
     if (!found) {
       searching = false
