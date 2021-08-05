@@ -543,16 +543,16 @@
 
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[48] = list[i];
+    	child_ctx[49] = list[i];
     	return child_ctx;
     }
 
     const get_item_slot_changes = dirty => ({ item: dirty[0] & /*visible*/ 512 });
-    const get_item_slot_context = ctx => ({ item: /*row*/ ctx[48].data });
+    const get_item_slot_context = ctx => ({ item: /*row*/ ctx[49].data });
     const get_loader_slot_changes = dirty => ({});
     const get_loader_slot_context = ctx => ({});
 
-    // (390:4) {#if loading && direction === 'top'}
+    // (413:4) {#if loading && direction === 'top'}
     function create_if_block_3(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[29].loader;
@@ -591,14 +591,14 @@
     	};
     }
 
-    // (394:4) {#if visible.length > 0}
+    // (417:4) {#if visible.length > 0}
     function create_if_block_2(ctx) {
     	let each_blocks = [];
     	let each_1_lookup = new Map();
     	let each_1_anchor;
     	let current;
     	let each_value = /*visible*/ ctx[9];
-    	const get_key = ctx => /*row*/ ctx[48].index;
+    	const get_key = ctx => /*row*/ ctx[49].index;
 
     	for (let i = 0; i < each_value.length; i += 1) {
     		let child_ctx = get_each_context(ctx, each_value, i);
@@ -656,7 +656,7 @@
     	};
     }
 
-    // (397:44) Template Not Found!!!
+    // (420:44) Template Not Found!!!
     function fallback_block(ctx) {
     	let t;
 
@@ -673,7 +673,7 @@
     	};
     }
 
-    // (395:6) {#each visible as row (row.index)}
+    // (418:6) {#each visible as row (row.index)}
     function create_each_block(key_1, ctx) {
     	let virtual_infinite_list_row;
     	let t;
@@ -690,7 +690,7 @@
     			virtual_infinite_list_row = element("virtual-infinite-list-row");
     			if (item_slot_or_fallback) item_slot_or_fallback.c();
     			t = space();
-    			set_custom_element_data(virtual_infinite_list_row, "id", virtual_infinite_list_row_id_value = "_item_" + String(/*row*/ ctx[48].data[/*uniqueKey*/ ctx[3]]));
+    			set_custom_element_data(virtual_infinite_list_row, "id", virtual_infinite_list_row_id_value = "_item_" + String(/*row*/ ctx[49].data[/*uniqueKey*/ ctx[3]]));
     			set_custom_element_data(virtual_infinite_list_row, "class", "svelte-1kggtm4");
     			this.first = virtual_infinite_list_row;
     		},
@@ -713,7 +713,7 @@
     				}
     			}
 
-    			if (!current || dirty[0] & /*visible, uniqueKey*/ 520 && virtual_infinite_list_row_id_value !== (virtual_infinite_list_row_id_value = "_item_" + String(/*row*/ ctx[48].data[/*uniqueKey*/ ctx[3]]))) {
+    			if (!current || dirty[0] & /*visible, uniqueKey*/ 520 && virtual_infinite_list_row_id_value !== (virtual_infinite_list_row_id_value = "_item_" + String(/*row*/ ctx[49].data[/*uniqueKey*/ ctx[3]]))) {
     				set_custom_element_data(virtual_infinite_list_row, "id", virtual_infinite_list_row_id_value);
     			}
     		},
@@ -733,7 +733,7 @@
     	};
     }
 
-    // (402:4) {#if loading && direction === 'bottom'}
+    // (425:4) {#if loading && direction === 'bottom'}
     function create_if_block_1(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[29].loader;
@@ -772,7 +772,7 @@
     	};
     }
 
-    // (406:2) {#if !loading && visible.length === 0}
+    // (429:2) {#if !loading && visible.length === 0}
     function create_if_block(ctx) {
     	let current;
     	const empty_slot_template = /*#slots*/ ctx[29].empty;
@@ -1290,12 +1290,20 @@
     	}
 
     	async function search(index) {
-    		const viewportTop = viewport.getBoundingClientRect().top;
+    		let result = getFoundAndTopByIndex(index);
+    		if (result.found) return result;
     		viewport.scrollTo({ left: 0, top: 0 });
     		await forceRefresh();
     		const isInBuffer = index < maxItemCountPerLoad + 1;
     		const coef = maxItemCountPerLoad - 1;
     		const to = isInBuffer ? 1 : index - coef;
+    		result = getFoundAndTopByIndex(index);
+    		if (result.found) return result;
+    		const h = heightMap.slice(0, index - 1).reduce((h, curr) => h + curr, 0);
+    		viewport.scrollTo({ left: 0, top: h });
+    		await forceRefresh();
+    		result = getFoundAndTopByIndex(index);
+    		if (result.found) return result;
 
     		if (!isInBuffer) {
     			const h = heightMap.slice(0, to).reduce((h, curr) => h + curr, 0);
@@ -1303,14 +1311,24 @@
     			await forceRefresh();
     		}
 
-    		const element = contents.querySelector(`#_item_${items[index][uniqueKey]}`);
-    		if (!element) return { found: false, top: 0 };
-    		const top = element.getBoundingClientRect().top;
+    		result = getFoundAndTopByIndex(index);
+    		return result;
+    	}
 
-    		return {
-    			found: true,
-    			top: viewport.scrollTop + top - viewportTop
-    		};
+    	function getFoundAndTopByIndex(index) {
+    		const element = contents.querySelector(`#_item_${items[index][uniqueKey]}`);
+    		const viewportTop = viewport.getBoundingClientRect().top;
+
+    		if (element) {
+    			const top = element.getBoundingClientRect().top;
+
+    			return {
+    				found: true,
+    				top: viewport.scrollTop + top - viewportTop
+    			};
+    		}
+
+    		return { found: false, top: 0 };
     	}
 
     	// trigger initial refresh
