@@ -38,6 +38,7 @@
     searching = true
 
     const { found, top } = await search(index)
+
     if (!found) {
       searching = false
       return false
@@ -327,13 +328,25 @@
   }
 
   async function search(index) {
-    const viewportTop = viewport.getBoundingClientRect().top
+    let result = getFoundAndTopByIndex(index)
+    if (result.found) return result
+
     viewport.scrollTo({ left: 0, top: 0 })
     await forceRefresh()
 
     const isInBuffer = index < maxItemCountPerLoad + 1
     const coef = maxItemCountPerLoad - 1
     const to = isInBuffer ? 1 : index - coef
+
+    result = getFoundAndTopByIndex(index)
+    if (result.found) return result
+
+    const h = heightMap.slice(0, index - 1).reduce((h, curr) => h + curr, 0)
+    viewport.scrollTo({ left: 0, top: h })
+    await forceRefresh()
+
+    result = getFoundAndTopByIndex(index)
+    if (result.found) return result
 
     if (!isInBuffer) {
       const h = heightMap.slice(0, to).reduce((h, curr) => h + curr, 0)
@@ -342,10 +355,20 @@
       await forceRefresh()
     }
 
+    result = getFoundAndTopByIndex(index)
+    return result
+  }
+
+  function getFoundAndTopByIndex(index) {
     const element = contents.querySelector(`#_item_${items[index][uniqueKey]}`)
-    if (!element) return { found: false, top: 0 }
-    const top = element.getBoundingClientRect().top
-    return { found: true, top: viewport.scrollTop + top - viewportTop }
+    const viewportTop = viewport.getBoundingClientRect().top
+
+    if (element) {
+      const top = element.getBoundingClientRect().top
+      return { found: true, top: viewport.scrollTop + top - viewportTop }
+    }
+
+    return { found: false, top: 0 }
   }
 
   // trigger initial refresh
