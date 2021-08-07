@@ -410,7 +410,7 @@
   <virtual-infinite-list-contents
     bind:this={contents}
     style="padding-top: {top}px; padding-bottom: {bottom}px;">
-    {#if loading && direction === 'top'}
+    {#if loading && direction !== 'bottom'}
       <slot name="loader" />
     {/if}
 
@@ -422,7 +422,7 @@
       {/each}
     {/if}
 
-    {#if loading && direction === 'bottom'}
+    {#if loading && direction !== 'top'}
       <slot name="loader" />
     {/if}
   </virtual-infinite-list-contents>
