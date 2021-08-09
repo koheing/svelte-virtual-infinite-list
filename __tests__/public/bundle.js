@@ -552,7 +552,7 @@
     const get_loader_slot_changes = dirty => ({});
     const get_loader_slot_context = ctx => ({});
 
-    // (413:4) {#if loading && direction !== 'bottom'}
+    // (422:4) {#if loading && direction !== 'bottom'}
     function create_if_block_3(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[29].loader;
@@ -591,7 +591,7 @@
     	};
     }
 
-    // (417:4) {#if visible.length > 0}
+    // (426:4) {#if visible.length > 0}
     function create_if_block_2(ctx) {
     	let each_blocks = [];
     	let each_1_lookup = new Map();
@@ -656,7 +656,7 @@
     	};
     }
 
-    // (420:44) Template Not Found!!!
+    // (429:44) Template Not Found!!!
     function fallback_block(ctx) {
     	let t;
 
@@ -673,7 +673,7 @@
     	};
     }
 
-    // (418:6) {#each visible as row (row.index)}
+    // (427:6) {#each visible as row (row.index)}
     function create_each_block(key_1, ctx) {
     	let virtual_infinite_list_row;
     	let t;
@@ -733,7 +733,7 @@
     	};
     }
 
-    // (425:4) {#if loading && direction !== 'top'}
+    // (434:4) {#if loading && direction !== 'top'}
     function create_if_block_1(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[29].loader;
@@ -772,7 +772,7 @@
     	};
     }
 
-    // (429:2) {#if !loading && visible.length === 0}
+    // (438:2) {#if !loading && visible.length === 0}
     function create_if_block(ctx) {
     	let current;
     	const empty_slot_template = /*#slots*/ ctx[29].empty;

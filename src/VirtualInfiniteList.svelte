@@ -4,9 +4,18 @@
   const dispatch = createEventDispatcher()
 
   export let items = []
+  /**
+  * @default false
+  */
   export let loading = false
   export let direction
+  /**
+  * @default '100%'
+  */
   export let height = '100%'
+  /**
+   * @default undefined
+   */
   export let itemHeight = undefined
   /**
    * You need to specify one unique property like `id` in the item object here
