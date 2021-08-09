@@ -5,13 +5,13 @@
 
   export let items = []
   /**
-  * @default false
-  */
+   * @default false
+   */
   export let loading = false
   export let direction
   /**
-  * @default '100%'
-  */
+   * @default '100%'
+   */
   export let height = '100%'
   /**
    * @default undefined
