@@ -552,7 +552,7 @@
     const get_loader_slot_changes = dirty => ({});
     const get_loader_slot_context = ctx => ({});
 
-    // (413:4) {#if loading && direction === 'top'}
+    // (422:4) {#if loading && direction !== 'bottom'}
     function create_if_block_3(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[29].loader;
@@ -591,7 +591,7 @@
     	};
     }
 
-    // (417:4) {#if visible.length > 0}
+    // (426:4) {#if visible.length > 0}
     function create_if_block_2(ctx) {
     	let each_blocks = [];
     	let each_1_lookup = new Map();
@@ -656,7 +656,7 @@
     	};
     }
 
-    // (420:44) Template Not Found!!!
+    // (429:44) Template Not Found!!!
     function fallback_block(ctx) {
     	let t;
 
@@ -673,7 +673,7 @@
     	};
     }
 
-    // (418:6) {#each visible as row (row.index)}
+    // (427:6) {#each visible as row (row.index)}
     function create_each_block(key_1, ctx) {
     	let virtual_infinite_list_row;
     	let t;
@@ -733,7 +733,7 @@
     	};
     }
 
-    // (425:4) {#if loading && direction === 'bottom'}
+    // (434:4) {#if loading && direction !== 'top'}
     function create_if_block_1(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[29].loader;
@@ -772,7 +772,7 @@
     	};
     }
 
-    // (429:2) {#if !loading && visible.length === 0}
+    // (438:2) {#if !loading && visible.length === 0}
     function create_if_block(ctx) {
     	let current;
     	const empty_slot_template = /*#slots*/ ctx[29].empty;
@@ -821,9 +821,9 @@
     	let current;
     	let mounted;
     	let dispose;
-    	let if_block0 = /*loading*/ ctx[0] && /*direction*/ ctx[1] === "top" && create_if_block_3(ctx);
+    	let if_block0 = /*loading*/ ctx[0] && /*direction*/ ctx[1] !== "bottom" && create_if_block_3(ctx);
     	let if_block1 = /*visible*/ ctx[9].length > 0 && create_if_block_2(ctx);
-    	let if_block2 = /*loading*/ ctx[0] && /*direction*/ ctx[1] === "bottom" && create_if_block_1(ctx);
+    	let if_block2 = /*loading*/ ctx[0] && /*direction*/ ctx[1] !== "top" && create_if_block_1(ctx);
     	let if_block3 = !/*loading*/ ctx[0] && /*visible*/ ctx[9].length === 0 && create_if_block(ctx);
 
     	return {
@@ -869,7 +869,7 @@
     			}
     		},
     		p(ctx, dirty) {
-    			if (/*loading*/ ctx[0] && /*direction*/ ctx[1] === "top") {
+    			if (/*loading*/ ctx[0] && /*direction*/ ctx[1] !== "bottom") {
     				if (if_block0) {
     					if_block0.p(ctx, dirty);
 
@@ -915,7 +915,7 @@
     				check_outros();
     			}
 
-    			if (/*loading*/ ctx[0] && /*direction*/ ctx[1] === "bottom") {
+    			if (/*loading*/ ctx[0] && /*direction*/ ctx[1] !== "top") {
     				if (if_block2) {
     					if_block2.p(ctx, dirty);
 
@@ -1155,7 +1155,7 @@
     		$$invalidate(24, preItems = items ? [...items] : []);
     	}
 
-    	// use when direction = 'top'
+    	// use when direction = 'top' | 'vertical'
     	function calculateScrollTop(rows, viewport, heightMap, diff, loaderHeight, slotItemMarginTop) {
     		const previousTopDom = rows[diff]
     		? rows[diff].firstChild
@@ -1281,28 +1281,28 @@
 
     	function loadRequiredAtTop(viewport) {
     		const reachedTop = viewport.scrollTop === 0;
-    		return reachedTop && direction === "top";
+    		return reachedTop && direction !== "bottom";
     	}
 
     	function loadRequiredAtBottom(viewport) {
     		const reachedBottom = viewport.scrollHeight - viewport.scrollTop === viewport.clientHeight;
-    		return reachedBottom && direction === "bottom";
+    		return reachedBottom && direction !== "top";
     	}
 
     	async function search(index) {
-    		let result = getFoundAndTopByIndex(index);
+    		let result = getItemTopByIndex(index);
     		if (result.found) return result;
     		viewport.scrollTo({ left: 0, top: 0 });
     		await forceRefresh();
     		const isInBuffer = index < maxItemCountPerLoad + 1;
     		const coef = maxItemCountPerLoad - 1;
     		const to = isInBuffer ? 1 : index - coef;
-    		result = getFoundAndTopByIndex(index);
+    		result = getItemTopByIndex(index);
     		if (result.found) return result;
     		const h = heightMap.slice(0, index - 1).reduce((h, curr) => h + curr, 0);
     		viewport.scrollTo({ left: 0, top: h });
     		await forceRefresh();
-    		result = getFoundAndTopByIndex(index);
+    		result = getItemTopByIndex(index);
     		if (result.found) return result;
 
     		if (!isInBuffer) {
@@ -1311,11 +1311,11 @@
     			await forceRefresh();
     		}
 
-    		result = getFoundAndTopByIndex(index);
+    		result = getItemTopByIndex(index);
     		return result;
     	}
 
-    	function getFoundAndTopByIndex(index) {
+    	function getItemTopByIndex(index) {
     		const element = contents.querySelector(`#_item_${items[index][uniqueKey]}`);
     		const viewportTop = viewport.getBoundingClientRect().top;
 
@@ -1758,12 +1758,12 @@
 
     function add_css() {
     	var style = element("style");
-    	style.id = "svelte-yby8h8-style";
-    	style.textContent = ".row.svelte-yby8h8{margin-top:8px;margin-bottom:8px;overflow-wrap:break-word}.load-count.svelte-yby8h8{margin-top:8px;margin-bottom:8px}main.svelte-yby8h8{text-align:center;padding:1em;max-width:240px;margin:0 auto}";
+    	style.id = "svelte-1oj7q8v-style";
+    	style.textContent = ".row.svelte-1oj7q8v{margin-top:8px;margin-bottom:8px;overflow-wrap:break-word}.load-count.svelte-1oj7q8v{margin-top:8px;margin-bottom:8px}.direction.svelte-1oj7q8v{margin-top:8px;margin-bottom:8px}main.svelte-1oj7q8v{text-align:center;padding:1em;max-width:240px;margin:0 auto}";
     	append(document.head, style);
     }
 
-    // (85:6) 
+    // (104:6) 
     function create_item_slot(ctx) {
     	let div1;
     	let div0;
@@ -1775,7 +1775,7 @@
     			div1 = element("div");
     			div0 = element("div");
     			t = text(t_value);
-    			attr(div0, "class", "row svelte-yby8h8");
+    			attr(div0, "class", "row svelte-1oj7q8v");
     			attr(div1, "slot", "item");
     		},
     		m(target, anchor) {
@@ -1799,19 +1799,23 @@
     	let div0;
     	let t2;
     	let t3;
-    	let input;
     	let t4;
-    	let button1;
-    	let t6;
     	let div1;
+    	let t5;
+    	let t6;
+    	let input;
+    	let t7;
+    	let button1;
+    	let t9;
+    	let div2;
     	let virtualinfinitelist;
     	let updating_start;
     	let updating_end;
-    	let t7;
-    	let div2;
-    	let t8;
-    	let t9;
     	let t10;
+    	let div3;
+    	let t11;
+    	let t12;
+    	let t13;
     	let current;
     	let mounted;
     	let dispose;
@@ -1863,24 +1867,29 @@
     			button0.textContent = "Change Direction";
     			t1 = space();
     			div0 = element("div");
-    			t2 = text(/*loadCount*/ ctx[3]);
-    			t3 = space();
-    			input = element("input");
+    			t2 = text("Current Direction: ");
+    			t3 = text(/*direction*/ ctx[2]);
     			t4 = space();
+    			div1 = element("div");
+    			t5 = text(/*loadCount*/ ctx[3]);
+    			t6 = space();
+    			input = element("input");
+    			t7 = space();
     			button1 = element("button");
     			button1.textContent = "moveTo";
-    			t6 = space();
-    			div1 = element("div");
-    			create_component(virtualinfinitelist.$$.fragment);
-    			t7 = space();
+    			t9 = space();
     			div2 = element("div");
-    			t8 = text(/*start*/ ctx[5]);
-    			t9 = text(" - ");
-    			t10 = text(/*end*/ ctx[6]);
+    			create_component(virtualinfinitelist.$$.fragment);
+    			t10 = space();
+    			div3 = element("div");
+    			t11 = text(/*start*/ ctx[5]);
+    			t12 = text(" - ");
+    			t13 = text(/*end*/ ctx[6]);
     			attr(button0, "id", "direction");
-    			attr(div0, "class", "load-count svelte-yby8h8");
+    			attr(div0, "class", "direction svelte-1oj7q8v");
+    			attr(div1, "class", "load-count svelte-1oj7q8v");
     			attr(button1, "id", "scrollTo");
-    			attr(main, "class", "svelte-yby8h8");
+    			attr(main, "class", "svelte-1oj7q8v");
     		},
     		m(target, anchor) {
     			insert(target, main, anchor);
@@ -1888,19 +1897,23 @@
     			append(main, t1);
     			append(main, div0);
     			append(div0, t2);
-    			append(main, t3);
+    			append(div0, t3);
+    			append(main, t4);
+    			append(main, div1);
+    			append(div1, t5);
+    			append(main, t6);
     			append(main, input);
     			set_input_value(input, /*value*/ ctx[7]);
-    			append(main, t4);
-    			append(main, button1);
-    			append(main, t6);
-    			append(main, div1);
-    			mount_component(virtualinfinitelist, div1, null);
     			append(main, t7);
+    			append(main, button1);
+    			append(main, t9);
     			append(main, div2);
-    			append(div2, t8);
-    			append(div2, t9);
-    			append(div2, t10);
+    			mount_component(virtualinfinitelist, div2, null);
+    			append(main, t10);
+    			append(main, div3);
+    			append(div3, t11);
+    			append(div3, t12);
+    			append(div3, t13);
     			current = true;
 
     			if (!mounted) {
@@ -1914,7 +1927,8 @@
     			}
     		},
     		p(ctx, [dirty]) {
-    			if (!current || dirty & /*loadCount*/ 8) set_data(t2, /*loadCount*/ ctx[3]);
+    			if (!current || dirty & /*direction*/ 4) set_data(t3, /*direction*/ ctx[2]);
+    			if (!current || dirty & /*loadCount*/ 8) set_data(t5, /*loadCount*/ ctx[3]);
 
     			if (dirty & /*value*/ 128 && input.value !== /*value*/ ctx[7]) {
     				set_input_value(input, /*value*/ ctx[7]);
@@ -1942,8 +1956,8 @@
     			}
 
     			virtualinfinitelist.$set(virtualinfinitelist_changes);
-    			if (!current || dirty & /*start*/ 32) set_data(t8, /*start*/ ctx[5]);
-    			if (!current || dirty & /*end*/ 64) set_data(t10, /*end*/ ctx[6]);
+    			if (!current || dirty & /*start*/ 32) set_data(t11, /*start*/ ctx[5]);
+    			if (!current || dirty & /*end*/ 64) set_data(t13, /*end*/ ctx[6]);
     		},
     		i(local) {
     			if (current) return;
@@ -1977,7 +1991,24 @@
     	async function onClick() {
     		$$invalidate(1, loading = true);
     		$$invalidate(0, items = []);
-    		$$invalidate(2, direction = direction === "top" ? "bottom" : "top");
+
+    		switch (direction) {
+    			case "top":
+    				{
+    					$$invalidate(2, direction = "bottom");
+    					break;
+    				}
+    			case "bottom":
+    				{
+    					$$invalidate(2, direction = "vertical");
+    					break;
+    				}
+    			default:
+    				{
+    					$$invalidate(2, direction = "top");
+    				}
+    		}
+
     		const animals = await find(30);
     		$$invalidate(0, items = [...animals]);
     		$$invalidate(1, loading = false);
@@ -1986,6 +2017,8 @@
 
     	async function onInitialize() {
     		direction === "top" && await virtualInfiniteList.scrollTo(99999);
+    		direction === "bottom" && await virtualInfiniteList.scrollTo(0);
+    		direction === "vertical" && await virtualInfiniteList.scrollTo(1);
     	}
 
     	async function onInfinite({ detail }) {
@@ -2057,7 +2090,7 @@
     class App extends SvelteComponent {
     	constructor(options) {
     		super();
-    		if (!document.getElementById("svelte-yby8h8-style")) add_css();
+    		if (!document.getElementById("svelte-1oj7q8v-style")) add_css();
     		init(this, options, instance, create_fragment, safe_not_equal, { items: 0, loading: 1, direction: 2 });
     	}
     }

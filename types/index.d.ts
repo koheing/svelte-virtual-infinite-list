@@ -10,7 +10,7 @@ export interface InitializeEvent extends CustomEvent<any>{}
 export interface VirtualInfiniteListProps {
   items: any[]
   loading: boolean
-  direction: 'top' | 'bottom'
+  direction: 'top' | 'bottom' | 'vertical'
   /**
    * @default '100%'
    */

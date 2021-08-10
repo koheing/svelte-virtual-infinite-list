@@ -15,7 +15,19 @@
   async function onClick() {
     loading = true
     items = []
-    direction = direction === 'top' ? 'bottom' : 'top'
+    switch (direction) {
+      case 'top': {
+        direction = 'bottom'
+        break
+      }
+      case 'bottom': {
+        direction = 'vertical'
+        break
+      }
+      default: {
+        direction = 'top'
+      }
+    }
     const animals = await find(30)
     items = [...animals]
     loading = false
@@ -24,6 +36,8 @@
 
   async function onInitialize() {
     direction === 'top' && await virtualInfiniteList.scrollTo(99999)
+    direction === 'bottom' && await virtualInfiniteList.scrollTo(0)
+    direction === 'vertical' && await virtualInfiniteList.scrollTo(1)
   }
 
   async function onInfinite({ detail }) {
@@ -54,6 +68,10 @@
     margin-top: 8px;
     margin-bottom: 8px;
   }
+  .direction {
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
   main {
     text-align: center;
     padding: 1em;
@@ -64,6 +82,7 @@
 
 <main>
   <button id="direction" on:click={onClick}>Change Direction</button>
+  <div class="direction">Current Direction: {direction}</div>
   <div class="load-count">{loadCount}</div>
   <input bind:value />
   <button id="scrollTo" on:click={() => virtualInfiniteList.scrollToIndex(Number(value))} >moveTo</button>

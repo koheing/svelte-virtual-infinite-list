@@ -4,9 +4,18 @@
   const dispatch = createEventDispatcher()
 
   export let items = []
+  /**
+   * @default false
+   */
   export let loading = false
   export let direction
+  /**
+   * @default '100%'
+   */
   export let height = '100%'
+  /**
+   * @default undefined
+   */
   export let itemHeight = undefined
   /**
    * You need to specify one unique property like `id` in the item object here
@@ -177,7 +186,7 @@
     preItems = items ? [...items] : []
   }
 
-  // use when direction = 'top'
+  // use when direction = 'top' | 'vertical'
   function calculateScrollTop(rows, viewport, heightMap, diff, loaderHeight, slotItemMarginTop) {
     const previousTopDom = rows[diff]
       ? rows[diff].firstChild // after second time
@@ -319,16 +328,16 @@
 
   function loadRequiredAtTop(viewport) {
     const reachedTop = viewport.scrollTop === 0
-    return reachedTop && direction === 'top'
+    return reachedTop && direction !== 'bottom'
   }
 
   function loadRequiredAtBottom(viewport) {
     const reachedBottom = viewport.scrollHeight - viewport.scrollTop === viewport.clientHeight
-    return reachedBottom && direction === 'bottom'
+    return reachedBottom && direction !== 'top'
   }
 
   async function search(index) {
-    let result = getFoundAndTopByIndex(index)
+    let result = getItemTopByIndex(index)
     if (result.found) return result
 
     viewport.scrollTo({ left: 0, top: 0 })
@@ -338,14 +347,14 @@
     const coef = maxItemCountPerLoad - 1
     const to = isInBuffer ? 1 : index - coef
 
-    result = getFoundAndTopByIndex(index)
+    result = getItemTopByIndex(index)
     if (result.found) return result
 
     const h = heightMap.slice(0, index - 1).reduce((h, curr) => h + curr, 0)
     viewport.scrollTo({ left: 0, top: h })
     await forceRefresh()
 
-    result = getFoundAndTopByIndex(index)
+    result = getItemTopByIndex(index)
     if (result.found) return result
 
     if (!isInBuffer) {
@@ -355,11 +364,11 @@
       await forceRefresh()
     }
 
-    result = getFoundAndTopByIndex(index)
+    result = getItemTopByIndex(index)
     return result
   }
 
-  function getFoundAndTopByIndex(index) {
+  function getItemTopByIndex(index) {
     const element = contents.querySelector(`#_item_${items[index][uniqueKey]}`)
     const viewportTop = viewport.getBoundingClientRect().top
 
@@ -410,7 +419,7 @@
   <virtual-infinite-list-contents
     bind:this={contents}
     style="padding-top: {top}px; padding-bottom: {bottom}px;">
-    {#if loading && direction === 'top'}
+    {#if loading && direction !== 'bottom'}
       <slot name="loader" />
     {/if}
 
@@ -422,7 +431,7 @@
       {/each}
     {/if}
 
-    {#if loading && direction === 'bottom'}
+    {#if loading && direction !== 'top'}
       <slot name="loader" />
     {/if}
   </virtual-infinite-list-contents>
