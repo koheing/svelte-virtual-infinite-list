@@ -57,8 +57,8 @@
     await onScroll()
     await refresh(items, viewportHeight, itemHeight)
 
-    if (loadRequiredAtTop(viewport)) viewport.scrollTop = 1
-    if (loadRequiredAtBottom(viewport)) viewport.scrollTop -= 1
+    if (reachedTop() && direction !== 'bottom') viewport.scrollTop = 1
+    if (reachedBottom() && direction !== 'top') viewport.scrollTop -= 1
 
     searching = false
     return true
@@ -66,17 +66,19 @@
 
   export async function scrollToTop() {
     if (!initialized || !viewport) return
-    viewport.scrollTop = 0
+    viewport.scrollTo({ left: 0, top: 1 })
     await onScroll()
-    viewport.scrollTop = 0
     await refresh(items, viewportHeight, itemHeight)
+    viewport.scrollTo({ left: 0, top: 1 })
   }
 
   export async function scrollToBottom() {
     if (!initialized || !viewport) return
-    viewport.scrollTop = viewport.scrollHeight
+    viewport.scrollTo({ left: 0, top: viewport.scrollHeight })
     await onScroll()
     await refresh(items, viewportHeight, itemHeight)
+    viewport.scrollTo({ left: 0, top: viewport.scrollHeight })
+    if (reachedBottom() && direction !== 'top') viewport.scrollTo({ left: 0, top: viewport.scrollTop - 1 })
   }
 
   export async function reset() {
@@ -130,7 +132,7 @@
     : []
 
   $: if (newItemsLoaded && initialized) {
-    loadRequiredAtTop(viewport) ? onLoadAtTop() : onLoadAtBottom()
+    reachedTop() && direction !== 'bottom' ? onLoadAtTop() : onLoadAtBottom()
   }
 
   $: if (mounted && items && items.length === 0 && preItems.length > 0) reset()
@@ -139,11 +141,11 @@
   $: if (itemsRemoved) onRemove()
 
   async function onLoadAtTop() {
-    const firstItemTopOnLoading = getRowTop(viewport)
+    const firstItemTopOnLoading = getTop(getTopRow())
 
     await refresh(items, viewportHeight, itemHeight)
 
-    const firstItemTopOnLoaded = getRowTop(viewport)
+    const firstItemTopOnLoaded = getTop(getTopRow())
 
     const slotItemMarginTop = getSlotItemMarginTop(viewport)
 
@@ -154,7 +156,7 @@
 
     const diff = items.length - preItems.length
     if (initialized) {
-      const scrollTop = calculateScrollTop(
+      const scrollTop = getScrollTop(
         rows,
         viewport,
         heightMap,
@@ -187,7 +189,7 @@
   }
 
   // use when direction = 'top' | 'vertical'
-  function calculateScrollTop(rows, viewport, heightMap, diff, loaderHeight, slotItemMarginTop) {
+  function getScrollTop(rows, viewport, heightMap, diff, loaderHeight, slotItemMarginTop) {
     const previousTopDom = rows[diff]
       ? rows[diff].firstChild // after second time
       : rows[diff - 1] // first time
@@ -209,13 +211,16 @@
     return scrollTop
   }
 
-  function getRowTop(viewport) {
-    const element = viewport.querySelector('virtual-infinite-list-row')
+  function getTopRow() {
+    return contents.querySelector('virtual-infinite-list-row')
+  }
+
+  function getTop(element) {
     return element?.getBoundingClientRect().top ?? 0
   }
 
-  function getSlotItemMarginTop(viewport) {
-    const slotTemplate = viewport.querySelector('virtual-infinite-list-row').firstElementChild
+  function getSlotItemMarginTop() {
+    const slotTemplate = getTopRow().firstElementChild
     if (!slotTemplate) return 0
     const marginTop = getMarginTop(slotTemplate)
     if (marginTop > 0) return marginTop
@@ -310,7 +315,7 @@
   }
 
   function scrollListener() {
-    const loadRequired = loadRequiredAtTop(viewport) || loadRequiredAtBottom(viewport)
+    const loadRequired = reachedTop() && direction !== 'bottom' || reachedBottom() && direction !== 'top'
     if (
       !initialized ||
       loading ||
@@ -321,19 +326,15 @@
     )
       return
 
-    const reachedTop = viewport.scrollTop === 0
-    const on = reachedTop ? 'top' : 'bottom'
-    dispatch('infinite', { on })
+    dispatch('infinite', { on: reachedTop() ? 'top' : 'bottom' })
   }
 
-  function loadRequiredAtTop(viewport) {
-    const reachedTop = viewport.scrollTop === 0
-    return reachedTop && direction !== 'bottom'
+  function reachedTop() {
+    return viewport.scrollTop === 0
   }
 
-  function loadRequiredAtBottom(viewport) {
-    const reachedBottom = viewport.scrollHeight - viewport.scrollTop === viewport.clientHeight
-    return reachedBottom && direction !== 'top'
+  function reachedBottom() {
+    return viewport.scrollHeight - viewport.scrollTop === viewport.clientHeight
   }
 
   async function search(index) {
@@ -370,14 +371,9 @@
 
   function getItemTopByIndex(index) {
     const element = contents.querySelector(`#_item_${items[index][uniqueKey]}`)
-    const viewportTop = viewport.getBoundingClientRect().top
 
-    if (element) {
-      const top = element.getBoundingClientRect().top
-      return { found: true, top: viewport.scrollTop + top - viewportTop }
-    }
-
-    return { found: false, top: 0 }
+    const top = element ? viewport.scrollTop + getTop(element) - getTop(viewport) : 0
+    return { found: !!element, top }
   }
 
   // trigger initial refresh
@@ -419,21 +415,23 @@
   <virtual-infinite-list-contents
     bind:this={contents}
     style="padding-top: {top}px; padding-bottom: {bottom}px;">
-    {#if loading && direction !== 'bottom'}
-      <slot name="loader" />
-    {/if}
 
     {#if visible.length > 0}
+      {#if loading && direction !== 'bottom'}
+        <slot name="loader" />
+      {/if}
       {#each visible as row (row.index)}
         <virtual-infinite-list-row id={'_item_' + String(row.data[uniqueKey])}>
           <slot name="item" item={row.data}>Template Not Found!!!</slot>
         </virtual-infinite-list-row>
       {/each}
-    {/if}
-
-    {#if loading && direction !== 'top'}
+      {#if loading && direction !== 'top'}
+        <slot name="loader" />
+      {/if}
+    {:else}
       <slot name="loader" />
     {/if}
+
   </virtual-infinite-list-contents>
   {#if !loading && visible.length === 0}
     <slot name="empty" />
