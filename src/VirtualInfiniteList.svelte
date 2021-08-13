@@ -78,7 +78,8 @@
     await onScroll()
     await refresh(items, viewportHeight, itemHeight)
     viewport.scrollTo({ left: 0, top: viewport.scrollHeight })
-    if (reachedBottom() && direction !== 'top') viewport.scrollTo({ left: 0, top: viewport.scrollTop - 1 })
+    if (reachedBottom() && direction !== 'top')
+      viewport.scrollTo({ left: 0, top: viewport.scrollTop - 1 })
   }
 
   export async function reset() {
@@ -141,18 +142,15 @@
   $: if (itemsRemoved) onRemove()
 
   async function onLoadAtTop() {
-    const firstItemTopOnLoading = getTop(getTopRow())
+    const preTop = getTopOf(getTopRow())
 
     await refresh(items, viewportHeight, itemHeight)
 
-    const firstItemTopOnLoaded = getTop(getTopRow())
+    const currTop = getTopOf(getTopRow())
 
-    const slotItemMarginTop = getSlotItemMarginTop(viewport)
+    const slotItemMarginTop = getMarginTopOf(getTopRow().firstElementChild)
 
-    const loaderHeight =
-      firstItemTopOnLoading - firstItemTopOnLoaded < 0
-        ? 0
-        : firstItemTopOnLoading - firstItemTopOnLoaded
+    const loaderHeight = preTop - currTop < 0 ? 0 : preTop - currTop
 
     const diff = items.length - preItems.length
     if (initialized) {
@@ -215,18 +213,17 @@
     return contents.querySelector('virtual-infinite-list-row')
   }
 
-  function getTop(element) {
+  function getTopOf(element) {
     return element?.getBoundingClientRect().top ?? 0
   }
 
-  function getSlotItemMarginTop() {
-    const slotTemplate = getTopRow().firstElementChild
-    if (!slotTemplate) return 0
-    const marginTop = getMarginTop(slotTemplate)
+  function getMarginTopOf(element) {
+    if (!element) return 0
+    const marginTop = getMarginTop(element)
     if (marginTop > 0) return marginTop
-    const slotItemTemplate = slotTemplate.firstElementChild
-    if (!slotItemTemplate) return 0
-    return getMarginTop(slotItemTemplate)
+    const el = element.firstElementChild
+    if (!el) return 0
+    return getMarginTop(el)
   }
 
   function getMarginTop(element) {
@@ -315,7 +312,8 @@
   }
 
   function scrollListener() {
-    const loadRequired = reachedTop() && direction !== 'bottom' || reachedBottom() && direction !== 'top'
+    const loadRequired =
+      (reachedTop() && direction !== 'bottom') || (reachedBottom() && direction !== 'top')
     if (
       !initialized ||
       loading ||
@@ -372,7 +370,7 @@
   function getItemTopByIndex(index) {
     const element = contents.querySelector(`#_item_${items[index][uniqueKey]}`)
 
-    const top = element ? viewport.scrollTop + getTop(element) - getTop(viewport) : 0
+    const top = element ? viewport.scrollTop + getTopOf(element) - getTopOf(viewport) : 0
     return { found: !!element, top }
   }
 
@@ -415,7 +413,6 @@
   <virtual-infinite-list-contents
     bind:this={contents}
     style="padding-top: {top}px; padding-bottom: {bottom}px;">
-
     {#if visible.length > 0}
       {#if loading && direction !== 'bottom'}
         <slot name="loader" />
@@ -431,7 +428,6 @@
     {:else}
       <slot name="loader" />
     {/if}
-
   </virtual-infinite-list-contents>
   {#if !loading && visible.length === 0}
     <slot name="empty" />
