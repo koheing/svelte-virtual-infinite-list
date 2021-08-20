@@ -545,16 +545,16 @@
 
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[49] = list[i];
+    	child_ctx[50] = list[i];
     	return child_ctx;
     }
 
     const get_item_slot_changes = dirty => ({ item: dirty[0] & /*visible*/ 512 });
-    const get_item_slot_context = ctx => ({ item: /*row*/ ctx[49].data });
+    const get_item_slot_context = ctx => ({ item: /*row*/ ctx[50].data });
     const get_loader_slot_changes = dirty => ({});
     const get_loader_slot_context = ctx => ({});
 
-    // (434:46) 
+    // (428:46) 
     function create_if_block_4(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[29].loader;
@@ -593,7 +593,7 @@
     	};
     }
 
-    // (422:4) {#if visible.length > 0}
+    // (416:4) {#if visible.length > 0}
     function create_if_block_1(ctx) {
     	let t0;
     	let each_blocks = [];
@@ -603,7 +603,7 @@
     	let current;
     	let if_block0 = /*loading*/ ctx[0] && /*direction*/ ctx[1] !== "bottom" && create_if_block_3(ctx);
     	let each_value = /*visible*/ ctx[9];
-    	const get_key = ctx => /*row*/ ctx[49].index;
+    	const get_key = ctx => /*row*/ ctx[50].index;
 
     	for (let i = 0; i < each_value.length; i += 1) {
     		let child_ctx = get_each_context(ctx, each_value, i);
@@ -729,7 +729,7 @@
     	};
     }
 
-    // (423:6) {#if loading && direction !== 'bottom'}
+    // (417:6) {#if loading && direction !== 'bottom'}
     function create_if_block_3(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[29].loader;
@@ -768,7 +768,7 @@
     	};
     }
 
-    // (428:44) Template Not Found!!!
+    // (422:44) Template Not Found!!!
     function fallback_block(ctx) {
     	let t;
 
@@ -785,7 +785,7 @@
     	};
     }
 
-    // (426:6) {#each visible as row (row.index)}
+    // (420:6) {#each visible as row (row.index)}
     function create_each_block(key_1, ctx) {
     	let virtual_infinite_list_row;
     	let virtual_infinite_list_row_id_value;
@@ -800,7 +800,7 @@
     		c() {
     			virtual_infinite_list_row = element("virtual-infinite-list-row");
     			if (item_slot_or_fallback) item_slot_or_fallback.c();
-    			set_custom_element_data(virtual_infinite_list_row, "id", virtual_infinite_list_row_id_value = "_item_" + String(/*row*/ ctx[49].data[/*uniqueKey*/ ctx[3]]));
+    			set_custom_element_data(virtual_infinite_list_row, "id", virtual_infinite_list_row_id_value = "_item_" + String(/*row*/ ctx[50].data[/*uniqueKey*/ ctx[3]]));
     			set_custom_element_data(virtual_infinite_list_row, "class", "svelte-1kggtm4");
     			this.first = virtual_infinite_list_row;
     		},
@@ -822,7 +822,7 @@
     				}
     			}
 
-    			if (!current || dirty[0] & /*visible, uniqueKey*/ 520 && virtual_infinite_list_row_id_value !== (virtual_infinite_list_row_id_value = "_item_" + String(/*row*/ ctx[49].data[/*uniqueKey*/ ctx[3]]))) {
+    			if (!current || dirty[0] & /*visible, uniqueKey*/ 520 && virtual_infinite_list_row_id_value !== (virtual_infinite_list_row_id_value = "_item_" + String(/*row*/ ctx[50].data[/*uniqueKey*/ ctx[3]]))) {
     				set_custom_element_data(virtual_infinite_list_row, "id", virtual_infinite_list_row_id_value);
     			}
     		},
@@ -842,7 +842,7 @@
     	};
     }
 
-    // (431:6) {#if loading && direction !== 'top'}
+    // (425:6) {#if loading && direction !== 'top'}
     function create_if_block_2(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[29].loader;
@@ -881,7 +881,7 @@
     	};
     }
 
-    // (438:2) {#if !loading && visible.length === 0}
+    // (432:2) {#if !loading && visible.length === 0}
     function create_if_block(ctx) {
     	let current;
     	const empty_slot_template = /*#slots*/ ctx[29].empty;
@@ -1082,19 +1082,17 @@
     	};
     }
 
-    function getRowTop(viewport) {
-    	const element = viewport.querySelector("virtual-infinite-list-row");
+    function getTopOf(element) {
     	return element?.getBoundingClientRect().top ?? 0;
     }
 
-    function getSlotItemMarginTop(viewport) {
-    	const slotTemplate = viewport.querySelector("virtual-infinite-list-row").firstElementChild;
-    	if (!slotTemplate) return 0;
-    	const marginTop = getMarginTop(slotTemplate);
+    function getMarginTopOf(element) {
+    	if (!element) return 0;
+    	const marginTop = getMarginTop(element);
     	if (marginTop > 0) return marginTop;
-    	const slotItemTemplate = slotTemplate.firstElementChild;
-    	if (!slotItemTemplate) return 0;
-    	return getMarginTop(slotItemTemplate);
+    	const el = element.firstElementChild;
+    	if (!el) return 0;
+    	return getMarginTop(el);
     }
 
     function getMarginTop(element) {
@@ -1144,25 +1142,27 @@
     		viewport.scrollTo({ left: 0, top });
     		await onScroll();
     		await refresh(items, viewportHeight, itemHeight);
-    		if (loadRequiredAtTop(viewport)) $$invalidate(4, viewport.scrollTop = 1, viewport);
-    		if (loadRequiredAtBottom(viewport)) $$invalidate(4, viewport.scrollTop -= 1, viewport);
+    		if (reachedTop() && direction !== "bottom") $$invalidate(4, viewport.scrollTop = 1, viewport);
+    		if (reachedBottom() && direction !== "top") $$invalidate(4, viewport.scrollTop -= 1, viewport);
     		searching = false;
     		return true;
     	}
 
     	async function scrollToTop() {
     		if (!initialized || !viewport) return;
-    		$$invalidate(4, viewport.scrollTop = 0, viewport);
+    		viewport.scrollTo({ left: 0, top: 1 });
     		await onScroll();
-    		$$invalidate(4, viewport.scrollTop = 0, viewport);
     		await refresh(items, viewportHeight, itemHeight);
+    		if (viewport.scrollTop !== 1) viewport.scrollTo({ left: 0, top: 1 });
     	}
 
     	async function scrollToBottom() {
     		if (!initialized || !viewport) return;
-    		$$invalidate(4, viewport.scrollTop = viewport.scrollHeight, viewport);
+    		viewport.scrollTo({ left: 0, top: viewport.scrollHeight });
     		await onScroll();
     		await refresh(items, viewportHeight, itemHeight);
+    		viewport.scrollTo({ left: 0, top: viewport.scrollHeight });
+    		if (reachedBottom() && direction !== "top") viewport.scrollTo({ left: 0, top: viewport.scrollTop - 1 });
     	}
 
     	async function reset() {
@@ -1200,19 +1200,15 @@
     	let initialized = false;
 
     	async function onLoadAtTop() {
-    		const firstItemTopOnLoading = getRowTop(viewport);
+    		const preTop = getTopOf(getTopRow());
     		await refresh(items, viewportHeight, itemHeight);
-    		const firstItemTopOnLoaded = getRowTop(viewport);
-    		const slotItemMarginTop = getSlotItemMarginTop(viewport);
-
-    		const loaderHeight = firstItemTopOnLoading - firstItemTopOnLoaded < 0
-    		? 0
-    		: firstItemTopOnLoading - firstItemTopOnLoaded;
-
+    		const currTop = getTopOf(getTopRow());
+    		const slotItemMarginTop = getMarginTopOf(getTopRow().firstElementChild);
+    		const loaderHeight = preTop - currTop < 0 ? 0 : preTop - currTop;
     		const diff = items.length - preItems.length;
 
     		if (initialized) {
-    			const scrollTop = calculateScrollTop(rows, viewport, heightMap, diff, loaderHeight, slotItemMarginTop);
+    			const scrollTop = getScrollTop(rows, viewport, heightMap, diff, loaderHeight, slotItemMarginTop);
     			$$invalidate(4, viewport.scrollTop = scrollTop === 0 ? scrollTop + 5 : scrollTop, viewport);
     		}
 
@@ -1235,7 +1231,7 @@
     	}
 
     	// use when direction = 'top' | 'vertical'
-    	function calculateScrollTop(rows, viewport, heightMap, diff, loaderHeight, slotItemMarginTop) {
+    	function getScrollTop(rows, viewport, heightMap, diff, loaderHeight, slotItemMarginTop) {
     		const previousTopDom = rows[diff]
     		? rows[diff].firstChild
     		: rows[diff - 1] ? rows[diff - 1].firstChild : undefined; // after second time
@@ -1255,6 +1251,10 @@
     		: heightMap.slice(0, diff).reduce((pre, curr) => pre + curr) - topFromTop;
 
     		return scrollTop;
+    	}
+
+    	function getTopRow() {
+    		return contents.querySelector("virtual-infinite-list-row");
     	}
 
     	async function refresh(items, viewportHeight, itemHeight) {
@@ -1351,21 +1351,17 @@
     	}
 
     	function scrollListener() {
-    		const loadRequired = loadRequiredAtTop(viewport) || loadRequiredAtBottom(viewport);
+    		const loadRequired = reachedTop() && direction !== "bottom" || reachedBottom() && direction !== "top";
     		if (!initialized || loading || searching || !loadRequired || items.length === 0 || preItems.length === 0) return;
-    		const reachedTop = viewport.scrollTop === 0;
-    		const on = reachedTop ? "top" : "bottom";
-    		dispatch("infinite", { on });
+    		dispatch("infinite", { on: reachedTop() ? "top" : "bottom" });
     	}
 
-    	function loadRequiredAtTop(viewport) {
-    		const reachedTop = viewport.scrollTop === 0;
-    		return reachedTop && direction !== "bottom";
+    	function reachedTop() {
+    		return viewport.scrollTop === 0;
     	}
 
-    	function loadRequiredAtBottom(viewport) {
-    		const reachedBottom = viewport.scrollHeight - viewport.scrollTop === viewport.clientHeight;
-    		return reachedBottom && direction !== "top";
+    	function reachedBottom() {
+    		return viewport.scrollHeight - viewport.scrollTop === viewport.clientHeight;
     	}
 
     	async function search(index) {
@@ -1396,18 +1392,12 @@
 
     	function getItemTopByIndex(index) {
     		const element = contents.querySelector(`#_item_${items[index][uniqueKey]}`);
-    		const viewportTop = viewport.getBoundingClientRect().top;
 
-    		if (element) {
-    			const top = element.getBoundingClientRect().top;
+    		const top = element
+    		? viewport.scrollTop + getTopOf(element) - getTopOf(viewport)
+    		: 0;
 
-    			return {
-    				found: true,
-    				top: viewport.scrollTop + top - viewportTop
-    			};
-    		}
-
-    		return { found: false, top: 0 };
+    		return { found: !!element, top };
     	}
 
     	// trigger initial refresh
@@ -1472,9 +1462,9 @@
     			: []);
     		}
 
-    		if ($$self.$$.dirty[0] & /*newItemsLoaded, initialized, viewport*/ 100663312) {
+    		if ($$self.$$.dirty[0] & /*newItemsLoaded, initialized, direction*/ 100663298) {
     			if (newItemsLoaded && initialized) {
-    				loadRequiredAtTop(viewport)
+    				reachedTop() && direction !== "bottom"
     				? onLoadAtTop()
     				: onLoadAtBottom();
     			}
