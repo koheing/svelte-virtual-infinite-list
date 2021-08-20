@@ -5,30 +5,30 @@
 
   export let items = []
   /**
-  * @default false
-  */
+   * @default false
+   */
   export let loading = false
   export let direction
   /**
-  * @default '100%'
-  */
+   * @default '100%'
+   */
   export let height = '100%'
   /**
-  * @default undefined
-  */
+   * @default undefined
+   */
   export let itemHeight = undefined
   /**
-  * You need to specify one unique property like `id` in the item object here
-  * if you want to use the `scrollToIndex` method.
-  * @default undefined
-  */
+   * You need to specify one unique property like `id` in the item object here
+   * if you want to use the `scrollToIndex` method.
+   * @default undefined
+   */
   export let uniqueKey = undefined
   /**
-  * [**For direction-top infinite scroll user**]
-  * Maximum number of items loaded per load.
-  * The offset after loaded may be significantly shift
-  * if the number of items that exceeds this value is loaded.
-  */
+   * [**For direction-top infinite scroll user**]
+   * Maximum number of items loaded per load.
+   * The offset after loaded may be significantly shift
+   * if the number of items that exceeds this value is loaded.
+   */
   export let maxItemCountPerLoad = 0
 
   export async function scrollTo(offset) {
@@ -100,12 +100,12 @@
   }
 
   /**
-  * read-only, but visible to consumers via bind:start
-  */
+   * read-only, but visible to consumers via bind:start
+   */
   export let start = 0
   /**
-  * read-only, but visible to consumers via bind:end
-  */
+   * read-only, but visible to consumers via bind:end
+   */
   export let end = 0
 
   let heightMap = []
