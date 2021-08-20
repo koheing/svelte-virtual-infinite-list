@@ -425,7 +425,7 @@
       {#if loading && direction !== 'top'}
         <slot name="loader" />
       {/if}
-    {:else}
+    {:else if visible.length === 0 && loading}
       <slot name="loader" />
     {/if}
   </virtual-infinite-list-contents>
