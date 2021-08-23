@@ -48,7 +48,7 @@ export interface VirtualInfiniteListProps {
   readonly end?: number
 
   scrollTo?: (offset: number) => Promise<void>
-  scrollToIndex?: (index: number) => Promise<boolean>
+  scrollToIndex?: (index: number, options?: { align: 'top' | 'bottom' | 'center' }) => Promise<boolean>
   scrollToBottom?: () => Promise<void>
   scrollToTop?: () => Promise<void>
   reset?: () => Promise<void>
