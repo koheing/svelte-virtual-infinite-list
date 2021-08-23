@@ -194,7 +194,7 @@
     preItems = items ? [...items] : []
   }
 
-  // use when direction = 'top' || 'vertical'
+  // use when direction = 'top' | 'vertical'
   function getScrollTop(rows, viewport, heightMap, diff, loaderHeight, slotItemMarginTop) {
     const previousTopDom = rows[diff]
       ? rows[diff].firstChild // after second time
