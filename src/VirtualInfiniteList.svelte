@@ -39,7 +39,7 @@
   }
 
   export async function scrollToIndex(index, options = { align: 'top' }) {
-    if (typeof items[index] === 'undefined' || !initialized) return false
+    if (typeof items[index] === 'undefined' || !initialized || !viewport) return false
     if (!uniqueKey) {
       console.warn(`[Virtual Infinite List] You have to set 'uniqueKey' if you use this method.`)
       return false
@@ -72,8 +72,8 @@
     await onScroll()
     await refresh(items, viewportHeight, itemHeight)
 
-    if (reachedTop(viewport) && direction !== 'bottom') viewport.scrollTop = 1
-    if (reachedBottom(viewport) && direction !== 'top') viewport.scrollTop -= 1
+    if (loadRequiredAtTop(viewport)) viewport.scrollTop = 1
+    if (loadRequiredAtBottom(viewport)) viewport.scrollTop -= 1
 
     searching = false
     return true
@@ -125,7 +125,6 @@
    * read-only, but visible to consumers via bind:end
    */
   export let end = 0
-
   let heightMap = []
   let rows
   let viewport
@@ -145,13 +144,10 @@
   $: visible = initialized
     ? items.slice(start, end + maxItemCountPerLoad).map((data, i) => ({ index: i + start, data }))
     : []
-
   $: if (newItemsLoaded && initialized) {
-    reachedTop(viewport) && direction !== 'bottom' ? onLoadAtTop() : onLoadAtBottom()
+    loadRequiredAtTop(viewport) ? onLoadAtTop() : onLoadAtBottom()
   }
-
   $: if (mounted && items && items.length === 0 && preItems.length > 0) reset()
-
   $: itemsRemoved = mounted && items && items.length > 0 && items.length - preItems.length < 0
   $: if (itemsRemoved) onRemove()
 
@@ -163,7 +159,6 @@
     const currItemTop = getRowTop(viewport)
     const slotItemMarginTop = getSlotItemMarginTop(viewport)
     const loaderHeight = preItemTop - currItemTop < 0 ? 0 : preItemTop - currItemTop
-
     const diff = items.length - preItems.length
     if (initialized) {
       const scrollTop = getScrollTop(
@@ -201,13 +196,11 @@
       : rows[diff - 1] // first time
       ? rows[diff - 1].firstChild
       : undefined
-
     if ((!previousTopDom || maxItemCountPerLoad === 0) && preItemsExisted) {
       console.warn(`[Virtual Infinite List]
     The number of items exceeds 'maxItemCountPerLoad',
     so the offset after loaded may be significantly shift.`)
     }
-
     const viewportTop = viewport.getBoundingClientRect().top
     const topFromTop = viewportTop + loaderHeight + slotItemMarginTop
     const scrollTop = previousTopDom
@@ -317,9 +310,7 @@
   }
 
   function scrollListener() {
-    const loadRequired =
-      (reachedTop(viewport) && direction !== 'bottom') ||
-      (reachedBottom(viewport) && direction !== 'top')
+    const loadRequired = loadRequiredAtTop(viewport) || loadRequiredAtBottom(viewport)
     if (
       !initialized ||
       loading ||
@@ -329,16 +320,19 @@
       preItems.length === 0
     )
       return
-    const on = reachedTop(viewport) ? 'top' : 'bottom'
+    const reachedTop = viewport.scrollTop === 0
+    const on = reachedTop ? 'top' : 'bottom'
     dispatch('infinite', { on })
   }
 
-  function reachedTop(viewport) {
-    return viewport.scrollTop === 0
+  function loadRequiredAtTop(viewport) {
+    const reachedTop = viewport.scrollTop === 0
+    return reachedTop && direction !== 'bottom'
   }
 
-  function reachedBottom(viewport) {
-    return viewport.scrollHeight - viewport.scrollTop === viewport.clientHeight
+  function loadRequiredAtBottom(viewport) {
+    const reachedBottom = viewport.scrollHeight - viewport.scrollTop === viewport.clientHeight
+    return reachedBottom && direction !== 'top'
   }
 
   async function search(index) {
