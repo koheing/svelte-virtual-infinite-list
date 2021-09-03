@@ -545,16 +545,16 @@
 
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[47] = list[i];
+    	child_ctx[49] = list[i];
     	return child_ctx;
     }
 
     const get_item_slot_changes = dirty => ({ item: dirty[0] & /*visible*/ 512 });
-    const get_item_slot_context = ctx => ({ item: /*row*/ ctx[47].data });
+    const get_item_slot_context = ctx => ({ item: /*row*/ ctx[49].data });
     const get_loader_slot_changes = dirty => ({});
     const get_loader_slot_context = ctx => ({});
 
-    // (434:46) 
+    // (428:46) 
     function create_if_block_4(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[29].loader;
@@ -593,7 +593,7 @@
     	};
     }
 
-    // (422:4) {#if visible.length > 0}
+    // (416:4) {#if visible.length > 0}
     function create_if_block_1(ctx) {
     	let t0;
     	let each_blocks = [];
@@ -603,7 +603,7 @@
     	let current;
     	let if_block0 = /*loading*/ ctx[0] && /*direction*/ ctx[1] !== "bottom" && create_if_block_3(ctx);
     	let each_value = /*visible*/ ctx[9];
-    	const get_key = ctx => /*row*/ ctx[47].index;
+    	const get_key = ctx => /*row*/ ctx[49].index;
 
     	for (let i = 0; i < each_value.length; i += 1) {
     		let child_ctx = get_each_context(ctx, each_value, i);
@@ -729,7 +729,7 @@
     	};
     }
 
-    // (423:6) {#if loading && direction !== 'bottom'}
+    // (417:6) {#if loading && direction !== 'bottom'}
     function create_if_block_3(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[29].loader;
@@ -768,7 +768,7 @@
     	};
     }
 
-    // (428:44) Template Not Found!!!
+    // (422:44) Template Not Found!!!
     function fallback_block(ctx) {
     	let t;
 
@@ -785,7 +785,7 @@
     	};
     }
 
-    // (426:6) {#each visible as row (row.index)}
+    // (420:6) {#each visible as row (row.index)}
     function create_each_block(key_1, ctx) {
     	let virtual_infinite_list_row;
     	let virtual_infinite_list_row_id_value;
@@ -800,7 +800,7 @@
     		c() {
     			virtual_infinite_list_row = element("virtual-infinite-list-row");
     			if (item_slot_or_fallback) item_slot_or_fallback.c();
-    			set_custom_element_data(virtual_infinite_list_row, "id", virtual_infinite_list_row_id_value = "_item_" + String(/*row*/ ctx[47].data[/*uniqueKey*/ ctx[3]]));
+    			set_custom_element_data(virtual_infinite_list_row, "id", virtual_infinite_list_row_id_value = "_item_" + String(/*row*/ ctx[49].data[/*uniqueKey*/ ctx[3]]));
     			set_custom_element_data(virtual_infinite_list_row, "class", "svelte-1kggtm4");
     			this.first = virtual_infinite_list_row;
     		},
@@ -822,7 +822,7 @@
     				}
     			}
 
-    			if (!current || dirty[0] & /*visible, uniqueKey*/ 520 && virtual_infinite_list_row_id_value !== (virtual_infinite_list_row_id_value = "_item_" + String(/*row*/ ctx[47].data[/*uniqueKey*/ ctx[3]]))) {
+    			if (!current || dirty[0] & /*visible, uniqueKey*/ 520 && virtual_infinite_list_row_id_value !== (virtual_infinite_list_row_id_value = "_item_" + String(/*row*/ ctx[49].data[/*uniqueKey*/ ctx[3]]))) {
     				set_custom_element_data(virtual_infinite_list_row, "id", virtual_infinite_list_row_id_value);
     			}
     		},
@@ -842,7 +842,7 @@
     	};
     }
 
-    // (431:6) {#if loading && direction !== 'top'}
+    // (425:6) {#if loading && direction !== 'top'}
     function create_if_block_2(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[29].loader;
@@ -881,7 +881,7 @@
     	};
     }
 
-    // (438:2) {#if !loading && visible.length === 0}
+    // (432:2) {#if !loading && visible.length === 0}
     function create_if_block(ctx) {
     	let current;
     	const empty_slot_template = /*#slots*/ ctx[29].empty;
@@ -1103,14 +1103,6 @@
     	return marginTop;
     }
 
-    function reachedTop(viewport) {
-    	return viewport.scrollTop === 0;
-    }
-
-    function reachedBottom(viewport) {
-    	return viewport.scrollHeight - viewport.scrollTop === viewport.clientHeight;
-    }
-
     function instance$1($$self, $$props, $$invalidate) {
     	let newItemsLoaded;
     	let preItemsExisted;
@@ -1134,7 +1126,7 @@
     	}
 
     	async function scrollToIndex(index, options = { align: "top" }) {
-    		if (typeof items[index] === "undefined" || !initialized) return false;
+    		if (typeof items[index] === "undefined" || !initialized || !viewport) return false;
 
     		if (!uniqueKey) {
     			console.warn(`[Virtual Infinite List] You have to set 'uniqueKey' if you use this method.`);
@@ -1171,8 +1163,8 @@
     		viewport.scrollTo({ left: 0, top });
     		await onScroll();
     		await refresh(items, viewportHeight, itemHeight);
-    		if (reachedTop(viewport) && direction !== "bottom") $$invalidate(4, viewport.scrollTop = 1, viewport);
-    		if (reachedBottom(viewport) && direction !== "top") $$invalidate(4, viewport.scrollTop -= 1, viewport);
+    		if (loadRequiredAtTop(viewport)) $$invalidate(4, viewport.scrollTop = 1, viewport);
+    		if (loadRequiredAtBottom(viewport)) $$invalidate(4, viewport.scrollTop -= 1, viewport);
     		searching = false;
     		return true;
     	}
@@ -1380,10 +1372,21 @@
     	}
 
     	function scrollListener() {
-    		const loadRequired = reachedTop(viewport) && direction !== "bottom" || reachedBottom(viewport) && direction !== "top";
+    		const loadRequired = loadRequiredAtTop(viewport) || loadRequiredAtBottom(viewport);
     		if (!initialized || loading || searching || !loadRequired || items.length === 0 || preItems.length === 0) return;
-    		const on = reachedTop(viewport) ? "top" : "bottom";
+    		const reachedTop = viewport.scrollTop === 0;
+    		const on = reachedTop ? "top" : "bottom";
     		dispatch("infinite", { on });
+    	}
+
+    	function loadRequiredAtTop(viewport) {
+    		const reachedTop = viewport.scrollTop === 0;
+    		return reachedTop && direction !== "bottom";
+    	}
+
+    	function loadRequiredAtBottom(viewport) {
+    		const reachedBottom = viewport.scrollHeight - viewport.scrollTop === viewport.clientHeight;
+    		return reachedBottom && direction !== "top";
     	}
 
     	async function search(index) {
@@ -1495,9 +1498,9 @@
     			: []);
     		}
 
-    		if ($$self.$$.dirty[0] & /*newItemsLoaded, initialized, viewport, direction*/ 100663314) {
+    		if ($$self.$$.dirty[0] & /*newItemsLoaded, initialized, viewport*/ 100663312) {
     			if (newItemsLoaded && initialized) {
-    				reachedTop(viewport) && direction !== "bottom"
+    				loadRequiredAtTop(viewport)
     				? onLoadAtTop()
     				: onLoadAtBottom();
     			}
