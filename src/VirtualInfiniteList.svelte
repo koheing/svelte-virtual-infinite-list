@@ -49,7 +49,7 @@
   let searching = false
 
   $: if (!initialized && !loading && viewport) initialized = true
-  $: if (items) load(items, direction)
+  $: if (items) load(items)
   $: visible = initialized
     ? items.slice(start, end + persists).map((data, i) => ({ index: i + start, data }))
     : []
@@ -231,8 +231,8 @@
     const reachedTop = viewport.scrollTop === 0
     const reachedBottom = viewport.scrollHeight - viewport.scrollTop === viewport.clientHeight
 
-    if (direction === Direction.top && reachedTop) dispatch('infinite', { on: 'top' })
-    if (direction === Direction.bottom && reachedBottom) dispatch('infinite', { on: 'bottom' })
+    if (direction !== Direction.bottom && reachedTop) dispatch('infinite', { on: 'top' })
+    if (direction !== Direction.top && reachedBottom) dispatch('infinite', { on: 'bottom' })
   }
 
   async function onResize() {
@@ -240,22 +240,110 @@
     await refresh(items, viewportHeight, itemHeight)
   }
 
+  export async function forceRefresh() {
+    if (!initialized || !viewport) return
+    await handleScroll()
+    await refresh(items, viewportHeight, itemHeight)
+  }
+
   export async function scrollTo(offset) {
     if (!initialized || !viewport) return
-    await tick()
     viewport.scrollTo(0, offset)
+    await forceRefresh()
   }
 
   export async function scrollToTop() {
     if (!initialized || !viewport) return
-    await tick()
     viewport.scrollTo(0, 0)
+    await forceRefresh()
   }
 
   export async function scrollToBottom() {
     if (!initialized || !viewport) return
-    await tick()
     viewport.scrollTo(0, viewportHeight + top + bottom)
+    await forceRefresh()
+  }
+
+  export async function scrollToIndex(index, options = { align: 'top' }) {
+    if (typeof items[index] === 'undefined' || !initialized || !viewport) return false
+    if (!uniqueKey) {
+      console.warn(`[Virtual Infinite List] You have to set 'uniqueKey' if you use this method.`)
+      return false
+    }
+
+    searching = true
+    const { found, top: t, itemRect } = await search(index)
+    if (!found) {
+      searching = false
+      return false
+    }
+    let top = 0
+    switch (options.align) {
+      case 'top': {
+        top = t
+        break
+      }
+      case 'bottom': {
+        top = t - viewport.getBoundingClientRect().height + itemRect.height
+        break
+      }
+      case 'center': {
+        top = t - viewport.getBoundingClientRect().height / 2 + itemRect.height
+      }
+    }
+
+    if (top === 0) top = 1
+    if (top === viewport.clientHeight) top -= 1
+
+    viewport.scrollTo(0, top)
+    await forceRefresh()
+
+    if (viewport.scrollTop === 0) viewport.scrollTo(0, 1)
+    if (viewport.scrollHeight - viewport.scrollTop === viewport.clientHeight)
+      viewport.scrollTo(0, viewport.scrollTop - 1)
+
+    searching = false
+    return true
+  }
+
+  async function search(index) {
+    viewport.scrollTo(0, 0)
+    await forceRefresh()
+
+    const isInBuffer = index < persists + 1
+    const coef = persists - 1
+    const to = isInBuffer ? 1 : index - coef
+
+    let result = getTop(index)
+    if (result.found) return result
+
+    const h = heightMap.slice(0, index - 1).reduce((h, curr) => h + curr, 0)
+    viewport.scrollTo(0, h)
+    await forceRefresh()
+
+    result = getTop(index)
+    if (result.found) return result
+
+    if (!isInBuffer) {
+      const h = heightMap.slice(0, to).reduce((h, curr) => h + curr, 0)
+      viewport.scrollTo(0, h)
+      await forceRefresh()
+    }
+
+    result = getTop(index)
+    return result
+  }
+
+  function getTop(index) {
+    const element = contents.querySelector(
+      `#svelte-virtual-infinite-list-items-${items[index][uniqueKey]}`
+    )
+    const viewportTop = viewport.getBoundingClientRect().top
+    if (element) {
+      const itemRect = element.getBoundingClientRect()
+      return { found: true, top: viewport.scrollTop + itemRect.top - viewportTop, itemRect }
+    }
+    return { found: false, top: 0, itemRect: undefined }
   }
 
   // trigger initial refresh
@@ -291,17 +379,20 @@
   bind:this={viewport}
   bind:offsetHeight={viewportHeight}
   on:scroll={handleScroll}
-  style="height: {height};">
+  style="height: {height};"
+>
   <virtual-infinite-list-contents
     bind:this={contents}
-    style="padding-top: {top}px; padding-bottom: {bottom}px;">
+    style="padding-top: {top}px; padding-bottom: {bottom}px;"
+  >
     {#if visible.length > 0}
       {#if loading && direction !== 'bottom'}
         <slot name="loader" />
       {/if}
       {#each visible as row (row.index)}
         <virtual-infinite-list-row
-          id={'svelte-virtual-infinite-list-items-' + String(row.data[uniqueKey])}>
+          id={'svelte-virtual-infinite-list-items-' + String(row.data[uniqueKey])}
+        >
           <slot name="item" item={row.data}>Template Not Found!!!</slot>
         </virtual-infinite-list-row>
       {/each}

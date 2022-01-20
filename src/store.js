@@ -1,5 +1,5 @@
 import { derived, writable } from 'svelte/store'
-import { Direction, Type } from './constant'
+import { Type } from './constant'
 
 const store = writable({ items: [] })
 
@@ -20,17 +20,7 @@ export const type = derived(changes, (state) => {
   if (!!newer && !!older && newer.length - older.length < 0) return Type.remove
 })
 
-export const load = (items, direction) =>
-  store.update((state) => {
-    switch (direction) {
-      case Direction.top: {
-        return { ...state, items: [...items] }
-      }
-      case Direction.bottom: {
-        return { ...state, items: [...items] }
-      }
-    }
-  })
+export const load = (items) => store.update((state) => ({ ...state, items: [...items] }))
 
 export const reset = () => {
   previous = []

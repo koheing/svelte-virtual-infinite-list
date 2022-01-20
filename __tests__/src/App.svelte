@@ -21,7 +21,7 @@
         break
       }
       case 'bottom': {
-        direction = 'top'
+        direction = 'vertical'
         break
       }
       default: {
@@ -37,7 +37,7 @@
   async function onInitialize() {
     direction === 'top' && await virtualInfiniteList.scrollToBottom()
     direction === 'bottom' && await virtualInfiniteList.scrollToTop()
-    direction === 'vertical' && await virtualInfiniteList.scrollTo(1)
+    direction === 'vertical' && await virtualInfiniteList.scrollTo(30)
   }
 
   async function onInfinite({ detail }) {
@@ -93,7 +93,10 @@
   <div class="direction">Current Direction: {direction}</div>
   <div class="load-count">{loadCount}</div>
   <input bind:value />
-  <button id="scrollTo" on:click={() => virtualInfiniteList.scrollToIndex(Number(value))} >moveTo</button>
+  <button id="scrollTo" on:click={async () => {
+    const result = await virtualInfiniteList.scrollToIndex(Number(value))
+    console.log(result)
+  }} >moveTo</button>
   
   <div>
     <VirtualInfiniteList
