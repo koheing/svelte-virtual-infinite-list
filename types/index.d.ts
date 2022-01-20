@@ -26,6 +26,7 @@ export interface VirtualInfiniteListProps {
    */
   uniqueKey?: string
   /**
+   * @deprecated
    * [**For direction-top infinite scroll user**]
    * Maximum number of items loaded per load.
    * The offset after loaded may be significantly shift
@@ -34,6 +35,14 @@ export interface VirtualInfiniteListProps {
    * @default 0
    */
   maxItemCountPerLoad?: number
+  /**
+   * [**For direction-top infinite scroll user**]
+   * Maximum number of items loaded per load.
+   * The offset after loaded may be significantly shift
+   * if the number of items that exceeds this value is loaded.
+   * 
+   */
+   persists?: number
   /**
    * read-only, but visible to consumers via bind:start
    * 

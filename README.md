@@ -100,8 +100,9 @@ npm i svelte-virtual-infinite-list
 | :--: | :-- | :-- | :-- |
 | 1 |  `loading` | boolean | - |
 | 2 |  `direction` | `'top'` or `'bottom'` or `'vertical'` | Loading direction. |
-| 3 |  `maxItemCountPerLoad` | number | [**For direction-top infinite scroll user**] Maximum number of items loaded per load. The offset after loaded may be significantly shift if the number of items that exceeds this value is loaded. `Default value is 0.` |
-| 4 | `uniqueKey` | string | You need to set specify one unique property like `id` in the item object if you want to use the `scrollToIndex` method. `Default value is undefined.` |   
+| 3 |  `maxItemCountPerLoad` | number | **deprecated** [**For direction-top infinite scroll user**] Maximum number of items loaded per load. The offset after loaded may be significantly shift if the number of items that exceeds this value is loaded. `Default value is 0.` |
+| 4 |  `persists` | number | [**For direction-top infinite scroll user**] Maximum number of items loaded per load. The offset after loaded may be significantly shift if the number of items that exceeds this value is loaded. `Default value is 0.` |
+| 5 | `uniqueKey` | string | You need to set specify one unique property like `id` in the item object if you want to use the `scrollToIndex` method. `Default value is undefined.` |   
 
 ## Additional Events
 
@@ -121,12 +122,12 @@ npm i svelte-virtual-infinite-list
 
 | No | Method Name | Type | Note |  
 | :--: | :-- | :-- | :-- |
-| 1 |  `scrollTo` | (offset: number) =>  Promise< void > | This allows you to scroll to a specific offset.  |
-| 2 |  `scrollToIndex` | (index: number, options?: { align: 'top' | 'bottom' | 'center' }) => Promise< boolean > | This allows you to scroll to a specific item using the index. Returns `true` if this is done. |
-| 3 |  `scrollToTop` | () =>  Promise< void > | This allows you to scroll to top.  |
-| 4 |  `scrollToBottom` | () =>  Promise< void > | This allows you to scroll to bottom.  |
-| 5 |  `reset` | () =>  Promise< void > | This allows you to reset VirtualInfiniteList.  |
-| 6 |  `forceRefresh` | () =>  Promise< void > | This allows you to tick and render VirtualInfiniteList.  |
+| 1 |  `scrollTo` | `(offset: number) =>  Promise<void>` | This allows you to scroll to a specific offset.  |
+| 2 |  `scrollToIndex` | `(index: number, options?: { align: 'top' \| 'bottom' \| 'center' }) => Promise<boolean>` | This allows you to scroll to a specific item using the index. Returns `true` if this is done. |
+| 3 |  `scrollToTop` | `() =>  Promise<void>` | This allows you to scroll to top.  |
+| 4 |  `scrollToBottom` | `() =>  Promise<void>` | This allows you to scroll to bottom.  |
+| 5 |  `reset` | `() =>  Promise<void>` | This allows you to reset VirtualInfiniteList.  |
+| 6 |  `forceRefresh` | `() =>  Promise<void>` | This allows you to tick and render VirtualInfiniteList.  |
 
 ## LICENSE
 

@@ -12,12 +12,12 @@ context('VirtualInfiniteList', () => {
 
   it('[direction=top] load more data when scroll top', () => {
     cy.get('virtual-infinite-list-viewport')
-      .scrollTo(0, -10)
+      .scrollTo(0, -99999)
       .wait(500)
-      .should(($div) => expect($div[0].scrollTop).not.to.equal(0))
+      .should(($div) => expect($div[0].scrollTop).not.to.equal('0'))
       .wait(500)
       .get('.load-count')
-      .should(($div) => expect($div[0].innerText).to.equal('2'))
+      .should(($div) => expect($div[0].innerText).to.equal('1'))
   })
 
   it('[direction=bottom] can load virtual list', () => {

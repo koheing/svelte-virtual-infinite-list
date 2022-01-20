@@ -1,6 +1,6 @@
 {
   "svelteSortOrder": "scripts-styles-options-markup",
-  "svelteBracketNewLine": false,
+  "bracketSameLine": false,
   "printWidth": 100,
   "trailingComma": "es5",
   "tabWidth": 2,

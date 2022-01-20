@@ -5,7 +5,7 @@
 
   export let items = []
   export let loading = true
-  export let direction = 'top'
+  export let direction = 'bottom'
   let loadCount = 0
   let virtualInfiniteList
   let start
@@ -35,9 +35,9 @@
   }
 
   async function onInitialize() {
-    direction === 'top' && await virtualInfiniteList.scrollTo(99999)
-    direction === 'bottom' && await virtualInfiniteList.scrollTo(0)
-    direction === 'vertical' && await virtualInfiniteList.scrollTo(1)
+    direction === 'top' && await virtualInfiniteList.scrollToBottom()
+    direction === 'bottom' && await virtualInfiniteList.scrollToTop()
+    direction === 'vertical' && await virtualInfiniteList.scrollTo(30)
   }
 
   async function onInfinite({ detail }) {
@@ -47,6 +47,14 @@
     else items = [...items, ...animals]
     loading = false
     loadCount++
+  }
+
+  function onRemove(id) {
+    const i = items.slice()
+    const index = i.findIndex((it) => it.id === id)
+    if (index < 0) return
+    i.splice(index, 1)
+    items = [...i]
   }
 
   onMount(async () => {
@@ -85,7 +93,10 @@
   <div class="direction">Current Direction: {direction}</div>
   <div class="load-count">{loadCount}</div>
   <input bind:value />
-  <button id="scrollTo" on:click={() => virtualInfiniteList.scrollToIndex(Number(value))} >moveTo</button>
+  <button id="scrollTo" on:click={async () => {
+    const result = await virtualInfiniteList.scrollToIndex(Number(value))
+    console.log(result)
+  }} >moveTo</button>
   
   <div>
     <VirtualInfiniteList
@@ -102,7 +113,7 @@
       bind:end
       let:item>
       <div slot="item">
-        <div class="row">{item.name}</div>
+        <div class="row" on:click={() => onRemove(item.id)}>{item.name}</div>
       </div>
     </VirtualInfiniteList>
   </div>
