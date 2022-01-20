@@ -119,17 +119,6 @@
     await handleScroll()
   }
 
-  async function reset() {
-    initialized = false
-    items = []
-    top = 0
-    bottom = 0
-    start = 0
-    end = 0
-    rs()
-    await tick()
-  }
-
   // whenever `items` changes, invalidate the current heightmap
 
   async function refresh(items, viewportHeight, itemHeight) {
@@ -238,6 +227,17 @@
   async function onResize() {
     if (!initialized || !viewport) return
     await refresh(items, viewportHeight, itemHeight)
+  }
+
+  export async function reset() {
+    initialized = false
+    items = []
+    top = 0
+    bottom = 0
+    start = 0
+    end = 0
+    rs()
+    await tick()
   }
 
   export async function forceRefresh() {

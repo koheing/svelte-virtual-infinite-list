@@ -784,8 +784,8 @@
     // (402:46) 
     function create_if_block_4(ctx) {
     	let current;
-    	const loader_slot_template = /*#slots*/ ctx[27].loader;
-    	const loader_slot = create_slot(loader_slot_template, ctx, /*$$scope*/ ctx[26], get_loader_slot_context_2);
+    	const loader_slot_template = /*#slots*/ ctx[28].loader;
+    	const loader_slot = create_slot(loader_slot_template, ctx, /*$$scope*/ ctx[27], get_loader_slot_context_2);
 
     	return {
     		c() {
@@ -800,15 +800,15 @@
     		},
     		p(ctx, dirty) {
     			if (loader_slot) {
-    				if (loader_slot.p && (!current || dirty[0] & /*$$scope*/ 67108864)) {
+    				if (loader_slot.p && (!current || dirty[0] & /*$$scope*/ 134217728)) {
     					update_slot_base(
     						loader_slot,
     						loader_slot_template,
     						ctx,
-    						/*$$scope*/ ctx[26],
+    						/*$$scope*/ ctx[27],
     						!current
-    						? get_all_dirty_from_scope(/*$$scope*/ ctx[26])
-    						: get_slot_changes(loader_slot_template, /*$$scope*/ ctx[26], dirty, get_loader_slot_changes_2),
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[27])
+    						: get_slot_changes(loader_slot_template, /*$$scope*/ ctx[27], dirty, get_loader_slot_changes_2),
     						get_loader_slot_context_2
     					);
     				}
@@ -899,7 +899,7 @@
     				check_outros();
     			}
 
-    			if (dirty[0] & /*visible, uniqueKey, $$scope*/ 67109384) {
+    			if (dirty[0] & /*visible, uniqueKey, $$scope*/ 134218248) {
     				each_value = /*visible*/ ctx[9];
     				group_outros();
     				each_blocks = update_keyed_each(each_blocks, dirty, get_key, 1, ctx, each_value, each_1_lookup, t1.parentNode, outro_and_destroy_block, create_each_block, t1, get_each_context);
@@ -968,8 +968,8 @@
     // (389:6) {#if loading && direction !== 'bottom'}
     function create_if_block_3(ctx) {
     	let current;
-    	const loader_slot_template = /*#slots*/ ctx[27].loader;
-    	const loader_slot = create_slot(loader_slot_template, ctx, /*$$scope*/ ctx[26], get_loader_slot_context);
+    	const loader_slot_template = /*#slots*/ ctx[28].loader;
+    	const loader_slot = create_slot(loader_slot_template, ctx, /*$$scope*/ ctx[27], get_loader_slot_context);
 
     	return {
     		c() {
@@ -984,15 +984,15 @@
     		},
     		p(ctx, dirty) {
     			if (loader_slot) {
-    				if (loader_slot.p && (!current || dirty[0] & /*$$scope*/ 67108864)) {
+    				if (loader_slot.p && (!current || dirty[0] & /*$$scope*/ 134217728)) {
     					update_slot_base(
     						loader_slot,
     						loader_slot_template,
     						ctx,
-    						/*$$scope*/ ctx[26],
+    						/*$$scope*/ ctx[27],
     						!current
-    						? get_all_dirty_from_scope(/*$$scope*/ ctx[26])
-    						: get_slot_changes(loader_slot_template, /*$$scope*/ ctx[26], dirty, get_loader_slot_changes),
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[27])
+    						: get_slot_changes(loader_slot_template, /*$$scope*/ ctx[27], dirty, get_loader_slot_changes),
     						get_loader_slot_context
     					);
     				}
@@ -1035,8 +1035,8 @@
     	let virtual_infinite_list_row;
     	let virtual_infinite_list_row_id_value;
     	let current;
-    	const item_slot_template = /*#slots*/ ctx[27].item;
-    	const item_slot = create_slot(item_slot_template, ctx, /*$$scope*/ ctx[26], get_item_slot_context);
+    	const item_slot_template = /*#slots*/ ctx[28].item;
+    	const item_slot = create_slot(item_slot_template, ctx, /*$$scope*/ ctx[27], get_item_slot_context);
     	const item_slot_or_fallback = item_slot || fallback_block();
 
     	return {
@@ -1062,15 +1062,15 @@
     			ctx = new_ctx;
 
     			if (item_slot) {
-    				if (item_slot.p && (!current || dirty[0] & /*$$scope, visible*/ 67109376)) {
+    				if (item_slot.p && (!current || dirty[0] & /*$$scope, visible*/ 134218240)) {
     					update_slot_base(
     						item_slot,
     						item_slot_template,
     						ctx,
-    						/*$$scope*/ ctx[26],
+    						/*$$scope*/ ctx[27],
     						!current
-    						? get_all_dirty_from_scope(/*$$scope*/ ctx[26])
-    						: get_slot_changes(item_slot_template, /*$$scope*/ ctx[26], dirty, get_item_slot_changes),
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[27])
+    						: get_slot_changes(item_slot_template, /*$$scope*/ ctx[27], dirty, get_item_slot_changes),
     						get_item_slot_context
     					);
     				}
@@ -1099,8 +1099,8 @@
     // (399:6) {#if loading && direction !== 'top'}
     function create_if_block_2(ctx) {
     	let current;
-    	const loader_slot_template = /*#slots*/ ctx[27].loader;
-    	const loader_slot = create_slot(loader_slot_template, ctx, /*$$scope*/ ctx[26], get_loader_slot_context_1);
+    	const loader_slot_template = /*#slots*/ ctx[28].loader;
+    	const loader_slot = create_slot(loader_slot_template, ctx, /*$$scope*/ ctx[27], get_loader_slot_context_1);
 
     	return {
     		c() {
@@ -1115,15 +1115,15 @@
     		},
     		p(ctx, dirty) {
     			if (loader_slot) {
-    				if (loader_slot.p && (!current || dirty[0] & /*$$scope*/ 67108864)) {
+    				if (loader_slot.p && (!current || dirty[0] & /*$$scope*/ 134217728)) {
     					update_slot_base(
     						loader_slot,
     						loader_slot_template,
     						ctx,
-    						/*$$scope*/ ctx[26],
+    						/*$$scope*/ ctx[27],
     						!current
-    						? get_all_dirty_from_scope(/*$$scope*/ ctx[26])
-    						: get_slot_changes(loader_slot_template, /*$$scope*/ ctx[26], dirty, get_loader_slot_changes_1),
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[27])
+    						: get_slot_changes(loader_slot_template, /*$$scope*/ ctx[27], dirty, get_loader_slot_changes_1),
     						get_loader_slot_context_1
     					);
     				}
@@ -1147,8 +1147,8 @@
     // (406:2) {#if !loading && visible.length === 0}
     function create_if_block(ctx) {
     	let current;
-    	const empty_slot_template = /*#slots*/ ctx[27].empty;
-    	const empty_slot = create_slot(empty_slot_template, ctx, /*$$scope*/ ctx[26], get_empty_slot_context);
+    	const empty_slot_template = /*#slots*/ ctx[28].empty;
+    	const empty_slot = create_slot(empty_slot_template, ctx, /*$$scope*/ ctx[27], get_empty_slot_context);
 
     	return {
     		c() {
@@ -1163,15 +1163,15 @@
     		},
     		p(ctx, dirty) {
     			if (empty_slot) {
-    				if (empty_slot.p && (!current || dirty[0] & /*$$scope*/ 67108864)) {
+    				if (empty_slot.p && (!current || dirty[0] & /*$$scope*/ 134217728)) {
     					update_slot_base(
     						empty_slot,
     						empty_slot_template,
     						ctx,
-    						/*$$scope*/ ctx[26],
+    						/*$$scope*/ ctx[27],
     						!current
-    						? get_all_dirty_from_scope(/*$$scope*/ ctx[26])
-    						: get_slot_changes(empty_slot_template, /*$$scope*/ ctx[26], dirty, get_empty_slot_changes),
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[27])
+    						: get_slot_changes(empty_slot_template, /*$$scope*/ ctx[27], dirty, get_empty_slot_changes),
     						get_empty_slot_context
     					);
     				}
@@ -1229,7 +1229,7 @@
     			set_custom_element_data(virtual_infinite_list_contents, "class", "svelte-1kggtm4");
     			set_style(virtual_infinite_list_viewport, "height", /*height*/ ctx[0]);
     			set_custom_element_data(virtual_infinite_list_viewport, "class", "svelte-1kggtm4");
-    			add_render_callback(() => /*virtual_infinite_list_viewport_elementresize_handler*/ ctx[30].call(virtual_infinite_list_viewport));
+    			add_render_callback(() => /*virtual_infinite_list_viewport_elementresize_handler*/ ctx[31].call(virtual_infinite_list_viewport));
     		},
     		m(target, anchor) {
     			insert(target, virtual_infinite_list_viewport, anchor);
@@ -1239,11 +1239,11 @@
     				if_blocks[current_block_type_index].m(virtual_infinite_list_contents, null);
     			}
 
-    			/*virtual_infinite_list_contents_binding*/ ctx[28](virtual_infinite_list_contents);
+    			/*virtual_infinite_list_contents_binding*/ ctx[29](virtual_infinite_list_contents);
     			append(virtual_infinite_list_viewport, t);
     			if (if_block1) if_block1.m(virtual_infinite_list_viewport, null);
-    			/*virtual_infinite_list_viewport_binding*/ ctx[29](virtual_infinite_list_viewport);
-    			virtual_infinite_list_viewport_resize_listener = add_resize_listener(virtual_infinite_list_viewport, /*virtual_infinite_list_viewport_elementresize_handler*/ ctx[30].bind(virtual_infinite_list_viewport));
+    			/*virtual_infinite_list_viewport_binding*/ ctx[30](virtual_infinite_list_viewport);
+    			virtual_infinite_list_viewport_resize_listener = add_resize_listener(virtual_infinite_list_viewport, /*virtual_infinite_list_viewport_elementresize_handler*/ ctx[31].bind(virtual_infinite_list_viewport));
     			current = true;
 
     			if (!mounted) {
@@ -1344,9 +1344,9 @@
     				if_blocks[current_block_type_index].d();
     			}
 
-    			/*virtual_infinite_list_contents_binding*/ ctx[28](null);
+    			/*virtual_infinite_list_contents_binding*/ ctx[29](null);
     			if (if_block1) if_block1.d();
-    			/*virtual_infinite_list_viewport_binding*/ ctx[29](null);
+    			/*virtual_infinite_list_viewport_binding*/ ctx[30](null);
     			virtual_infinite_list_viewport_resize_listener();
     			mounted = false;
     			run_all(dispose);
@@ -1358,8 +1358,8 @@
     	let visible;
     	let $type;
     	let $changes;
-    	component_subscribe($$self, type, $$value => $$invalidate(24, $type = $$value));
-    	component_subscribe($$self, changes, $$value => $$invalidate(25, $changes = $$value));
+    	component_subscribe($$self, type, $$value => $$invalidate(25, $type = $$value));
+    	component_subscribe($$self, changes, $$value => $$invalidate(26, $changes = $$value));
     	let { $$slots: slots = {}, $$scope } = $$props;
     	const dispatch = createEventDispatcher();
     	let { items } = $$props;
@@ -1450,17 +1450,6 @@
     		await tick();
     		viewport.scrollTo(0, previous);
     		await handleScroll();
-    	}
-
-    	async function reset$1() {
-    		$$invalidate(23, initialized = false);
-    		$$invalidate(12, items = []);
-    		$$invalidate(7, top = 0);
-    		$$invalidate(8, bottom = 0);
-    		$$invalidate(14, start = 0);
-    		$$invalidate(15, end = 0);
-    		reset();
-    		await tick();
     	}
 
     	// whenever `items` changes, invalidate the current heightmap
@@ -1558,6 +1547,17 @@
     	async function onResize() {
     		if (!initialized || !viewport) return;
     		await refresh(items, viewportHeight, itemHeight);
+    	}
+
+    	async function reset$1() {
+    		$$invalidate(24, initialized = false);
+    		$$invalidate(12, items = []);
+    		$$invalidate(7, top = 0);
+    		$$invalidate(8, bottom = 0);
+    		$$invalidate(14, start = 0);
+    		$$invalidate(15, end = 0);
+    		reset();
+    		await tick();
     	}
 
     	async function forceRefresh() {
@@ -1714,12 +1714,12 @@
     		if ('maxItemCountPerLoad' in $$props) $$invalidate(17, maxItemCountPerLoad = $$props.maxItemCountPerLoad);
     		if ('start' in $$props) $$invalidate(14, start = $$props.start);
     		if ('end' in $$props) $$invalidate(15, end = $$props.end);
-    		if ('$$scope' in $$props) $$invalidate(26, $$scope = $$props.$$scope);
+    		if ('$$scope' in $$props) $$invalidate(27, $$scope = $$props.$$scope);
     	};
 
     	$$self.$$.update = () => {
-    		if ($$self.$$.dirty[0] & /*initialized, loading, viewport*/ 8388628) {
-    			if (!initialized && !loading && viewport) $$invalidate(23, initialized = true);
+    		if ($$self.$$.dirty[0] & /*initialized, loading, viewport*/ 16777236) {
+    			if (!initialized && !loading && viewport) $$invalidate(24, initialized = true);
     		}
 
     		if ($$self.$$.dirty[0] & /*items*/ 4096) {
@@ -1730,13 +1730,13 @@
     			$$invalidate(13, persists = persists || maxItemCountPerLoad || 0);
     		}
 
-    		if ($$self.$$.dirty[0] & /*initialized, items, start, end, persists*/ 8450048) {
+    		if ($$self.$$.dirty[0] & /*initialized, items, start, end, persists*/ 16838656) {
     			$$invalidate(9, visible = initialized
     			? items.slice(start, end + persists).map((data, i) => ({ index: i + start, data }))
     			: []);
     		}
 
-    		if ($$self.$$.dirty[0] & /*$changes, $type*/ 50331648) {
+    		if ($$self.$$.dirty[0] & /*$changes, $type*/ 100663296) {
     			if ($changes && $type) onChange($type, ...$changes);
     		}
     	};
@@ -1760,6 +1760,7 @@
     		end,
     		itemHeight,
     		maxItemCountPerLoad,
+    		reset$1,
     		forceRefresh,
     		scrollTo,
     		scrollToTop,
@@ -1797,35 +1798,40 @@
     				maxItemCountPerLoad: 17,
     				start: 14,
     				end: 15,
-    				forceRefresh: 18,
-    				scrollTo: 19,
-    				scrollToTop: 20,
-    				scrollToBottom: 21,
-    				scrollToIndex: 22
+    				reset: 18,
+    				forceRefresh: 19,
+    				scrollTo: 20,
+    				scrollToTop: 21,
+    				scrollToBottom: 22,
+    				scrollToIndex: 23
     			},
     			add_css$1,
     			[-1, -1]
     		);
     	}
 
-    	get forceRefresh() {
+    	get reset() {
     		return this.$$.ctx[18];
     	}
 
-    	get scrollTo() {
+    	get forceRefresh() {
     		return this.$$.ctx[19];
     	}
 
-    	get scrollToTop() {
+    	get scrollTo() {
     		return this.$$.ctx[20];
     	}
 
-    	get scrollToBottom() {
+    	get scrollToTop() {
     		return this.$$.ctx[21];
     	}
 
-    	get scrollToIndex() {
+    	get scrollToBottom() {
     		return this.$$.ctx[22];
+    	}
+
+    	get scrollToIndex() {
+    		return this.$$.ctx[23];
     	}
     }
 
