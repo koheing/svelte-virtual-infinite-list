@@ -15,7 +15,6 @@
     "format": "prettier --w ./**/**/*.js & prettier --w ./src",
     "cy:run": "cypress run",
     "cy:open": "cypress open",
-    "test:unit": "jest",
     "test:e2e": "npm run start & npm run cy:run"
   },
   "devDependencies": {
