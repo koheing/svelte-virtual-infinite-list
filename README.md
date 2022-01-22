@@ -2,7 +2,7 @@
   <img src="https://user-images.githubusercontent.com/55611095/113577028-91f6e800-965b-11eb-8081-4fb0f65fa07b.png" title="svelte-virtual-infinite-list">
 </div>
 
-# svelte-virtual-infinite-list([DEMO](https://svelte.dev/repl/be9bc677258c48a0a00446bed658672e?version=3.37.0))
+# svelte-virtual-infinite-list([DEMO](https://svelte.dev/repl/b19db3b0de424d72a451e95b5655a57e?version=3.46.2))
 
 [![test](https://github.com/koheing/svelte-virtual-infinite-list/actions/workflows/ci.yaml/badge.svg)](https://github.com/koheing/svelte-virtual-infinite-list/actions/workflows/ci.yaml)
 
