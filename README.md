@@ -36,11 +36,10 @@ npm i svelte-virtual-infinite-list
   ]
 
   let loading = true
-  let viewport: HTMLElement | null = null
   let virtualInfiniteList: VirtualInfiniteList
 
   async function onInitialize() {
-    await virtualInfiniteList.scrollTo(1)
+    await virtualInfiniteList.scrollToBottom()
   }
 
   async function onInfinite({ detail }: InfiniteEvent) {
@@ -54,15 +53,14 @@ npm i svelte-virtual-infinite-list
   }
 
   onMount(async () => {
-    viewport = document.querySelector('virtual-infinite-list-viewport') as HTMLElement | null
     const data = await find(30)
     things = [...data]
     loading = false
   })
 
   async function scrollToIndex(item) {
-    const index = things.findIndex((it) => it)
-    await virtualInfiniteList.scrollToIndex(index)
+    const index = things.findIndex((it) => it === item.number)
+    index && await virtualInfiniteList.scrollToIndex(index)
   }
 </script>
 
@@ -70,7 +68,7 @@ npm i svelte-virtual-infinite-list
   items={things}
   {loading}
   direction="top"
-  maxItemCountPerLoad={30}
+  persists={30}
   uniqueKey={'number'}
   on:initialize={onInitialize}
   on:infinite={onInfinite}
@@ -100,8 +98,8 @@ npm i svelte-virtual-infinite-list
 | :--: | :-- | :-- | :-- |
 | 1 |  `loading` | boolean | - |
 | 2 |  `direction` | `'top'` or `'bottom'` or `'vertical'` | Loading direction. |
-| 3 |  `maxItemCountPerLoad` | number | **deprecated** [**For direction-top infinite scroll user**] Maximum number of items loaded per load. The offset after loaded may be significantly shift if the number of items that exceeds this value is loaded. `Default value is 0.` |
-| 4 |  `persists` | number | [**For direction-top infinite scroll user**] Maximum number of items loaded per load. The offset after loaded may be significantly shift if the number of items that exceeds this value is loaded. `Default value is 0.` |
+| 3 |  `maxItemCountPerLoad` | number | **Deprecated. This valiable removed @2.0.0. Use `persists`, please.**  |
+| 4 |  `persists` | number | [**For direction-top infinite scroll user**] Maximum number of items loaded per load. The offset after loaded may be significantly shift if the number of items that exceeds this value is loaded. `Default value is 30.` |
 | 5 | `uniqueKey` | string | You need to set specify one unique property like `id` in the item object if you want to use the `scrollToIndex` method. `Default value is undefined.` |   
 
 ## Additional Events

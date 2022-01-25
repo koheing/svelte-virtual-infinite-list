@@ -50,12 +50,12 @@
 
   $: if (!initialized && !loading && viewport) initialized = true
   $: if (items) load(items)
+  $: persists = persists || maxItemCountPerLoad || 0
   $: visible = initialized
     ? items.slice(start, end + persists).map((data, i) => ({ index: i + start, data }))
     : []
 
   $: if ($changes && $type) onChange($type, ...$changes)
-  $: persists = persists || maxItemCountPerLoad || 0
 
   async function onChange(type, newers, olders) {
     switch (type) {
@@ -138,8 +138,8 @@
         row = rows[i - start]
       }
 
-      const row_height = (heightMap[i] = itemHeight || row.offsetHeight)
-      contentHeight += row_height
+      const rowHeight = (heightMap[i] = itemHeight || row.offsetHeight)
+      contentHeight += rowHeight
       i += 1
     }
 
@@ -155,7 +155,7 @@
   async function handleScroll() {
     const { scrollTop } = viewport
 
-    const old_start = start
+    const oldStart = start
 
     for (let v = 0; v < rows.length; v += 1) {
       heightMap[start + v] = itemHeight || rows[v].offsetHeight
@@ -165,15 +165,15 @@
     let y = 0
 
     while (i < items.length) {
-      const row_height = heightMap[i] || averageHeight
-      if (y + row_height > scrollTop) {
+      const rowHeight = heightMap[i] || averageHeight
+      if (y + rowHeight > scrollTop) {
         start = i
         top = y
 
         break
       }
 
-      y += row_height
+      y += rowHeight
       i += 1
     }
 
@@ -193,13 +193,13 @@
     bottom = remaining * averageHeight
 
     // prevent jumping if we scrolled up into unknown territory
-    if (start < old_start) {
+    if (start < oldStart) {
       await tick()
 
       let expectedHeight = 0
       let actualHeight = 0
 
-      for (let i = start; i < old_start; i += 1) {
+      for (let i = start; i < oldStart; i += 1) {
         if (rows[i - start]) {
           expectedHeight += heightMap[i]
           actualHeight += itemHeight || rows[i - start].offsetHeight
@@ -212,7 +212,7 @@
 
     // TODO if we overestimated the space these
     // rows would occupy we may need to add some
-    // more. maybe we can just call handle_scroll again?
+    // more. maybe we can just call handleScroll again?
   }
 
   function onScroll() {
