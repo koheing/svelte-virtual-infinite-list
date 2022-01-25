@@ -50,12 +50,12 @@
 
   $: if (!initialized && !loading && viewport) initialized = true
   $: if (items) load(items)
+  $: persists = persists || maxItemCountPerLoad || 0
   $: visible = initialized
     ? items.slice(start, end + persists).map((data, i) => ({ index: i + start, data }))
     : []
 
   $: if ($changes && $type) onChange($type, ...$changes)
-  $: persists = persists || maxItemCountPerLoad || 0
 
   async function onChange(type, newers, olders) {
     switch (type) {
