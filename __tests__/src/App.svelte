@@ -11,6 +11,7 @@
   let start
   let end
   let value
+  $: persists = direction !== 'bottom' ? 30 : 0 
 
   async function onClick() {
     loading = true
@@ -105,7 +106,7 @@
       {loading}
       {items}
       uniqueKey={'id'}
-      maxItemCountPerLoad={30}
+      {persists}
       on:initialize={onInitialize}
       on:infinite={onInfinite}
       bind:this={virtualInfiniteList}
