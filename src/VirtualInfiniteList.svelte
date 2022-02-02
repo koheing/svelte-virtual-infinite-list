@@ -97,7 +97,10 @@
       ? rows[diff - 1].firstChild
       : undefined
 
-    if (!previousDom || (persists === 0 && $type !== Type.init)) {
+    if (
+      direction !== Direction.bottom &&
+      (!previousDom || (persists === 0 && $type !== Type.init))
+    ) {
       console.warn(`[Virtual Infinite List]
     The number of items exceeds 'persists' or 'maxItemCountPerLoad',
     so the offset after loaded may be significantly shift.`)

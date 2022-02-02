@@ -781,7 +781,7 @@
     const get_loader_slot_changes = dirty => ({});
     const get_loader_slot_context = ctx => ({});
 
-    // (402:46) 
+    // (405:46) 
     function create_if_block_4(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[28].loader;
@@ -829,7 +829,7 @@
     	};
     }
 
-    // (388:4) {#if visible.length > 0}
+    // (391:4) {#if visible.length > 0}
     function create_if_block_1(ctx) {
     	let t0;
     	let each_blocks = [];
@@ -965,7 +965,7 @@
     	};
     }
 
-    // (389:6) {#if loading && direction !== 'bottom'}
+    // (392:6) {#if loading && direction !== 'bottom'}
     function create_if_block_3(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[28].loader;
@@ -1013,7 +1013,7 @@
     	};
     }
 
-    // (396:44) Template Not Found!!!
+    // (399:44) Template Not Found!!!
     function fallback_block(ctx) {
     	let t;
 
@@ -1030,7 +1030,7 @@
     	};
     }
 
-    // (392:6) {#each visible as row (row.index)}
+    // (395:6) {#each visible as row (row.index)}
     function create_each_block(key_1, ctx) {
     	let virtual_infinite_list_row;
     	let virtual_infinite_list_row_id_value;
@@ -1096,7 +1096,7 @@
     	};
     }
 
-    // (399:6) {#if loading && direction !== 'top'}
+    // (402:6) {#if loading && direction !== 'top'}
     function create_if_block_2(ctx) {
     	let current;
     	const loader_slot_template = /*#slots*/ ctx[28].loader;
@@ -1144,7 +1144,7 @@
     	};
     }
 
-    // (406:2) {#if !loading && visible.length === 0}
+    // (409:2) {#if !loading && visible.length === 0}
     function create_if_block(ctx) {
     	let current;
     	const empty_slot_template = /*#slots*/ ctx[28].empty;
@@ -1430,7 +1430,7 @@
     		: rows[diff - 1] ? rows[diff - 1].firstChild : undefined; // after second time
     		// first time
 
-    		if (!previousDom || persists === 0 && $type !== Type.init) {
+    		if (direction !== Direction.bottom && (!previousDom || persists === 0 && $type !== Type.init)) {
     			console.warn(`[Virtual Infinite List]
     The number of items exceeds 'persists' or 'maxItemCountPerLoad',
     so the offset after loaded may be significantly shift.`);
@@ -2087,17 +2087,17 @@
     	append_styles(target, "svelte-1oj7q8v", ".row.svelte-1oj7q8v{margin-top:8px;margin-bottom:8px;overflow-wrap:break-word}.load-count.svelte-1oj7q8v{margin-top:8px;margin-bottom:8px}.direction.svelte-1oj7q8v{margin-top:8px;margin-bottom:8px}main.svelte-1oj7q8v{text-align:center;padding:1em;max-width:240px;margin:0 auto}");
     }
 
-    // (115:6) 
+    // (116:6) 
     function create_item_slot(ctx) {
     	let div1;
     	let div0;
-    	let t_value = /*item*/ ctx[18].name + "";
+    	let t_value = /*item*/ ctx[19].name + "";
     	let t;
     	let mounted;
     	let dispose;
 
     	function click_handler_1() {
-    		return /*click_handler_1*/ ctx[14](/*item*/ ctx[18]);
+    		return /*click_handler_1*/ ctx[15](/*item*/ ctx[19]);
     	}
 
     	return {
@@ -2120,7 +2120,7 @@
     		},
     		p(new_ctx, dirty) {
     			ctx = new_ctx;
-    			if (dirty & /*item*/ 262144 && t_value !== (t_value = /*item*/ ctx[18].name + "")) set_data(t, t_value);
+    			if (dirty & /*item*/ 524288 && t_value !== (t_value = /*item*/ ctx[19].name + "")) set_data(t, t_value);
     		},
     		d(detaching) {
     			if (detaching) detach(div1);
@@ -2159,25 +2159,25 @@
     	let dispose;
 
     	function virtualinfinitelist_start_binding(value) {
-    		/*virtualinfinitelist_start_binding*/ ctx[16](value);
+    		/*virtualinfinitelist_start_binding*/ ctx[17](value);
     	}
 
     	function virtualinfinitelist_end_binding(value) {
-    		/*virtualinfinitelist_end_binding*/ ctx[17](value);
+    		/*virtualinfinitelist_end_binding*/ ctx[18](value);
     	}
 
     	let virtualinfinitelist_props = {
     		height: "500px",
-    		direction: /*direction*/ ctx[2],
-    		loading: /*loading*/ ctx[1],
-    		items: /*items*/ ctx[0],
+    		direction: /*direction*/ ctx[0],
+    		loading: /*loading*/ ctx[2],
+    		items: /*items*/ ctx[1],
     		uniqueKey: 'id',
-    		maxItemCountPerLoad: 30,
+    		persists: /*persists*/ ctx[8],
     		$$slots: {
     			item: [
     				create_item_slot,
-    				({ item }) => ({ 18: item }),
-    				({ item }) => item ? 262144 : 0
+    				({ item }) => ({ 19: item }),
+    				({ item }) => item ? 524288 : 0
     			]
     		},
     		$$scope: { ctx }
@@ -2192,11 +2192,11 @@
     	}
 
     	virtualinfinitelist = new VirtualInfiniteList({ props: virtualinfinitelist_props });
-    	/*virtualinfinitelist_binding*/ ctx[15](virtualinfinitelist);
+    	/*virtualinfinitelist_binding*/ ctx[16](virtualinfinitelist);
     	binding_callbacks.push(() => bind(virtualinfinitelist, 'start', virtualinfinitelist_start_binding));
     	binding_callbacks.push(() => bind(virtualinfinitelist, 'end', virtualinfinitelist_end_binding));
-    	virtualinfinitelist.$on("initialize", /*onInitialize*/ ctx[9]);
-    	virtualinfinitelist.$on("infinite", /*onInfinite*/ ctx[10]);
+    	virtualinfinitelist.$on("initialize", /*onInitialize*/ ctx[10]);
+    	virtualinfinitelist.$on("infinite", /*onInfinite*/ ctx[11]);
 
     	return {
     		c() {
@@ -2206,7 +2206,7 @@
     			t1 = space();
     			div0 = element("div");
     			t2 = text("Current Direction: ");
-    			t3 = text(/*direction*/ ctx[2]);
+    			t3 = text(/*direction*/ ctx[0]);
     			t4 = space();
     			div1 = element("div");
     			t5 = text(/*loadCount*/ ctx[3]);
@@ -2256,16 +2256,16 @@
 
     			if (!mounted) {
     				dispose = [
-    					listen(button0, "click", /*onClick*/ ctx[8]),
-    					listen(input, "input", /*input_input_handler*/ ctx[12]),
-    					listen(button1, "click", /*click_handler*/ ctx[13])
+    					listen(button0, "click", /*onClick*/ ctx[9]),
+    					listen(input, "input", /*input_input_handler*/ ctx[13]),
+    					listen(button1, "click", /*click_handler*/ ctx[14])
     				];
 
     				mounted = true;
     			}
     		},
     		p(ctx, [dirty]) {
-    			if (!current || dirty & /*direction*/ 4) set_data(t3, /*direction*/ ctx[2]);
+    			if (!current || dirty & /*direction*/ 1) set_data(t3, /*direction*/ ctx[0]);
     			if (!current || dirty & /*loadCount*/ 8) set_data(t5, /*loadCount*/ ctx[3]);
 
     			if (dirty & /*value*/ 128 && input.value !== /*value*/ ctx[7]) {
@@ -2273,11 +2273,12 @@
     			}
 
     			const virtualinfinitelist_changes = {};
-    			if (dirty & /*direction*/ 4) virtualinfinitelist_changes.direction = /*direction*/ ctx[2];
-    			if (dirty & /*loading*/ 2) virtualinfinitelist_changes.loading = /*loading*/ ctx[1];
-    			if (dirty & /*items*/ 1) virtualinfinitelist_changes.items = /*items*/ ctx[0];
+    			if (dirty & /*direction*/ 1) virtualinfinitelist_changes.direction = /*direction*/ ctx[0];
+    			if (dirty & /*loading*/ 4) virtualinfinitelist_changes.loading = /*loading*/ ctx[2];
+    			if (dirty & /*items*/ 2) virtualinfinitelist_changes.items = /*items*/ ctx[1];
+    			if (dirty & /*persists*/ 256) virtualinfinitelist_changes.persists = /*persists*/ ctx[8];
 
-    			if (dirty & /*$$scope, item*/ 786432) {
+    			if (dirty & /*$$scope, item*/ 1572864) {
     				virtualinfinitelist_changes.$$scope = { dirty, ctx };
     			}
 
@@ -2308,7 +2309,7 @@
     		},
     		d(detaching) {
     			if (detaching) detach(main);
-    			/*virtualinfinitelist_binding*/ ctx[15](null);
+    			/*virtualinfinitelist_binding*/ ctx[16](null);
     			destroy_component(virtualinfinitelist);
     			mounted = false;
     			run_all(dispose);
@@ -2317,6 +2318,7 @@
     }
 
     function instance($$self, $$props, $$invalidate) {
+    	let persists;
     	let { items = [] } = $$props;
     	let { loading = true } = $$props;
     	let { direction = 'bottom' } = $$props;
@@ -2327,29 +2329,29 @@
     	let value;
 
     	async function onClick() {
-    		$$invalidate(1, loading = true);
-    		$$invalidate(0, items = []);
+    		$$invalidate(2, loading = true);
+    		$$invalidate(1, items = []);
 
     		switch (direction) {
     			case 'top':
     				{
-    					$$invalidate(2, direction = 'bottom');
+    					$$invalidate(0, direction = 'bottom');
     					break;
     				}
     			case 'bottom':
     				{
-    					$$invalidate(2, direction = 'vertical');
+    					$$invalidate(0, direction = 'vertical');
     					break;
     				}
     			default:
     				{
-    					$$invalidate(2, direction = 'top');
+    					$$invalidate(0, direction = 'top');
     				}
     		}
 
     		const animals = await find(30);
-    		$$invalidate(0, items = [...animals]);
-    		$$invalidate(1, loading = false);
+    		$$invalidate(1, items = [...animals]);
+    		$$invalidate(2, loading = false);
     		$$invalidate(3, loadCount++, loadCount);
     	}
 
@@ -2360,10 +2362,10 @@
     	}
 
     	async function onInfinite({ detail }) {
-    		$$invalidate(1, loading = true);
+    		$$invalidate(2, loading = true);
     		const animals = await find(30);
-    		if (detail.on === 'top') $$invalidate(0, items = [...animals, ...items]); else $$invalidate(0, items = [...items, ...animals]);
-    		$$invalidate(1, loading = false);
+    		if (detail.on === 'top') $$invalidate(1, items = [...animals, ...items]); else $$invalidate(1, items = [...items, ...animals]);
+    		$$invalidate(2, loading = false);
     		$$invalidate(3, loadCount++, loadCount);
     	}
 
@@ -2372,14 +2374,14 @@
     		const index = i.findIndex(it => it.id === id);
     		if (index < 0) return;
     		i.splice(index, 1);
-    		$$invalidate(0, items = [...i]);
+    		$$invalidate(1, items = [...i]);
     	}
 
     	onMount(async () => {
-    		$$invalidate(1, loading = true);
+    		$$invalidate(2, loading = true);
     		const animals = await find(30);
-    		$$invalidate(0, items = [...animals]);
-    		$$invalidate(1, loading = false);
+    		$$invalidate(1, items = [...animals]);
+    		$$invalidate(2, loading = false);
     		$$invalidate(3, loadCount++, loadCount);
     	});
 
@@ -2413,20 +2415,27 @@
     	}
 
     	$$self.$$set = $$props => {
-    		if ('items' in $$props) $$invalidate(0, items = $$props.items);
-    		if ('loading' in $$props) $$invalidate(1, loading = $$props.loading);
-    		if ('direction' in $$props) $$invalidate(2, direction = $$props.direction);
+    		if ('items' in $$props) $$invalidate(1, items = $$props.items);
+    		if ('loading' in $$props) $$invalidate(2, loading = $$props.loading);
+    		if ('direction' in $$props) $$invalidate(0, direction = $$props.direction);
+    	};
+
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty & /*direction*/ 1) {
+    			$$invalidate(8, persists = direction !== 'bottom' ? 30 : 0);
+    		}
     	};
 
     	return [
+    		direction,
     		items,
     		loading,
-    		direction,
     		loadCount,
     		virtualInfiniteList,
     		start,
     		end,
     		value,
+    		persists,
     		onClick,
     		onInitialize,
     		onInfinite,
@@ -2443,7 +2452,7 @@
     class App extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance, create_fragment, safe_not_equal, { items: 0, loading: 1, direction: 2 }, add_css);
+    		init(this, options, instance, create_fragment, safe_not_equal, { items: 1, loading: 2, direction: 0 }, add_css);
     	}
     }
 
